@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="BookstoreEf.View.MenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BookstoreEf.View"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"             
+             mc:Ignorable="d" 
+             Height="auto" d:Width="800"
+             Background="White">
+    <Grid>
+        <Menu>
+            <MenuItem Header="_File">
+                <MenuItem Command="{Binding temp}"
+                          Header="Edit Store Inventory"
+                          Icon="{fa:Icon Book}"
+                          InputGestureText="Ctrl+I"/>
+
+                <MenuItem Command="{Binding temp}"                 
+                          Header="_Fullscreen"
+                          Icon="{fa:Icon Expand}"
+                          InputGestureText="Alt+Enter"/>
+
+                <MenuItem Command="{Binding temp}"
+                          Header="E_xit"
+                          Icon="{fa:Icon DoorOpen}"
+                          InputGestureText="Alt+F4"/>
+            </MenuItem>
+
+            
+            <MenuItem Header="_Author">
+                <MenuItem Command="{Binding temp}"
+                          Header="_Add Author"
+                          Icon="{fa:Icon Plus}"
+                          InputGestureText="Insert"/>
+
+                <MenuItem Command="{Binding temp}"
+                          Header="_Remove Author"
+                          Icon="{fa:Icon Minus}"
+                          InputGestureText="Delete"/>
+            </MenuItem>
+
+            
+            <MenuItem Header="_Book">
+                <MenuItem Command="{Binding temp}"
+                          Header="_Add Book"
+                          Icon="{fa:Icon Plus}"
+                          InputGestureText="Ctrl+A"/>
+
+                <MenuItem Command="{Binding temp}"
+                          Header="_Remove Book"
+                          Icon="{fa:Icon Minus}"
+                          InputGestureText="Ctrl+R"/>
+
+                <MenuItem Command="{Binding temp}"
+                          Header="_Edit Book Details"
+                          Icon="{fa:Icon Gears}"
+                          InputGestureText="Ctrl+E"/>
+
+            </MenuItem>
+        </Menu>
+
+
+    </Grid>
+</UserControl>
