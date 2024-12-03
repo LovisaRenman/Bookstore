@@ -40,19 +40,6 @@
                    HorizontalAlignment="Left">
             </Label>
 
-            <Button Background="Transparent" 
-                    BorderBrush="Transparent"
-                    Command ="{Binding temp}"
-                    Grid.Column="1"
-                    Height="20" 
-                    HorizontalAlignment="Right"
-                    Margin="10 0 10 0"
-                    Width="20">
-                <Button.Content>
-                    <fa:IconBlock Icon="Sliders"/>
-                </Button.Content>
-            </Button>
-
             <ListBox Grid.Column="0"
                      Grid.Row="1"                     
                      ItemsSource="{Binding temp}"
@@ -100,12 +87,14 @@
                     Grid.Column="1"
                     Height="20" 
                     HorizontalAlignment="Right"
-                    Margin="10 0 10 0"
+                    Margin="10 0 40 0"
+                    ToolTip="View and update store inventory"
                     Width="20">
                 <Button.Content>
-                    <fa:IconBlock Icon="Sliders"/>
+                    <fa:IconBlock Icon="Shop"/>
                 </Button.Content>
             </Button>
+
 
             <Button Background="Transparent" 
                     BorderBrush="Transparent"
@@ -113,10 +102,11 @@
                     Grid.Column="1"
                     Height="20" 
                     HorizontalAlignment="Right"
-                    Margin="10 0 40 0"
+                    Margin="10 0 10 0"
+                    ToolTip="Go to advanced options"
                     Width="20"> 
                 <Button.Content>
-                    <fa:IconBlock Icon="Sliders"/>
+                    <fa:IconBlock Icon="Book"/>
                 </Button.Content>
             </Button>
 
@@ -185,8 +175,17 @@
 
 </UserControl>
 
-<!--<StackPanel Grid.Column="1"
-               Grid.Row="2"
-               Margin="10 0 10 10"
-               Orientation="Horizontal">
-</StackPanel>-->
+
+<!--<Button Background="Transparent" 
+         BorderBrush="Transparent"
+         Command ="{Binding temp}"
+         Grid.Column="1"
+         Height="20" 
+         HorizontalAlignment="Right"
+         Margin="10 0 10 0"
+         ToolTip="Manage"
+         Width="20">
+    <Button.Content>
+        <fa:IconBlock Icon="Sliders"/>
+    </Button.Content>
+</Button>-->
