@@ -1,0 +1,45 @@
+﻿<Window x:Class="BookstoreEf.Dialogs.ManageInventory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BookstoreEf.Dialogs"
+        mc:Ignorable="d"
+        Title="Manage Inventory" Height="350" Width="250" ResizeMode="NoResize"
+        FontSize="16" FontWeight="Bold">
+    <Grid>
+        <StackPanel VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Width="230">
+            <Label Content="Title"
+                   Margin="0 10 0 0"/>
+            <ComboBox ItemsSource="{Binding temp}"
+                      Margin="0 0 0 70"
+                      ToolTip="Select a Book"
+                      SelectedItem="{Binding temp}"
+                      MaxDropDownHeight="60"/>
+            <WrapPanel Margin="0 10 0 0">
+                <Label Content="Balance"/>
+                <Label Content="value"
+                       Margin="75 0 0 0"
+                       FontWeight="Normal"
+                       HorizontalAlignment="Left"/>
+                <Label Content="{Binding ElementName=slider, Path=Value}"
+                       FontWeight="Normal"/>
+            </WrapPanel>
+            <Slider x:Name="slider"
+                    Value="{Binding temp}"
+                    Minimum="0"
+                    Maximum="20"
+                    TickPlacement="BottomRight"
+                    IsSnapToTickEnabled="True"/>
+            <WrapPanel HorizontalAlignment="Center"
+                       Margin="20">
+                <Button Content="Ok" 
+                        Margin="0 0 5 0"/>
+                <Button Content="Cancel" Margin="5 0 0 0"/>
+            </WrapPanel>
+
+        </StackPanel>
+    </Grid>
+</Window>
