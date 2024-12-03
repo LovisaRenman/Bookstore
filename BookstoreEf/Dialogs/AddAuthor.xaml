@@ -30,13 +30,21 @@
 
         <StackPanel Grid.Row="2"
                     Margin="10 0 10 0">
-            <Label Content="Date Of Birth: DDMMYY*"/>
+            <WrapPanel>
+                <Label Content="Date Of Birth:"/>
+                <Label Content="DDMMYY*"
+                       FontWeight="Normal"/>
+            </WrapPanel>
             <TextBox Text="{Binding temp}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="3"
                     Margin="10 0 10 0">
-            <Label Content="Date Of Death: DDMMYY"/>
+            <WrapPanel>
+                <Label Content="Date Of Death:"/>
+                <Label Content="DDMMYY*"
+                       FontWeight="Normal"/>
+            </WrapPanel>
             <TextBox Text="{Binding temp}"
                      ToolTip="Optional"/>
         </StackPanel>
