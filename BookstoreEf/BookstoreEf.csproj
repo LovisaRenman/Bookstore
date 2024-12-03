@@ -10,11 +10,7 @@
 
   <ItemGroup>
     <Folder Include="Model\" />
-    <Folder Include="Dialogs\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
+    <Folder Include="View\" />
   </ItemGroup>
 
 </Project>
