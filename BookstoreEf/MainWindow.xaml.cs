@@ -1,14 +1,5 @@
 ﻿using BookstoreEf.ViewModel;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BookstoreEf;
 
@@ -21,5 +12,15 @@ public partial class MainWindow : Window
         InitializeComponent();
         mainWindowViewModel = new MainWindowViewModel();
         DataContext = mainWindowViewModel;
+    }
+
+    public void RemoveAuthor(object? sender, EventArgs arg)
+    {
+        MessageBox.Show("Are you sure you want to remove this author", "Remove Author", MessageBoxButton.YesNo, MessageBoxImage.Question);
+    }
+
+    public void RemoveAuthorWarning(object? sender, EventArgs arg)
+    {
+        MessageBox.Show("All books associated with this author will be removed, do you want to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
     }
 }
