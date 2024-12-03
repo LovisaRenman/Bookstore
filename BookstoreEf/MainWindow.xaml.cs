@@ -10,17 +10,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BookstoreEf
-{
-    public partial class MainWindow : Window
-    {
-        private readonly MainWindowViewModel? mainWindowViewModel;
+namespace BookstoreEf;
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            mainWindowViewModel = new MainWindowViewModel();
-            DataContext = mainWindowViewModel;
-        }
+public partial class MainWindow : Window
+{
+    private readonly MainWindowViewModel? mainWindowViewModel;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        mainWindowViewModel = new MainWindowViewModel();
+        DataContext = mainWindowViewModel;
     }
 }
