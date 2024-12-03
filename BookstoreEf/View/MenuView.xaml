@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:BookstoreEf.View"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"             
              mc:Ignorable="d" 
-             Height="auto" d:Width="800"
-             Background="White">
+             Height="auto" Width="auto" MinWidth="800"
+             Background="MintCream">
     <Grid>
         <Menu>
             <MenuItem Header="_File">
@@ -15,7 +15,7 @@
                           Header="Edit Store Inventory"
                           Icon="{fa:Icon Book}"
                           InputGestureText="Ctrl+I"/>
-
+                <Separator/>
                 <MenuItem Command="{Binding temp}"                 
                           Header="_Fullscreen"
                           Icon="{fa:Icon Expand}"

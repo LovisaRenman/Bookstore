@@ -5,8 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookstoreEf" xmlns:view="clr-namespace:BookstoreEf.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Background="MintCream"
+        Height="500" Width="800" 
+        MinHeight="450" MinWidth="700" 
+        Title="The Amazing Bookstore">
+    
+    
+    <!--<Grid>
         <view:ConfigurationView/>
+    </Grid>-->
+
+    <Grid Background="MintCream">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <view:MenuView Grid.Row="0"/>
+        <view:ConfigurationView Grid.Row="1" Visibility="Visible"/>
+        <view:EditView Grid.Row="1" Visibility="Hidden"/>
+
     </Grid>
+
+
 </Window>
+
+
+
+
+
+<!--<Window.Resources>
+    <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+</Window.Resources>-->
+
+<!--<Window.InputBindings>
+    <KeyBinding Key="Insert"
+      Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
+</Window.InputBindings>-->
+    
+<!--Visibility="{Binding IsPlayerModeVisible, Converter={StaticResource VisibilityConverter}}"-->
