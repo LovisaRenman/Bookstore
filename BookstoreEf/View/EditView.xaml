@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="BookstoreEf.View.ConfigurationView"
+﻿<UserControl x:Class="BookstoreEf.View.EditView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,10 +7,9 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             Background="white"
-             FontSize="16">
-
-
+             Background="White">
+    
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -19,61 +18,89 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="4*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--Stores-->
+        <!--Authors-->
         <Grid Grid.Column="0" 
-              Grid.Row="1"
-              Grid.RowSpan="2">
-            
+              Grid.Row="1">
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Label Content ="Stores"
-                   Grid.Column="0"
+            <Label Content ="Authors"
+                   Grid.Row="0"
                    FontWeight="Bold"
+                   FontSize="16"
                    Margin="20 0 20 0"
-                   HorizontalAlignment="Left">
+                   HorizontalAlignment="Left"> 
             </Label>
 
-            <ListBox Grid.Column="0"
-                     Grid.Row="1"                     
-                     ItemsSource="{Binding temp}"
-                     Margin="20 0 20 20"
-                     SelectedItem="{Binding temp, UpdateSourceTrigger=PropertyChanged}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <Button Background="Transparent" 
+                    BorderBrush="Transparent"
+                    Command ="{Binding temp}"
+                    Grid.Row="0"
+                    Height="30" 
+                    HorizontalAlignment="Right"
+                    Margin="10 0 50 0"
+                    ToolTip="Add author"
+                    Width="30">
+                <Button.Content>
+                    <fa:IconBlock Icon="Plus"/>
+                </Button.Content>
+            </Button>
 
-                <!--Binding 1: butiksnamn, Binding 2: adress-->
+            <Button Background="Transparent" 
+                    BorderBrush="Transparent"
+                    Command ="{Binding temp}"
+                    Grid.Row="0"
+                    Height="30" 
+                    HorizontalAlignment="Right"
+                    Margin="0 0 20 0"
+                    ToolTip="Remove author"
+                    Width="30">
+                <Button.Content>
+                    <fa:IconBlock Icon="Minus"/>
+                </Button.Content>
+            </Button>
+
+            <ListBox Grid.Column="0"
+              Grid.Row="1"                     
+              ItemsSource="{Binding temp}"
+              Margin="20 0 20 20"
+              SelectedItem="{Binding temp, UpdateSourceTrigger=PropertyChanged}"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                <!--Lista över befintliga författare-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
+                            <!--Binding 1: För- och efternamn, Binding 2: ID eller övrig info -->
                             <TextBlock Text="{Binding temp}" 
-                                       FontWeight="Bold"
-                                       FontSize="14"/>
+                                FontWeight="Bold"
+                                FontSize="14"/>
                             <TextBlock Text="{Binding temp}"
-                                       TextWrapping="Wrap"
-                                       FontSize="13"/>
+                                TextWrapping="Wrap"
+                                FontSize="12"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid >
 
-         
-        <!--Books in store-->
+
+        <!--Books-->
         <Grid Grid.Column="1" 
               Grid.Row="1">
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Label Content ="Store name"
+            <Label Content ="Books"
                    Grid.Column="1"
                    FontWeight="Bold"
                    FontSize="16"
@@ -87,14 +114,27 @@
                     Grid.Column="1"
                     Height="30" 
                     HorizontalAlignment="Right"
-                    Margin="10 0 50 0"
-                    ToolTip="View and update store inventory"
+                    Margin="10 0 80 0"
+                    ToolTip="Add book"
                     Width="30">
                 <Button.Content>
-                    <fa:IconBlock Icon="Shop"/>
+                    <fa:IconBlock Icon="Plus"/>
                 </Button.Content>
             </Button>
 
+            <Button Background="Transparent" 
+                    BorderBrush="Transparent"
+                    Command ="{Binding temp}"
+                    Grid.Column="1"
+                    Height="30" 
+                    HorizontalAlignment="Right"
+                    Margin="10 0 50 0"
+                    ToolTip="Remove book"
+                    Width="30">
+                <Button.Content>
+                    <fa:IconBlock Icon="Minus"/>
+                </Button.Content>
+            </Button>
 
             <Button Background="Transparent" 
                     BorderBrush="Transparent"
@@ -103,33 +143,33 @@
                     Height="30" 
                     HorizontalAlignment="Right"
                     Margin="10 0 20 0"
-                    ToolTip="Go to advanced options"
-                    Width="30"> 
+                    ToolTip="Edit book details"
+                    Width="30">
                 <Button.Content>
-                    <fa:IconBlock Icon="Book"/>
+                    <fa:IconBlock Icon="Gears"/>
                 </Button.Content>
             </Button>
 
             <ListBox Grid.Column="1"
-                     Grid.Row="1"
-                     ItemsSource="{Binding temp}"
-                     Margin="20 0 20 20"
-                     SelectedItem="{Binding temp, UpdateSourceTrigger=PropertyChanged}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+              Grid.Row="1"
+              ItemsSource="{Binding temp}"
+              Margin="20 0 20 20"
+              SelectedItem="{Binding temp, UpdateSourceTrigger=PropertyChanged}"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                 <!--Binding 1: titel, Binding 2: saldo, Binding 3: pris/st-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding temp}" 
-                                       FontSize="12"
-                                       TextWrapping="Wrap"/>
+                                FontSize="12"
+                                TextWrapping="Wrap"/>
                             <TextBlock Text="{Binding temp}"                                      
-                                       FontSize="12"
-                                       TextWrapping="Wrap"/>
+                                FontSize="12"
+                                TextWrapping="Wrap"/>
                             <TextBlock Text="{Binding temp}"                                      
-                                       FontSize="12"
-                                       TextWrapping="Wrap"/>
+                                FontSize="12"
+                                TextWrapping="Wrap"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -137,41 +177,8 @@
 
         </Grid>
 
-
-        <!--Status-->
-        <Grid Grid.Column="1"
-                Grid.Row="2"
-                Margin="20 0 20 20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Label Content="Book(s):"
-                   FontWeight="Bold"
-                   Grid.Column ="0"
-                   VerticalAlignment="Center">
-            </Label>
-            <Label Content="xx st"
-                   Grid.Column ="0"           
-                   Margin="70 0 0 0"
-                   VerticalAlignment="Center">
-            </Label>
-
-            <Label Content="Total price:"
-                   FontWeight="Bold"
-                   Grid.Column="1"
-                   VerticalAlignment="Center">
-            </Label>
-            <Label Content="xx kr"
-                   Grid.Column="1"
-                   Margin="90 0 0 0"
-                   VerticalAlignment="Center">
-            </Label>
-        </Grid>
-
     </Grid>
-
+    
+    
+    
 </UserControl>
-
-
