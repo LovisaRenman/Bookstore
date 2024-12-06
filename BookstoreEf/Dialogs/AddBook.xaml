@@ -17,10 +17,10 @@
         </Grid.ColumnDefinitions>
         <StackPanel Margin="15,15,15,15" Grid.ColumnSpan="2">
             <Label Content="ISBN"/>
-            <TextBox Text="{Binding temp}"
+            <TextBox Text="{Binding ISBN, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"/>
             <Label Content="Title"/>
-            <TextBox Text="{Binding temp}"
+            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"/>
             <Label Content="Language"/>
             <TextBox Text="{Binding temp}"

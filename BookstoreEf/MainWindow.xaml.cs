@@ -22,7 +22,6 @@ public partial class MainWindow : Window
         MessageBox.Show("Are you sure you want to remove this author", "Remove Author", MessageBoxButton.YesNo, MessageBoxImage.Question);
     }
 
-
     public void RemoveAuthorWarning(object? sender, EventArgs arg)
     {
         MessageBox.Show("All books associated with this author will be removed, do you want to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);

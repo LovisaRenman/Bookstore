@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="MintCream"
-             DataContext="{Binding temp}">
+             DataContext="{Binding BookViewModel}">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
@@ -33,7 +33,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding tempDialog}"
+                Command ="{Binding AddBookCommand}"
                 Grid.Row="0"  
                 Height="30" 
                 HorizontalAlignment="Right"
@@ -85,7 +85,7 @@
         <DataGrid x:Name="DG_BookDetails" 
                   Grid.Row="1"
                   Margin="10 0 10 0"
-                  AutoGenerateColumns="True"
+                  AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   CanUserReorderColumns="False"
@@ -93,38 +93,39 @@
                   IsReadOnly ="True"
                   AlternationCount="2"
                   AlternatingRowBackground="LightGray"
-                  RowBackground="White"                
+                  RowBackground="White"
                   RowHeaderWidth="20"
-                  SelectedItem="{Binding temp}">
+                  SelectedItem="{Binding SelectdBook}"
+                  ItemsSource="{Binding Books}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN"
-                                    Width="*"
-                                    Binding="{Binding tempBookISBN}"/>
+                                    Width="3*"
+                                    Binding="{Binding Isbn}"/>
                 <DataGridTextColumn Header="Book Title"
-                                    Width="2*"
-                                    Binding="{Binding tempBookTitle}"/>
+                                    Width="4*"
+                                    Binding="{Binding BookTitle}"/>
                 <DataGridTextColumn Header="Author"
-                                    Width="*"
-                                    Binding="{Binding tempBookAuthor}"/>
+                                    Width="3*"
+                                    Binding="{Binding TempAuthor}"/>
                 <DataGridTextColumn Header="Genre"
-                                    Width="*"
-                                    Binding="{Binding tempBookGenre}"/>
+                                    Width="3*"
+                                    Binding="{Binding Genre.GenreName}"/>
                 <DataGridTextColumn Header="Language"
-                                    Width="*"
-                                    Binding="{Binding tempBookLanguage}"/>
+                                    Width="3*"
+                                    Binding="{Binding Language}"/>
                 <DataGridTextColumn Header="Publisher"
-                                    Width="*"
-                                    Binding="{Binding tempBookPulisher}"/>
+                                    Width="3*"
+                                    Binding="{Binding Publisher.Name}"/>
                 <DataGridTextColumn Header="Pages"
-                                    Width="*"
-                                    Binding="{Binding tempBookPages}"/>
+                                    Width="2*"
+                                    Binding="{Binding Pages}"/>
                 <DataGridTextColumn Header="Weight (g)"
-                                    Width="*"
-                                    Binding="{Binding tempBookWeight}"/>
+                                    Width="2*"
+                                    Binding="{Binding WeightInGrams}"/>
                 <DataGridTextColumn Header="Price (kr)"
-                                    Width="*"
-                                    Binding="{Binding tempBookPrice}"/>
+                                    Width="2*"
+                                    Binding="{Binding Price}"/>
             </DataGrid.Columns>
         </DataGrid>
 
