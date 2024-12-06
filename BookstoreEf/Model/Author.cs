@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookstoreEf;
 
@@ -16,4 +17,8 @@ public partial class Author
     public DateOnly? DateofDeath { get; set; }
 
     public virtual ICollection<Book> BookIsbns { get; set; } = new List<Book>();
+
+    [NotMapped]
+    public string? Name { get; set; }
+
 }

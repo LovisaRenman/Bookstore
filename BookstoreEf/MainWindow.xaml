@@ -27,9 +27,9 @@
         </Grid.RowDefinitions>
 
         <view:MenuView Grid.Row="0"/>
-        <view:StoreInventoryView Grid.Row="1" Visibility="Visible"/>
+        <view:StoreInventoryView Grid.Row="1" Visibility="Hidden"/>
         <view:BookView Grid.Row="1" Visibility="Hidden"/>
-        <view:AuthorView Grid.Row="1" Visibility="Hidden"/>
+        <view:AuthorView Grid.Row="1" Visibility="Visible"/>
 
     </Grid>
 
