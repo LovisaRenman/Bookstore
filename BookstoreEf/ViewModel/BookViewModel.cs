@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookstoreEf.ViewModel
 {
-    class BookViewModel
+    class BookViewModel : ViewModelBase
     {
     }
 }
