@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BookstoreEf.Model;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace BookstoreEf.ViewModel;
 
@@ -11,14 +9,47 @@ class StoreInventoryViewModel : ViewModelBase
     private readonly MainWindowViewModel? mainWindowViewModel;
 
 
-    private bool _textVisibility;
-    public bool TextVisibility
+    private ObservableCollection<Store> _stores;
+    public ObservableCollection<Store> Stores
     {
-        get => _textVisibility;
+        get { return _stores; }
         set
         {
-            _textVisibility = value;
-            RaisePropertyChanged();
+            if (_stores != value)
+            {
+                _stores = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
+
+
+    private Store _selectedStore;
+    public Store SelectedStore
+    {
+        get { return _selectedStore; }
+        set
+        {
+            if (_selectedStore != value)
+            {
+                _selectedStore = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
+
+
+    private string _storeNames;
+    public string StoreNames
+    {
+        get { return _storeNames; }
+        set
+        {
+            if (_storeNames != value)
+            {
+                _storeNames = value;
+                RaisePropertyChanged();
+            }
         }
     }
 
@@ -27,20 +58,27 @@ class StoreInventoryViewModel : ViewModelBase
     {
         this.mainWindowViewModel = mainWindowViewModel;
 
-        //DeleteQuestionIsEnable = false;
-        //IsConfigurationModeVisible = true;
+        LoadStores();
+        GetStoreAdress();
 
+        _selectedStore = Stores?.FirstOrDefault();
+    }
 
-        // Delegat commands här ...
+    public void LoadStores() 
+    {
+        using var db = new BookstoreContext();
+        var stores = db.Stores.ToList();
 
-        //SelectedStore = ?????????????????.FirstOrDefault();
-        //TextVisibility = ActivePack?.Questions.Count > 0;
+        Stores = new ObservableCollection<Store>(stores);
+    }
 
-
+    public void GetStoreAdress()
+    {
+        foreach (var store in Stores)
+        {
+            store.StoreAdress = string.Join(", " , string.Join(" ", store.Street, store.StreetNumber), store.Postcode, store.City, store.Country);
+        }
     }
 
 
-
-    //private void ChangeTextVisibility()
-    //        => TextVisibility = XX.Count > 0 && SelectedStore != null;
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookstoreEf.Model;
 
@@ -20,4 +22,9 @@ public partial class Store
     public string Postcode { get; set; } = null!;
 
     public virtual ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
+
+    [NotMapped]
+    public string? StoreAdress { get; set; }
+
+
 }

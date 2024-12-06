@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="MintCream"
-             DataContext="{Binding temp}">
+             DataContext="{Binding StoreInventoryViewModel}">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
@@ -39,19 +39,25 @@
 
         <ListBox Grid.Column="0" 
                  Grid.Row="1"
-                 ItemsSource="{Binding tempStore}" 
+                 ItemsSource="{Binding Stores}" 
                  Margin="10 0 10 0"
-                 SelectedItem="{Binding tempSelectedStore, UpdateSourceTrigger=PropertyChanged}" >
+                 SelectedItem="{Binding SelectedStore, UpdateSourceTrigger=PropertyChanged}" >
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding tempStoreName}" 
+                        
+                        <TextBlock Text="{Binding StoreName}" 
                                    FontWeight="Bold"
-                                   FontSize="14"/>
-                        <TextBlock Text="{Binding tempStoreAdress}"
+                                   FontSize="12"
+                                   Margin="0 5 0 0"/>
+
+                        <TextBlock Text="{Binding StoreAdress}"                                   
+                                   FontWeight="Regular"
+                                   FontSize="11"
                                    TextWrapping="Wrap"
-                                   FontSize="12"/>
+                                   Margin="0 5 0 0"/>
+
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -194,5 +200,4 @@
     </Grid>
 
 </UserControl>
-
 

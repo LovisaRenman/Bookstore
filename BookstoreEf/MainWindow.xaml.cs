@@ -1,4 +1,5 @@
 ﻿using BookstoreEf.ViewModel;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows;
 
 namespace BookstoreEf;
@@ -12,6 +13,8 @@ public partial class MainWindow : Window
         InitializeComponent();
         mainWindowViewModel = new MainWindowViewModel();
         DataContext = mainWindowViewModel;
+
+  
     }
 
     public void RemoveAuthor(object? sender, EventArgs arg)
@@ -24,8 +27,10 @@ public partial class MainWindow : Window
     {
         MessageBox.Show("All books associated with this author will be removed, do you want to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
     }
+
     public void RemoveBook(object? sender, EventArgs arg)
     {
         MessageBox.Show("Are you sure you want to remove this Book", "Remove Book", MessageBoxButton.YesNo, MessageBoxImage.Question);
     }
+
 }
