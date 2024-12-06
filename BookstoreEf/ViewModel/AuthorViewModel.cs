@@ -8,5 +8,9 @@ namespace BookstoreEf.ViewModel
 {
     class AuthorViewModel : ViewModelBase
     {
+        public AuthorViewModel(MainWindowViewModel? mainWindowViewModel)
+        {
+            
+        }
     }
 }
