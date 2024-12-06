@@ -14,17 +14,19 @@ namespace BookstoreEf.ViewModel
 
         public DelegateCommand AddBookCommand { get; }
 
+        public event EventHandler ShowDialogAddBooks;
+
+
         public BookViewModel(MainWindowViewModel? mainWindowViewModel)
         {
             this.mainWindowViewModel = mainWindowViewModel;
 
             AddBookCommand = new DelegateCommand(AddBook);
-
         }
 
         private void AddBook(object obj)
         {
-            throw new NotImplementedException();
+            ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
         }
 
         private List<Book> _books;
