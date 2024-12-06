@@ -146,23 +146,24 @@
                   IsReadOnly ="True"
                   AlternationCount="2"
                   AlternatingRowBackground="LightGray"
-                  RowBackground="White"                
+                  RowBackground="White"
                   RowHeaderWidth="20"
-                  SelectedItem="{Binding temp}">
+                  SelectedItem="{Binding SelectedBook}"
+                  ItemsSource="{Binding BooksInSelectedStore}">
             
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Book Title"
                                     Width="2*"
-                                    Binding="{Binding tempBookTitle}"/>
+                                    Binding="{Binding BookTitle}"/>
                 <DataGridTextColumn Header="Quantity"
                                     Width="*"
-                                    Binding="{Binding tempBookQuantity}"/>
+                                    Binding="{Binding Quantity}"/>
                 <DataGridTextColumn Header="Price per unit"
                                     Width="*"
-                                    Binding="{Binding tempBookPrice}"/>
+                                    Binding="{Binding Price, StringFormat=sek}"/>
                 <DataGridTextColumn Header="Total price"
                                     Width="*"
-                                    Binding="{Binding tempBookPrice}"/>      
+                                    Binding="{Binding TotalPrice, StringFormat=sek}"/>      
             </DataGrid.Columns>
         </DataGrid>
         <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->

@@ -39,8 +39,8 @@ namespace BookstoreEf.ViewModel
                 return _books; 
             }
         }
-        private Book? _selectedBook;
 
+        private Book? _selectedBook;
         public Book? SelectedBook
         {
             get => _selectedBook;
