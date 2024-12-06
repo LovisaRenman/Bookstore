@@ -3,18 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BookstoreEf" xmlns:view="clr-namespace:BookstoreEf.View"
+        xmlns:local="clr-namespace:BookstoreEf" 
+        xmlns:view="clr-namespace:BookstoreEf.View"
         mc:Ignorable="d"
-        Background="MintCream"
         Height="500" Width="800" 
         MinHeight="450" MinWidth="700" 
-        Title="The Amazing Bookstore">
-    
-    
-    <!--<Grid>
-        <view:ConfigurationView/>
-    </Grid>-->
+        Title="Once Upon a Bookstore">
 
+    <!--<Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    </Window.Resources>-->
+
+    <!--<Window.InputBindings>
+        <KeyBinding Key="Insert"
+            Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
+    </Window.InputBindings>-->
+
+    
     <Grid Background="MintCream">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -22,25 +27,14 @@
         </Grid.RowDefinitions>
 
         <view:MenuView Grid.Row="0"/>
-        <view:ConfigurationView Grid.Row="1" Visibility="Visible"/>
-        <view:EditView Grid.Row="1" Visibility="Hidden"/>
+        <view:StoreInventoryView Grid.Row="1" Visibility="Hidden"/>
+        <view:BookView Grid.Row="1" Visibility="Hidden"/>
+        <view:AuthorView Grid.Row="1" Visibility="Visible"/>
 
     </Grid>
 
 
 </Window>
 
-
-
-
-
-<!--<Window.Resources>
-    <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
-</Window.Resources>-->
-
-<!--<Window.InputBindings>
-    <KeyBinding Key="Insert"
-      Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
-</Window.InputBindings>-->
     
 <!--Visibility="{Binding IsPlayerModeVisible, Converter={StaticResource VisibilityConverter}}"-->
