@@ -10,9 +10,9 @@
         MinHeight="450" MinWidth="700" 
         Title="Once Upon a Bookstore">
 
-    <!--<Window.Resources>
+    <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
-    </Window.Resources>-->
+    </Window.Resources>
 
     <!--<Window.InputBindings>
         <KeyBinding Key="Insert"
