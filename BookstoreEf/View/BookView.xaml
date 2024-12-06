@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="MintCream"
-             DataContext="{Binding temp}">
+             DataContext="{Binding BookViewModel}">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
@@ -93,9 +93,10 @@
                   IsReadOnly ="True"
                   AlternationCount="2"
                   AlternatingRowBackground="LightGray"
-                  RowBackground="White"                
+                  RowBackground="White"
                   RowHeaderWidth="20"
-                  SelectedItem="{Binding temp}">
+                  SelectedItem="{Binding SelectdBook}"
+                  ItemsSource="{Binding Books}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN"

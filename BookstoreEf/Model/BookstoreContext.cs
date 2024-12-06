@@ -20,7 +20,7 @@ public partial class BookstoreContext : DbContext
 
     public virtual DbSet<Book> Books { get; set; }
 
-    public virtual DbSet<BookReview> BookReviews { get; set; }
+    //public virtual DbSet<BookReview> BookReviews { get; set; }
 
     public virtual DbSet<BookReview1> BookReviews1 { get; set; }
 
