@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BookstoreEf.Command;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,19 @@ namespace BookstoreEf.ViewModel
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
 
+        public DelegateCommand AddBookCommand { get; }
+
         public BookViewModel(MainWindowViewModel? mainWindowViewModel)
         {
             this.mainWindowViewModel = mainWindowViewModel;
 
+            AddBookCommand = new DelegateCommand(AddBook);
+
+        }
+
+        private void AddBook(object obj)
+        {
+            throw new NotImplementedException();
         }
 
         private List<Book> _books;
@@ -23,7 +33,7 @@ namespace BookstoreEf.ViewModel
             get 
             {
                 using var db = new BookstoreContext();
-                var _books = db.Books.ToList();
+                var _books = db.Books.Include(b => b.Authors).Include(b => b.Genre).Include(b => b.Publisher).ToList();                
                 return _books; 
             }
         }
@@ -75,6 +85,14 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
                 UpdateBookTitle();
             }
+        }
+
+        private string _authorFullName;
+
+        public string AuthorFullName
+        {
+            get { return _authorFullName; }
+            set { _authorFullName = value; }
         }
 
         private void UpdateBookTitle()
