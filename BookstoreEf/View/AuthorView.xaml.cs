@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace BookstoreEf.View
 {
     /// <summary>
-    /// Interaction logic for EditView.xaml
+    /// Interaction logic for AuthorView.xaml
     /// </summary>
-    public partial class EditView : UserControl
+    public partial class AuthorView : UserControl
     {
-        public EditView()
+        public AuthorView()
         {
             InitializeComponent();
         }
