@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="MintCream"
-             DataContext="{Binding temp}">
+             DataContext="{Binding AuthorViewModel}">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
@@ -39,19 +39,17 @@
         
         <ListBox Grid.Column="0" 
                  Grid.Row="1"
-                 ItemsSource="{Binding tempStore}" 
+                 ItemsSource="{Binding Authors}" 
                  Margin="20 0 20 0"
-                 SelectedItem="{Binding tempSelectedAuthor, UpdateSourceTrigger=PropertyChanged}" >
+                 SelectedItem="{Binding SelectedAuthor, UpdateSourceTrigger=PropertyChanged}" >
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Author" 
-                           FontWeight="Bold"
-                           FontSize="14"/>
-                        <TextBlock Text="{Binding tempAuthorName}" 
+                        <TextBlock Text="{Binding Name}" 
                            FontWeight="Regular"
-                           FontSize="14"/>
+                           FontSize="14"
+                           Margin="0 5 0 0"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
