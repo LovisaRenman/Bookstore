@@ -80,7 +80,7 @@
         
         <Button Background="Transparent"
                 BorderBrush="Transparent"
-                Command ="{Binding tempDialogInventory}"
+                Command ="{Binding OpenInventoryCommand}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 

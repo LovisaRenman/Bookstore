@@ -1,4 +1,5 @@
-﻿using BookstoreEf.Model;
+﻿using BookstoreEf.Command;
+using BookstoreEf.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 
@@ -9,6 +10,9 @@ class StoreInventoryViewModel : ViewModelBase
     private readonly MainWindowViewModel? mainWindowViewModel;
 
     private ObservableCollection<BookInventoryViewModel> _booksInSelectedStore;
+
+    public event EventHandler ShowDialogManageInventory;
+
     public ObservableCollection<BookInventoryViewModel> BooksInSelectedStore
     {
         get => _booksInSelectedStore;
@@ -31,7 +35,9 @@ class StoreInventoryViewModel : ViewModelBase
                 RaisePropertyChanged();
             }
         }
-    } 
+    }
+
+    public DelegateCommand OpenInventoryCommand { get; }
 
     private Store _selectedStore;
     public Store SelectedStore
@@ -69,7 +75,14 @@ class StoreInventoryViewModel : ViewModelBase
         LoadStores();
         GetStoreAdress();
 
+        OpenInventoryCommand = new DelegateCommand(OpenInventory);
+
         _selectedStore = Stores?.FirstOrDefault();
+    }
+
+    private void OpenInventory(object obj)
+    {
+        ShowDialogManageInventory.Invoke(this, EventArgs.Empty);
     }
 
     private void LoadStores() 

@@ -20,6 +20,13 @@ public partial class MainWindow : Window
         mainWindowViewModel.BookViewModel.ShowDialogAddBooks += AddBooks;
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += RemoveBook;
+        mainWindowViewModel.StoreInventoryViewModel.ShowDialogManageInventory += ManageInventory;
+    }
+
+    private void ManageInventory(object? sender, EventArgs e)
+    {
+        _dialog = new ManageInventory();
+        ShowDialog(mainWindowViewModel.StoreInventoryViewModel);
     }
 
     private void EditBooks(object? sender, EventArgs e)
