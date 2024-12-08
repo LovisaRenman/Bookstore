@@ -13,8 +13,12 @@ namespace BookstoreEf.ViewModel
         private readonly MainWindowViewModel? mainWindowViewModel;
 
         public DelegateCommand AddBookCommand { get; }
+        public DelegateCommand EditBookCommand { get; }
+        public DelegateCommand RemoveBookCommand { get; }
 
         public event EventHandler ShowDialogAddBooks;
+        public event EventHandler ShowDialogEditBook;
+        public event EventHandler ShowMessageBoxRemoveBook;
 
 
         public BookViewModel(MainWindowViewModel? mainWindowViewModel)
@@ -22,6 +26,30 @@ namespace BookstoreEf.ViewModel
             this.mainWindowViewModel = mainWindowViewModel;
 
             AddBookCommand = new DelegateCommand(AddBook);
+            EditBookCommand = new DelegateCommand(EditBook, EditBookActive);
+            RemoveBookCommand = new DelegateCommand(RemoveBook, RemoveBookActive);
+        }
+
+        private bool RemoveBookActive(object? arg)
+        {
+            if (SelectedBook != null) return true;
+            else return false;
+        }
+
+        private void RemoveBook(object obj)
+        {
+            ShowMessageBoxRemoveBook.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool EditBookActive(object? arg)
+        {
+            if (SelectedBook != null) return true;
+            else return false;
+        }
+
+        private void EditBook(object obj)
+        {
+            ShowDialogEditBook.Invoke(this, EventArgs.Empty);
         }
 
         private void AddBook(object obj)
@@ -48,6 +76,8 @@ namespace BookstoreEf.ViewModel
             {
                 _selectedBook = value;
                 RaisePropertyChanged();
+                EditBookCommand.RaiseCanExecuteChanged();
+                RemoveBookCommand.RaiseCanExecuteChanged();
             }
         }
 

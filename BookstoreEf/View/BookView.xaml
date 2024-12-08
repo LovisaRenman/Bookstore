@@ -50,7 +50,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding temp}"
+                Command ="{Binding RemoveBookCommand}"
                 Grid.Row="0"  
                 Height="30" 
                 HorizontalAlignment="Right"
@@ -67,7 +67,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding temp}"
+                Command ="{Binding EditBookCommand}"
                 Grid.Row="0"  
                 Height="30" 
                 HorizontalAlignment="Right"
@@ -85,6 +85,7 @@
         <DataGrid x:Name="DG_BookDetails" 
                   Grid.Row="1"
                   Margin="10 0 10 0"
+                  SelectionMode="Single"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
@@ -95,7 +96,7 @@
                   AlternatingRowBackground="LightGray"
                   RowBackground="White"
                   RowHeaderWidth="20"
-                  SelectedItem="{Binding SelectdBook}"
+                  SelectedItem="{Binding SelectedBook}"
                   ItemsSource="{Binding Books}">
 
             <DataGrid.Columns>

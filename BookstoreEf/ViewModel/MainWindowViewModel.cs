@@ -8,8 +8,6 @@ internal class MainWindowViewModel : ViewModelBase
     public BookViewModel BookViewModel { get; }
     public StoreInventoryViewModel StoreInventoryViewModel { get; }
 
-
-
     public MainWindowViewModel()
     {
         AuthorViewModel = new AuthorViewModel(this);
@@ -17,8 +15,4 @@ internal class MainWindowViewModel : ViewModelBase
         StoreInventoryViewModel = new StoreInventoryViewModel(this);
 
     }
-
-   
-
-
 }

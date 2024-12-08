@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BookstoreEf.Dialogs"
         mc:Ignorable="d"
         DataContext="{Binding BookViewModel}"
-        Title="Add Book" Height="400" Width="500" ResizeMode="NoResize"
+        Title="Add Book" Height="450" Width="500" ResizeMode="NoResize"
         FontSize="16"
         FontWeight="Bold">
     <Grid>
@@ -22,9 +22,9 @@
             <Label Content="Title"/>
             <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"/>
-            <Label Content="Language"/>
-            <TextBox Text="{Binding temp}"
-                     Margin="0 0 0 10"/>
+            <Label Content="Author"/>
+            <ComboBox Margin="0 0 0 10"/>
+            
             <WrapPanel>
                 <Label Content="Publish Date:"/>
                 <Label Content="YYYYMMDD"
@@ -32,12 +32,14 @@
             </WrapPanel>
             <TextBox Text="{Binding temp}"
                      Margin="0 0 0 10"/>
-            <Label Content="Publisher Id"/>
-            <TextBox Text="{Binding temp}"
-                     Margin="0 0 0 10"/>
+            <Label Content="Publisher"/>
+            <ComboBox Margin="0 0 0 10"/>
         </StackPanel>
         <StackPanel Grid.Column="2"
                     Margin="15,15,15,15">
+            <Label Content="Language"/>
+            <TextBox Text="{Binding temp}"
+                     Margin="0 0 0 10"/>
             <Label Content="Price"/>
             <TextBox Text="{Binding temp}"
                      Margin="0 0 0 10"/>
@@ -49,12 +51,18 @@
                 <Label Content="(g)"
                        FontWeight="Normal"/>
             </WrapPanel>
-
             <TextBox Text="{Binding temp}"
                      Margin="0 0 0 10"/>
-            <Label Content="Genre Id"/>
-            <TextBox Text="{Binding temp}"
-                     Margin="0 0 0 10"/>
+            <Label Content="Genre"/>
+            <ComboBox Margin="0 0 0 10"/>
+            <WrapPanel Margin="18"
+                       HorizontalAlignment="Center">
+                <Button Content="Ok"
+                        Padding="5"
+                        Margin="0 0 10 0"/>
+                <Button Content="Cancel"
+                        Padding="5"/>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>
