@@ -57,7 +57,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding tempDialog}"
+                Command ="{Binding AddAuthorCommand}"
                 Grid.Row="0"  
                 Height="30" 
                 HorizontalAlignment="Right"
@@ -74,7 +74,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding temp}"
+                Command ="{Binding DeleteAuthorCommand}"
                 Grid.Row="0"  
                 Height="30" 
                 HorizontalAlignment="Right"
@@ -89,66 +89,67 @@
         </Button>
         
         
-        <!--AUTHOR DETAILS-->
+        <!--SELECTED AUTHOR DETAILS-->
         <Label Content="Edit Profile Details" 
-                FontSize="15" 
-                FontStyle="Oblique"                
-                FontWeight="Regular"
-                Grid.Column="1" 
-                Grid.Row="0" 
-                HorizontalAlignment="Left" 
-                VerticalAlignment="Bottom"
-                Margin="20 0 0 0">
+               FontSize="15" 
+               FontStyle="Oblique"                
+               FontWeight="Regular"
+               Grid.Column="1" 
+               Grid.Row="0" 
+               HorizontalAlignment="Left" 
+               VerticalAlignment="Bottom"
+               Margin="20 0 0 0"
+               Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}">
         </Label>
         
         <StackPanel Grid.Column="1" 
                     Grid.Row="1" 
-                    Margin="10 0">
+                    Margin="10 0"
+                    Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}">
 
             <Label Content="First Name" 
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
             
-            <TextBox Text ="{Binding temp, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text ="{Binding SelectedAuthor.FirstName, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
                      Margin="10 0 10 10"
-                     Padding="2"/>
+                     Padding="2 5 2 5"/>
 
             <Label Content="Last Name" 
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
             
-            <TextBox Text ="{Binding temp, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text ="{Binding SelectedAuthor.LastName, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
                      Margin="10 0 10 10"
-                     Padding="2"/>
+                     Padding="2 5 2 5"/>
 
             <WrapPanel Margin="10 0 0 0">
                 <Label Content="Date Of Birth"
                        FontWeight="Bold"/>
-                <Label Content="YYYYMMDD*"
+                <Label Content="MMDDYYYY*"
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox Text ="{Binding temp, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
                      Margin="10 0 10 10"
-                     Padding="2"/>
+                     Padding="2 5 2 5"/>
 
             <WrapPanel Margin="10 0 0 0">
                 <Label Content="Date Of Death"
                        FontWeight="Bold"/>
-                <Label Content="YYYYMMDD*"
+                <Label Content="MMDDYYYY*"
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox Text ="{Binding temp, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
                      Margin="10 0 10 0"
-                     Padding="2"/>
-
+                     Padding="2 5 2 5"/>
         </StackPanel>
-        <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
+
         
     </Grid>
 

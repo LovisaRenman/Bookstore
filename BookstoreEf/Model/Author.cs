@@ -21,4 +21,13 @@ public partial class Author
     [NotMapped]
     public string? Name { get; set; }
 
+
+    public Author(string firstName, string lastName, DateOnly dateofBirth, DateOnly dateofDate)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        DateofBirth = dateofBirth;
+        DateofDeath = DateofDeath;
+    }
+
 }
