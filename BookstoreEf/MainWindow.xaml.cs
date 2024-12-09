@@ -20,7 +20,8 @@ public partial class MainWindow : Window
         mainWindowViewModel.BookViewModel.ShowDialogAddBooks += AddBooks;
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += RemoveBook;
-        mainWindowViewModel.StoreInventoryViewModel.ShowDialogManageInventory += ManageInventory;
+        mainWindowViewModel.BookViewModel.CloseBookDialog += CloseDialog;
+        mainWindowViewModel.StoreInventoryViewModel.ShowDialogManageInventory += ManageInventory;       
     }
 
     private void ManageInventory(object? sender, EventArgs e)
@@ -66,6 +67,14 @@ public partial class MainWindow : Window
         catch (Exception e)
         {
             MessageBox.Show($"An error occurred while opening the dialog box {e.Message}");
+        }
+    }
+    public void CloseDialog(object? sender, EventArgs args)
+    {
+        if (_dialog != null)
+        {
+            _dialog?.Close();
+            _dialog = null;
         }
     }
 }
