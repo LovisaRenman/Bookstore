@@ -1,4 +1,5 @@
-﻿using BookstoreEf.Model;
+﻿using BookstoreEf.Command;
+using BookstoreEf.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 
@@ -8,6 +9,19 @@ class StoreInventoryViewModel : ViewModelBase
 {
     private readonly MainWindowViewModel? mainWindowViewModel;
 
+    private ObservableCollection<BookInventoryViewModel> _booksInSelectedStore;
+
+    public event EventHandler ShowDialogManageInventory;
+
+    public ObservableCollection<BookInventoryViewModel> BooksInSelectedStore
+    {
+        get => _booksInSelectedStore;
+        set
+        {
+            _booksInSelectedStore = value;
+            RaisePropertyChanged();
+        }
+    }
 
     private ObservableCollection<Store> _stores;
     public ObservableCollection<Store> Stores
@@ -23,6 +37,7 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
+    public DelegateCommand OpenInventoryCommand { get; }
 
     private Store _selectedStore;
     public Store SelectedStore
@@ -34,10 +49,10 @@ class StoreInventoryViewModel : ViewModelBase
             {
                 _selectedStore = value;
                 RaisePropertyChanged();
+                UpdateBooksForSelectedStore();
             }
         }
     }
-
 
     private string _storeNames;
     public string StoreNames
@@ -53,7 +68,6 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
-
     public StoreInventoryViewModel(MainWindowViewModel? mainWindowViewModel)
     {
         this.mainWindowViewModel = mainWindowViewModel;
@@ -61,10 +75,17 @@ class StoreInventoryViewModel : ViewModelBase
         LoadStores();
         GetStoreAdress();
 
+        OpenInventoryCommand = new DelegateCommand(OpenInventory);
+
         _selectedStore = Stores?.FirstOrDefault();
     }
 
-    public void LoadStores() 
+    private void OpenInventory(object obj)
+    {
+        ShowDialogManageInventory.Invoke(this, EventArgs.Empty);
+    }
+
+    private void LoadStores() 
     {
         using var db = new BookstoreContext();
         var stores = db.Stores.ToList();
@@ -72,7 +93,7 @@ class StoreInventoryViewModel : ViewModelBase
         Stores = new ObservableCollection<Store>(stores);
     }
 
-    public void GetStoreAdress()
+    private void GetStoreAdress()
     {
         foreach (var store in Stores)
         {
@@ -80,5 +101,28 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
+    private void UpdateBooksForSelectedStore()
+    {
+        if (SelectedStore == null)
+        {
+            BooksInSelectedStore = new ObservableCollection<BookInventoryViewModel>();
+            return;
+        }
+
+        using (var db = new BookstoreContext())
+        {
+            var booksInStore = db.Inventories
+                .Where(i => i.StoreId == SelectedStore.Id)
+                .Select(i => new BookInventoryViewModel
+                {
+                    BookTitle = i.BookIsbnNavigation.BookTitle,
+                    Quantity = i.Quantity,
+                    Price = i.BookIsbnNavigation.Price
+                })
+                .ToList();
+
+            BooksInSelectedStore = new ObservableCollection<BookInventoryViewModel>(booksInStore);
+        }
+    }
 
 }

@@ -25,6 +25,4 @@ public partial class Store
 
     [NotMapped]
     public string? StoreAdress { get; set; }
-
-
 }

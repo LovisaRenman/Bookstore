@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BookstoreEf.Dialogs"
         mc:Ignorable="d"
         DataContext="{Binding BookViewModel}"
-        Title="Add Book" Height="400" Width="500" ResizeMode="NoResize"
+        Title="{Binding BookWindowTitle}" Height="450" Width="500" ResizeMode="NoResize"
         FontSize="16"
         FontWeight="Bold">
     <Grid>
@@ -22,39 +22,56 @@
             <Label Content="Title"/>
             <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"/>
-            <Label Content="Language"/>
-            <TextBox Text="{Binding temp}"
-                     Margin="0 0 0 10"/>
+            <Label Content="Author"/>
+            <ComboBox Margin="0 0 0 10"
+                      ItemsSource="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Author}"
+                      DisplayMemberPath="{Binding Fullname}"/>
+
             <WrapPanel>
                 <Label Content="Publish Date:"/>
-                <Label Content="YYYYMMDD"
+                <Label Content="MM/DD/YYYY"
                        FontWeight="Normal"/>
             </WrapPanel>
-            <TextBox Text="{Binding temp}"
+            <TextBox Text="{Binding PublishDate, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"/>
-            <Label Content="Publisher Id"/>
-            <TextBox Text="{Binding temp}"
-                     Margin="0 0 0 10"/>
+            <Label Content="Publisher"/>
+            <ComboBox Margin="0 0 0 10"/>
         </StackPanel>
         <StackPanel Grid.Column="2"
                     Margin="15,15,15,15">
-            <Label Content="Price"/>
-            <TextBox Text="{Binding temp}"
+            <Label Content="Language"/>
+            <TextBox Text="{Binding Language, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0 0 0 10"/>
+            <WrapPanel>
+                <Label Content="Price"/>
+                <Label Content="(kr)"
+                       FontWeight="Normal"/>
+            </WrapPanel>
+            <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"/>
             <Label Content="Pages"/>
-            <TextBox Text="{Binding temp}"
+            <TextBox Text="{Binding Pages, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"/>
             <WrapPanel>
                 <Label Content="Weight"/>
                 <Label Content="(g)"
                        FontWeight="Normal"/>
             </WrapPanel>
-
-            <TextBox Text="{Binding temp}"
+            <TextBox Text="{Binding Weight, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0 0 0 10"/>
-            <Label Content="Genre Id"/>
-            <TextBox Text="{Binding temp}"
-                     Margin="0 0 0 10"/>
+            <Label Content="Genre"/>
+            <ComboBox Margin="0 0 0 10"/>
+            <WrapPanel Margin="18"
+                       HorizontalAlignment="Center">
+                <Button Content="Ok"
+                        Padding="5"
+                        Command="{Binding OkCommand}"
+                        Margin="0 0 10 0"/>
+                <Button Content="Cancel"
+                        Padding="5"
+                        Command="{Binding CancelCommand}"/>
+            </WrapPanel>
         </StackPanel>
     </Grid>
 </Window>
