@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 using BookstoreEf.Model;
 
 namespace BookstoreEf;
@@ -35,4 +36,11 @@ public partial class Book
     public virtual Publisher? Publisher { get; set; }
 
     public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
+
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

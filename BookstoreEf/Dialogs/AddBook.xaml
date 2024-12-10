@@ -11,67 +11,122 @@
         FontWeight="Bold">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="39*"/>
-            <ColumnDefinition Width="261*"/>
-            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Margin="15,15,15,15" Grid.ColumnSpan="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="10 0 10 0">
             <Label Content="ISBN"/>
-            <TextBox Text="{Binding ISBN, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding SelectedBook.Isbn, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Margin="0 0 0 10"/>
+        </StackPanel>
+
+        <StackPanel Margin="10 0 10 0"
+                    Grid.Row="1">
             <Label Content="Title"/>
-            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding SelectedBook.BookTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Margin="0 0 0 10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"
+                    Margin="10 0 10 0">
             <Label Content="Author"/>
             <ComboBox Margin="0 0 0 10"
                       ItemsSource="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedItem="{Binding SelectedAuthor}"
+                      SelectedItem="{Binding SelectedAuthor, Mode=TwoWay}"
                       DisplayMemberPath="Name"/>
-
-            <WrapPanel>
-                <Label Content="Publish Date:"/>
-                <Label Content="MM/DD/YYYY"
-                       FontWeight="Normal"/>
-            </WrapPanel>
-            <TextBox Text="{Binding PublishDate, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0 0 0 10"/>
-            <Label Content="Publisher"/>
-            <ComboBox Margin="0 0 0 10"/>
         </StackPanel>
+
+        <StackPanel Grid.Row="3"
+                    Margin="10 0 10 0">
+            <WrapPanel>
+                    <Label Content="Publish Date:"/>
+                    <Label Content="MM/DD/YYYY"
+                            FontWeight="Normal"/>
+                </WrapPanel>
+            <TextBox Text="{Binding SelectedBook.PublishDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            Margin="0 0 0 10"/>
+            
+        </StackPanel>
+
+        <StackPanel Grid.Row="4"
+                    Margin="10 0 10 0">
+            <Label Content="Publisher"/>
+            <ComboBox Margin="0 0 0 10"
+                      ItemsSource="{Binding Publishers, UpdateSourceTrigger=PropertyChanged}"
+                      DisplayMemberPath="Name" 
+                      SelectedItem="{Binding SelectedPublisher, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        </StackPanel>
+
         <StackPanel Grid.Column="2"
-                    Margin="15,15,15,15">
+                    Margin="10 0 10 0">
             <Label Content="Language"/>
-            <TextBox Text="{Binding Language, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding SelectedBook.Language, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Margin="0 0 0 10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2"
+                    Grid.Row="1"
+                    Margin="10 0 10 0">
             <WrapPanel>
                 <Label Content="Price"/>
                 <Label Content="(kr)"
                        FontWeight="Normal"/>
             </WrapPanel>
-            <TextBox Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding SelectedBook.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Margin="0 0 0 10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2"
+                    Grid.Row="2"
+                    Margin="10 0 10 0">
             <Label Content="Pages"/>
-            <TextBox Text="{Binding Pages, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding SelectedBook.Pages, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Margin="0 0 0 10"/>
+            
+        </StackPanel>
+
+        <StackPanel Grid.Column="2"
+                    Grid.Row="3"
+                    Margin="10 0 10 0">
             <WrapPanel>
                 <Label Content="Weight"/>
                 <Label Content="(g)"
                        FontWeight="Normal"/>
             </WrapPanel>
-            <TextBox Text="{Binding Weight, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding SelectedBook.WeightInGrams, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Margin="0 0 0 10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2"
+                    Grid.Row="4"
+                    Margin="10 0 10 0">
             <Label Content="Genre"/>
-            <ComboBox Margin="0 0 0 10"/>
-            <WrapPanel Margin="18"
-                       HorizontalAlignment="Center">
-                <Button Content="Ok"
+            <ComboBox Margin="0 0 0 10"
+                      ItemsSource="{Binding Genres, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedGenre, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      DisplayMemberPath="GenreName"/>
+        </StackPanel>
+        
+        <WrapPanel Margin="18"
+                   HorizontalAlignment="Center"
+                   Grid.ColumnSpan="2"
+                   Grid.Row="5">
+            <Button Content="Create"
                         Padding="5"
-                        Command="{Binding OkCommand}"
+                        Command="{Binding CreateCommand}"
                         Margin="0 0 10 0"/>
-                <Button Content="Cancel"
+            <Button Content="Cancel"
                         Padding="5"
                         Command="{Binding CancelCommand}"/>
-            </WrapPanel>
-        </StackPanel>
+        </WrapPanel>
     </Grid>
 </Window>

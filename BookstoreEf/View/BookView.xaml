@@ -97,7 +97,7 @@
                   RowBackground="White"
                   RowHeaderWidth="20"
                   SelectedItem="{Binding SelectedBook}"
-                  ItemsSource="{Binding Books}">
+                  ItemsSource="{Binding Books, UpdateSourceTrigger=PropertyChanged}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ISBN"
@@ -108,7 +108,7 @@
                                     Binding="{Binding BookTitle}"/>
                 <DataGridTextColumn Header="Author"
                                     Width="3*"
-                                    Binding="{Binding TempAuthor}"/>
+                                    Binding="{Binding Authorstemp}"/>
                 <DataGridTextColumn Header="Genre"
                                     Width="3*"
                                     Binding="{Binding Genre.GenreName}"/>
