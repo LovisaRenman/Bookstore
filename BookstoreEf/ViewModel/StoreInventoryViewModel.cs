@@ -132,7 +132,7 @@ class StoreInventoryViewModel : ViewModelBase
 
         IsStoreInventoryViewVisible = true;
         mainWindowViewModel.AuthorViewModel.IsAuthorViewVisible = false;
-        //mainWindowViewModel.BookViewModel.IsBookViewVisible = false;
+        mainWindowViewModel.BookViewModel.IsBookViewVisible = false;
        
         UpdateCommandStates();
     }
