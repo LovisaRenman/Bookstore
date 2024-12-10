@@ -143,8 +143,8 @@ class AuthorViewModel : ViewModelBase
         IsAuthorMenuOptionEnable = false;
 
         IsAuthorViewVisible = true;
+        mainWindowViewModel.BookViewModel.IsBookViewVisible = false;
         mainWindowViewModel.StoreInventoryViewModel.IsStoreInventoryViewVisible = false;
-        //mainWindowViewModel.BookViewModel.IsBookViewVisible = false;
 
         UpdateCommandStates();
     }

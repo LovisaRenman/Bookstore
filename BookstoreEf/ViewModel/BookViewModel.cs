@@ -250,8 +250,8 @@ namespace BookstoreEf.ViewModel
         private void UpdateCommandStates()
         {
             SwitchToBookViewCommand.RaiseCanExecuteChanged();
-            mainWindowViewModel.StoreInventoryViewModel.SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
             mainWindowViewModel.AuthorViewModel.SwitchToAuthorViewCommand.RaiseCanExecuteChanged();
+            mainWindowViewModel.StoreInventoryViewModel.SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
         }
 
     }
