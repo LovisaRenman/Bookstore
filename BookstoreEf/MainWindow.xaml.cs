@@ -1,8 +1,6 @@
 ﻿using BookstoreEf.Dialogs;
 using BookstoreEf.ViewModel;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace BookstoreEf;
 
@@ -17,11 +15,12 @@ public partial class MainWindow : Window
         mainWindowViewModel = new MainWindowViewModel();
         DataContext = mainWindowViewModel;
 
+        mainWindowViewModel.AuthorViewModel.DeleteAuthorRequested += DeleteAuthor;
         mainWindowViewModel.BookViewModel.ShowDialogAddBooks += AddBooks;
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += RemoveBook;
         mainWindowViewModel.BookViewModel.CloseBookDialog += CloseDialog;
-        mainWindowViewModel.StoreInventoryViewModel.ShowDialogManageInventory += ManageInventory;       
+        mainWindowViewModel.StoreInventoryViewModel.ShowDialogManageInventory += ManageInventory;
     }
 
     private void ManageInventory(object? sender, EventArgs e)
@@ -42,14 +41,15 @@ public partial class MainWindow : Window
         ShowDialog(mainWindowViewModel.BookViewModel);
     }
 
-    public void RemoveAuthor(object? sender, EventArgs arg)
+    public void DeleteAuthor(object? sender, Author author)
     {
-        MessageBox.Show("Are you sure you want to remove this author", "Remove Author", MessageBoxButton.YesNo, MessageBoxImage.Question);
-    }
+        MessageBoxResult result = MessageBox.Show("All books associated with this author will be permanently removed from the system. Do you want to continue?", 
+            "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-    public void RemoveAuthorWarning(object? sender, EventArgs arg)
-    {
-        MessageBox.Show("All books associated with this author will be removed, do you want to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (result == MessageBoxResult.Yes)
+        {
+            mainWindowViewModel.AuthorViewModel.Authors.Remove(author);
+        }
     }
 
     public void RemoveBook(object? sender, EventArgs arg)

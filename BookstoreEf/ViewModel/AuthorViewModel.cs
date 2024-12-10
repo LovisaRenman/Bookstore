@@ -11,33 +11,39 @@ class AuthorViewModel : ViewModelBase
     private ObservableCollection<Author> _authors;
     public ObservableCollection<Author> Authors
     {
-        get { return _authors; }
+        get => _authors; 
         set
-        {
-            if (_authors != value)
-            {
-                _authors = value;
-                RaisePropertyChanged();
-                ChangeTextVisibility();
-            }
+        {            
+            _authors = value;       
+            RaisePropertyChanged();
         }
     }
 
     private Author? _selectedAuthor;
     public Author? SelectedAuthor
     {
-        get { return _selectedAuthor; }
+        get => _selectedAuthor; 
         set 
-        {
-            if (_selectedAuthor != value)
-            {
-                _selectedAuthor = value;
-                RaisePropertyChanged();
-                ChangeTextVisibility();
-            }
+        {            
+            _selectedAuthor = value;
+            RaisePropertyChanged();             
+            ChangeTextVisibility();
+            AddAuthorCommand.RaiseCanExecuteChanged();
+            DeleteAuthorCommand.RaiseCanExecuteChanged();
         }
     }
 
+
+    private bool _isDeleteButtonEnable;
+    public bool IsDeleteButtonEnable
+    {
+        get => _isDeleteButtonEnable; 
+        set
+        {
+            _isDeleteButtonEnable = value;
+            RaisePropertyChanged();          
+        }
+    }
 
     private bool _textVisibility;
     public bool TextVisibility
@@ -50,7 +56,7 @@ class AuthorViewModel : ViewModelBase
         }
     }
 
-
+    public event EventHandler<Author> DeleteAuthorRequested;
     public DelegateCommand AddAuthorCommand { get; }
     public DelegateCommand DeleteAuthorCommand { get; }
 
@@ -58,13 +64,15 @@ class AuthorViewModel : ViewModelBase
     public AuthorViewModel(MainWindowViewModel? mainWindowViewModel)
     {
         this.mainWindowViewModel = mainWindowViewModel;
-
-        LoadAuthors();
-        GetAuthorName();
-        ChangeTextVisibility();
+        IsDeleteButtonEnable = false;
         
         AddAuthorCommand = new DelegateCommand(AddAuthor);
-        DeleteAuthorCommand = new DelegateCommand(AddAuthor);
+        DeleteAuthorCommand = new DelegateCommand(DeleteAuthor, IsDeleteAuthorEnable);
+
+        LoadAuthors();
+
+        SelectedAuthor = Authors.FirstOrDefault();
+        TextVisibility = Authors.Count > 0;
     }
 
 
@@ -77,43 +85,31 @@ class AuthorViewModel : ViewModelBase
         Authors = new ObservableCollection<Author>(authors);
     }
 
-    private void GetAuthorName()
+    private void AddAuthor(object? obj)
     {
-        foreach (var author in Authors)
-        {
-            author.Name = string.Join(" ", author.FirstName, author.LastName);
-        }
-    }
+        using var db = new BookstoreContext();
 
-    private void AddAuthor(object? obj) 
-    {
-        // DateOnly har ingen motsvarande nullvärde som string.Empty?
-        Authors.Add(new Author(string.Empty, string.Empty, DateOnly.MinValue, DateOnly.MinValue)); 
+        Authors.Add(new Author() { FirstName = "<New Author>", LastName = string.Empty }); 
+        
         SelectedAuthor = (Authors.Count > 0) ? Authors.Last() : Authors.FirstOrDefault();
-
-        UpdateCommandStates();
+       
+        //db.SaveChanges()
     }
+
     private void DeleteAuthor(object? obj)
-    {       
-        Authors.Remove(SelectedAuthor);
-        SelectedAuthor = (Authors.Count > 0) ? Authors.Last() : Authors.FirstOrDefault();
-
-        UpdateCommandStates();
-    }
-
-
-    private void ChangeTextVisibility() => TextVisibility = (Authors?.Count > 0) && SelectedAuthor != null;
-
-
-
-
-    private void UpdateCommandStates()
     {
+        using var db = new BookstoreContext();
+
+        if (SelectedAuthor != null) DeleteAuthorRequested.Invoke(this, SelectedAuthor);
+
         ChangeTextVisibility();
 
-        AddAuthorCommand.RaiseCanExecuteChanged();
-        DeleteAuthorCommand.RaiseCanExecuteChanged();
+        //db.SaveChanges()
     }
+
+    private bool IsDeleteAuthorEnable(object? obj) => IsDeleteButtonEnable = SelectedAuthor != null && Authors.Count > 0;
+
+    private void ChangeTextVisibility() => TextVisibility = (Authors?.Count > 0) && SelectedAuthor != null;
 
 }
 

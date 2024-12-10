@@ -1,16 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace BookstoreEf;
 
-public partial class Author
+public partial class Author : INotifyPropertyChanged
 {
     public int Id { get; set; }
 
-    public string? FirstName { get; set; }
+    private string? _firstName;
+    public string? FirstName
+    {
+        get =>_firstName; 
+        set 
+        { 
+            _firstName = value;
+            RaisePropertyChanged(); 
+            RaisePropertyChanged(nameof(Name)); 
+        }
+    }
 
-    public string? LastName { get; set; }
+    private string? _lastName;
+    public string? LastName
+    {
+        get => _lastName;
+        set
+        {
+            _lastName = value;
+            RaisePropertyChanged();
+            RaisePropertyChanged(nameof(Name));
+        }
+    }
 
     public DateOnly? DateofBirth { get; set; }
 
@@ -18,16 +38,14 @@ public partial class Author
 
     public virtual ICollection<Book> BookIsbns { get; set; } = new List<Book>();
 
+
     [NotMapped]
-    public string? Name { get; set; }
+    public string? Name => $"{FirstName} {LastName}";
 
 
-    public Author(string firstName, string lastName, DateOnly dateofBirth, DateOnly dateofDate)
+    public event PropertyChangedEventHandler? PropertyChanged;
+    public void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
     {
-        FirstName = firstName;
-        LastName = lastName;
-        DateofBirth = dateofBirth;
-        DateofDeath = DateofDeath;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-
 }
