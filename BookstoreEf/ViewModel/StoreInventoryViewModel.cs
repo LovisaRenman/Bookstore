@@ -49,21 +49,6 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
-    private string _storeNames;
-    public string StoreNames
-    {
-        get => _storeNames; 
-        set
-        {
-            if (_storeNames != value)
-            {
-                _storeNames = value;
-                RaisePropertyChanged();
-            }
-        }
-    }
-
-
 
     private bool _isStoreInventoryViewVisible;
     public bool IsStoreInventoryViewVisible
@@ -88,8 +73,35 @@ class StoreInventoryViewModel : ViewModelBase
     }
 
 
+    private decimal _totalInventoryValue;
+    public decimal TotalInventoryValue
+    {
+        get => _totalInventoryValue;
+        set
+        {
+            _totalInventoryValue = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
+    private string _storeNames;
+    public string StoreNames
+    {
+        get => _storeNames; 
+        set
+        {
+            if (_storeNames != value)
+            {
+                _storeNames = value;
+                RaisePropertyChanged();
+            }
+        }
+    }
+
 
     public event EventHandler ShowDialogManageInventory;
+
     public DelegateCommand OpenInventoryCommand { get; }
     public DelegateCommand SwitchToStoreInventoryViewCommand { get; }
 
@@ -108,7 +120,6 @@ class StoreInventoryViewModel : ViewModelBase
 
         SelectedStore = Stores?.FirstOrDefault();
     }
-
 
     private void LoadStores() 
     {
@@ -146,6 +157,7 @@ class StoreInventoryViewModel : ViewModelBase
         if (SelectedStore == null)
         {
             BooksInSelectedStore = new ObservableCollection<BookInventoryViewModel>();
+            TotalInventoryValue = 0;            
             return;
         }
 
@@ -163,10 +175,12 @@ class StoreInventoryViewModel : ViewModelBase
 
             BooksInSelectedStore = new ObservableCollection<BookInventoryViewModel>(booksInStore);
         }
+
+        TotalInventoryValue = BooksInSelectedStore.Sum(book => book.TotalPrice);
     }
 
     private void UpdateCommandStates()
-    {       
+    {        
         SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
         mainWindowViewModel.AuthorViewModel.SwitchToAuthorViewCommand.RaiseCanExecuteChanged();
         mainWindowViewModel.BookViewModel.SwitchToBookViewCommand.RaiseCanExecuteChanged();

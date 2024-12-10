@@ -7,8 +7,7 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             Background="MintCream"
-             DataContext="{Binding StoreInventoryViewModel}">
+             Background="MintCream">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
@@ -39,9 +38,9 @@
 
         <ListBox Grid.Column="0" 
                  Grid.Row="1"
-                 ItemsSource="{Binding Stores}" 
+                 ItemsSource="{Binding StoreInventoryViewModel.Stores}" 
                  Margin="10 0 10 0"
-                 SelectedItem="{Binding SelectedStore, UpdateSourceTrigger=PropertyChanged}" >
+                 SelectedItem="{Binding StoreInventoryViewModel.SelectedStore, UpdateSourceTrigger=PropertyChanged}" >
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -78,7 +77,7 @@
 
         <Button Background="Transparent"
                 BorderBrush="Transparent"
-                Command ="{Binding OpenInventoryCommand}"
+                Command ="{Binding StoreInventoryViewModel.OpenInventoryCommand}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
@@ -86,7 +85,7 @@
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"
                 Margin="0 0 70 0"
-                ToolTip="Update Book Quantity in Selected Store">
+                ToolTip="Update book quantity in selected store">
 
             <Button.Content>
                 <fa:IconBlock Icon="Shop"/>
@@ -95,7 +94,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding tempAuthorView}"
+                Command ="{Binding AuthorViewModel.SwitchToAuthorViewCommand}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
@@ -103,7 +102,7 @@
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"
                 Margin="0 0 40 0"
-                ToolTip="Edit Author Information">
+                ToolTip="Go to author information">
 
             <Button.Content>
                 <fa:IconBlock Icon="UserPen"/>
@@ -112,7 +111,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding tempBookView}"
+                Command ="{Binding BookViewModel.SwitchToBookViewCommand}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
@@ -120,7 +119,7 @@
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"
                 Margin="0 0 10 0"
-                ToolTip="Edit Book Information">
+                ToolTip="Go to book information">
             
                 <Button.Content>
                     <fa:IconBlock Icon="Book"/>
@@ -140,8 +139,8 @@
                   AlternatingRowBackground="LightGray"
                   RowBackground="White"
                   RowHeaderWidth="20"
-                  SelectedItem="{Binding SelectedBook}"
-                  ItemsSource="{Binding BooksInSelectedStore}">
+                  SelectedItem="{Binding StoreInventoryViewModel.SelectedBook}"
+                  ItemsSource="{Binding StoreInventoryViewModel.BooksInSelectedStore}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Book Title"
@@ -176,7 +175,7 @@
                    VerticalAlignment="Center">
             </Label>
 
-            <Label Content="{Binding tempTotalInventoryValue}"
+            <Label Content="{Binding StoreInventoryViewModel.TotalInventoryValue, UpdateSourceTrigger=PropertyChanged}"
                    Grid.Column="1"
                    FontWeight="Regular" 
                    FontSize="13"
