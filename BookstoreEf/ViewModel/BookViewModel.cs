@@ -153,8 +153,23 @@ namespace BookstoreEf.ViewModel
             get
             {
                 using var db = new BookstoreContext();
-                var _authors = db.Authors.ToList();
+                var _authors = db.Authors.OrderBy(a => a.LastName).ToList();
+                foreach (var author in _authors)
+                {
+                    author.Name = $"{author.FirstName} {author.LastName}";
+                }
                 return _authors;
+            }
+        }
+
+        public Author _selectedAuthor { get; set; }
+        public Author SelectedAuthor
+        {
+            get => _selectedAuthor;
+            set
+            {
+                _selectedAuthor = value;
+                RaisePropertyChanged();
             }
         }
 

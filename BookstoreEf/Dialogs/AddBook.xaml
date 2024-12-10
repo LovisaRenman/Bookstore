@@ -25,8 +25,8 @@
             <Label Content="Author"/>
             <ComboBox Margin="0 0 0 10"
                       ItemsSource="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedItem="{Binding Author}"
-                      DisplayMemberPath="{Binding Fullname}"/>
+                      SelectedItem="{Binding SelectedAuthor}"
+                      DisplayMemberPath="Name"/>
 
             <WrapPanel>
                 <Label Content="Publish Date:"/>
