@@ -156,7 +156,7 @@ namespace BookstoreEf.ViewModel
                 var _authors = db.Authors.OrderBy(a => a.LastName).ToList();
                 foreach (var author in _authors)
                 {
-                    author.Name = $"{author.FirstName} {author.LastName}";
+                    //author.Name = $"{author.FirstName} {author.LastName}";
                 }
                 return _authors;
             }

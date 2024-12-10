@@ -1,6 +1,5 @@
 ﻿using BookstoreEf.Command;
 using BookstoreEf.Model;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 
 namespace BookstoreEf.ViewModel;
@@ -9,10 +8,8 @@ class StoreInventoryViewModel : ViewModelBase
 {
     private readonly MainWindowViewModel? mainWindowViewModel;
 
+
     private ObservableCollection<BookInventoryViewModel> _booksInSelectedStore;
-
-    public event EventHandler ShowDialogManageInventory;
-
     public ObservableCollection<BookInventoryViewModel> BooksInSelectedStore
     {
         get => _booksInSelectedStore;
@@ -26,7 +23,7 @@ class StoreInventoryViewModel : ViewModelBase
     private ObservableCollection<Store> _stores;
     public ObservableCollection<Store> Stores
     {
-        get { return _stores; }
+        get => _stores; 
         set
         {
             if (_stores != value)
@@ -37,12 +34,10 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
-    public DelegateCommand OpenInventoryCommand { get; }
-
     private Store _selectedStore;
     public Store SelectedStore
     {
-        get { return _selectedStore; }
+        get => _selectedStore; 
         set
         {
             if (_selectedStore != value)
@@ -57,7 +52,7 @@ class StoreInventoryViewModel : ViewModelBase
     private string _storeNames;
     public string StoreNames
     {
-        get { return _storeNames; }
+        get => _storeNames; 
         set
         {
             if (_storeNames != value)
@@ -68,22 +63,52 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
+
+
+    private bool _isStoreInventoryViewVisible;
+    public bool IsStoreInventoryViewVisible
+    {
+        get => _isStoreInventoryViewVisible; 
+        set 
+        { 
+            _isStoreInventoryViewVisible = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    private bool _isStoreInventoryMenuOptionEnable;
+    public bool IsStoreInventoryMenuOptionEnable
+    {
+        get => _isStoreInventoryMenuOptionEnable;
+        set
+        {
+            _isStoreInventoryMenuOptionEnable = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
+
+    public event EventHandler ShowDialogManageInventory;
+    public DelegateCommand OpenInventoryCommand { get; }
+    public DelegateCommand SwitchToStoreInventoryViewCommand { get; }
+
+
     public StoreInventoryViewModel(MainWindowViewModel? mainWindowViewModel)
     {
         this.mainWindowViewModel = mainWindowViewModel;
+        
+        IsStoreInventoryViewVisible = true;
 
         LoadStores();
         GetStoreAdress();
 
         OpenInventoryCommand = new DelegateCommand(OpenInventory);
+        SwitchToStoreInventoryViewCommand = new DelegateCommand(StartInventoryView, IsInventoryViewEnable);
 
-        _selectedStore = Stores?.FirstOrDefault();
+        SelectedStore = Stores?.FirstOrDefault();
     }
 
-    private void OpenInventory(object obj)
-    {
-        ShowDialogManageInventory.Invoke(this, EventArgs.Empty);
-    }
 
     private void LoadStores() 
     {
@@ -100,6 +125,21 @@ class StoreInventoryViewModel : ViewModelBase
             store.StoreAdress = string.Join(", " , string.Join(" ", store.Street, store.StreetNumber), store.Postcode, store.City, store.Country);
         }
     }
+
+    private void StartInventoryView(object? obj)
+    {
+        IsStoreInventoryMenuOptionEnable = false;
+
+        IsStoreInventoryViewVisible = true;
+        mainWindowViewModel.AuthorViewModel.IsAuthorViewVisible = false;
+        //mainWindowViewModel.BookViewModel.IsBookViewVisible = false;
+       
+        UpdateCommandStates();
+    }
+
+    private bool IsInventoryViewEnable(object? obj) => IsStoreInventoryMenuOptionEnable = !IsStoreInventoryViewVisible;
+
+    private void OpenInventory(object obj) => ShowDialogManageInventory.Invoke(this, EventArgs.Empty);
 
     private void UpdateBooksForSelectedStore()
     {
@@ -123,6 +163,13 @@ class StoreInventoryViewModel : ViewModelBase
 
             BooksInSelectedStore = new ObservableCollection<BookInventoryViewModel>(booksInStore);
         }
+    }
+
+    private void UpdateCommandStates()
+    {       
+        SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
+        mainWindowViewModel.AuthorViewModel.SwitchToAuthorViewCommand.RaiseCanExecuteChanged();
+        //mainWindowViewModel.BookViewModel.SwitchToBookViewCommand.RaiseCanExecuteChanged();
     }
 
 }

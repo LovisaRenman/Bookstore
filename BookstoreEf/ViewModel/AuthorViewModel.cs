@@ -34,6 +34,30 @@ class AuthorViewModel : ViewModelBase
     }
 
 
+
+    private bool _isAuthorViewVisible;
+    public bool IsAuthorViewVisible
+    {
+        get =>_isAuthorViewVisible;
+        set 
+        { 
+            _isAuthorViewVisible = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    private bool _isAuthorMenuOptionEnable;
+    public bool IsAuthorMenuOptionEnable
+    {
+        get => _isAuthorMenuOptionEnable;
+        set
+        {
+            _isAuthorMenuOptionEnable = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
     private bool _isDeleteButtonEnable;
     public bool IsDeleteButtonEnable
     {
@@ -56,18 +80,23 @@ class AuthorViewModel : ViewModelBase
         }
     }
 
+
     public event EventHandler<Author> DeleteAuthorRequested;
     public DelegateCommand AddAuthorCommand { get; }
     public DelegateCommand DeleteAuthorCommand { get; }
+    public DelegateCommand SwitchToAuthorViewCommand { get; }
 
 
     public AuthorViewModel(MainWindowViewModel? mainWindowViewModel)
     {
         this.mainWindowViewModel = mainWindowViewModel;
+
         IsDeleteButtonEnable = false;
-        
+        IsAuthorMenuOptionEnable = true;
+
         AddAuthorCommand = new DelegateCommand(AddAuthor);
         DeleteAuthorCommand = new DelegateCommand(DeleteAuthor, IsDeleteAuthorEnable);
+        SwitchToAuthorViewCommand = new DelegateCommand(StartAuthorView, IsAuthorViewEnable);
 
         LoadAuthors();
 
@@ -89,7 +118,7 @@ class AuthorViewModel : ViewModelBase
     {
         using var db = new BookstoreContext();
 
-        Authors.Add(new Author() { FirstName = "<New Author>", LastName = string.Empty }); 
+        Authors.Add(new Author() { FirstName = "<New Author>" }); 
         
         SelectedAuthor = (Authors.Count > 0) ? Authors.Last() : Authors.FirstOrDefault();
        
@@ -109,7 +138,27 @@ class AuthorViewModel : ViewModelBase
 
     private bool IsDeleteAuthorEnable(object? obj) => IsDeleteButtonEnable = SelectedAuthor != null && Authors.Count > 0;
 
+    private void StartAuthorView(object? obj)
+    {
+        IsAuthorMenuOptionEnable = false;
+
+        IsAuthorViewVisible = true;
+        mainWindowViewModel.StoreInventoryViewModel.IsStoreInventoryViewVisible = false;
+        //mainWindowViewModel.BookViewModel.IsBookViewVisible = false;
+
+        UpdateCommandStates();
+    }
+
+    private bool IsAuthorViewEnable(object? obj) => IsAuthorMenuOptionEnable = !IsAuthorViewVisible;
+
     private void ChangeTextVisibility() => TextVisibility = (Authors?.Count > 0) && SelectedAuthor != null;
+
+    private void UpdateCommandStates()
+    {
+        SwitchToAuthorViewCommand.RaiseCanExecuteChanged();
+        mainWindowViewModel.StoreInventoryViewModel.SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
+        //mainWindowViewModel.BookViewModel.SwitchToBookViewCommand.RaiseCanExecuteChanged();
+    }
 
 }
 
