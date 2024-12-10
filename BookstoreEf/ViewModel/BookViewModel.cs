@@ -1,12 +1,7 @@
 ﻿using BookstoreEf.Command;
+using BookstoreEf.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace BookstoreEf.ViewModel
 {
@@ -17,7 +12,7 @@ namespace BookstoreEf.ViewModel
         public DelegateCommand AddBookCommand { get; }
         public DelegateCommand EditBookCommand { get; }
         public DelegateCommand RemoveBookCommand { get; }
-        public DelegateCommand OkCommand { get; }
+        public DelegateCommand CreateCommand { get; }
         public DelegateCommand CancelCommand { get; }
 
         public event EventHandler ShowDialogAddBooks;
@@ -33,35 +28,24 @@ namespace BookstoreEf.ViewModel
             AddBookCommand = new DelegateCommand(AddBook);
             EditBookCommand = new DelegateCommand(EditBook, EditBookActive);
             RemoveBookCommand = new DelegateCommand(RemoveBook, RemoveBookActive);
-            OkCommand = new DelegateCommand(Ok);
+            CreateCommand = new DelegateCommand(Create);
             CancelCommand = new DelegateCommand(Cancel);
+
+            LoadBooks();
         }
 
         private void Cancel(object obj)
         {
             CloseBookDialog.Invoke(this, EventArgs.Empty);
-            EmtyAllBookProperties();
         }
 
-        private void Ok(object obj)
+        private void Create(object obj)
         {
-            SelectedBook = new Book()
-            {
-                Isbn = ISBN,
-                Language = Language,
-                BookTitle = Title,
-                Pages = Pages,
-                Price = Price,
-                PublishDate = PublishDate,
-                WeightInGrams = Weight
-            };
-            //UpdateAllBookProperties();
-            using var db = new BookstoreContext();
+            //SelectedBook.Authors = SelectedAuthor;
+            SelectedBook.Genre = SelectedGenre;
+            SelectedBook.Publisher = SelectedPublisher;
 
-            db.Books.Add(SelectedBook);
-            
             CloseBookDialog.Invoke(this, EventArgs.Empty);
-            EmtyAllBookProperties();
         }
 
         private bool RemoveBookActive(object? arg)
@@ -85,52 +69,43 @@ namespace BookstoreEf.ViewModel
         {
             BookWindowTitle = "Edit book";
             ShowDialogEditBook.Invoke(this, EventArgs.Empty);
+
+            //SelectedAuthor = SelectedBook.Authors;
+            SelectedGenre = SelectedBook.Genre;
+            SelectedPublisher = SelectedBook.Publisher;
         }
 
         private void AddBook(object obj)
         {
-            EmtyAllBookProperties();
-            BookWindowTitle = "Add book";
+            using var db = new BookstoreContext();
+
             ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
-        }
+            var newBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
+            Books.Add(newBook);
+            SelectedBook = newBook;
 
-        private void EmtyAllBookProperties()
-        {
-            Title = string.Empty;
-            ISBN = string.Empty;
-            Language = string.Empty;
-            PublishDate = new DateOnly(0001, 01, 01);
-            Price = 0;
-            Pages = 0;
-            Weight = 0;
-        }
+            //SelectedAuthor = Authors.FirstOrDefault();
+            SelectedGenre = Genres.FirstOrDefault();
+            SelectedPublisher = Publishers.FirstOrDefault();
 
-        private void UpdateAllBookProperties()
+            BookWindowTitle = "Add book";
+        }
+        
+        public void LoadBooks()
         {
             using var db = new BookstoreContext();
-            var book = db.Books.FirstOrDefault(b => b == SelectedBook);
-            if (book != null)
-            {
-                book.BookTitle = Title;
-                book.Isbn = ISBN;
-                book.Language = Language;
-                book.PublishDate = PublishDate;
-                book.Price = Price;
-                book.Pages = Pages;
-                book.WeightInGrams = Weight;
-
-                db.SaveChanges();
-            }
+            var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Authors).ToList();
+            Books = new ObservableCollection<Book>(books);
         }
 
-        private List<Book> _books;
-        public List<Book> Books
+        private ObservableCollection<Book> _books;
+        public ObservableCollection<Book> Books
         {
-            get 
+            get => _books;
+            set
             {
-                using var db = new BookstoreContext();
-                var _books = db.Books.Include(b => b.Authors).Include(b => b.Genre).Include(b => b.Publisher).ToList();                
-                return _books; 
+                _books = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -147,21 +122,17 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        public List<Author> _authors { get; set; }
-        public List<Author> Authors
+
+        public ObservableCollection<Author> _authors { get; set; }
+        public ObservableCollection<Author> Authors
         {
             get
             {
                 using var db = new BookstoreContext();
-                var _authors = db.Authors.OrderBy(a => a.LastName).ToList();
-                foreach (var author in _authors)
-                {
-                    //author.Name = $"{author.FirstName} {author.LastName}";
-                }
+                _authors = db.Authors.OrderBy(a => a.LastName).ToList();                
                 return _authors;
             }
         }
-
         public Author _selectedAuthor { get; set; }
         public Author SelectedAuthor
         {
@@ -173,8 +144,52 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        private DateOnly _publishDate;
 
+        public List<Genre> _genres { get; set; }
+        public List<Genre> Genres
+        {
+            get
+            {
+                using var db = new BookstoreContext();
+                _genres = db.Genres.ToList();
+                return _genres;
+            }
+        }
+        public Genre _selectedGenre { get; set; }
+        public Genre SelectedGenre
+        {
+            get => _selectedGenre;
+            set
+            {
+                _selectedGenre = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public List<Publisher> _publishers { get; set; }
+        public List<Publisher> Publishers
+        {
+            get
+            {
+                using var db = new BookstoreContext();
+                _publishers = db.Publishers.ToList();
+                return _publishers;
+            }
+        }
+        public Publisher _selectedPublishers { get; set; }
+        public Publisher SelectedPublisher
+        {
+            get => _selectedPublishers;
+            set
+            {
+                _selectedPublishers = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        private DateOnly _publishDate;
         public DateOnly PublishDate
         {
             get => _publishDate;
@@ -185,78 +200,12 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        private string _language;
 
-        public string Language
-        {
-            get => _language; 
-            set 
-            {
-                _language = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private int _price;
-        public int Price
-        {
-            get => _price; 
-            set 
-            {
-                _price = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private int _pages;
-        public int Pages
-        {
-            get => _pages; 
-            set 
-            {
-                _pages = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private int _weight;
-        public int Weight
-        {
-            get => _weight;
-            set
-            {
-                _weight = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        private string _isbn;
-        public string ISBN
-        {
-            get => _isbn;
-            set 
-            {
-                _isbn = value;
-                RaisePropertyChanged();
-            }
-        }
-        
-        private string _title;
-        public string Title
-        {
-            get => _title;
-            set 
-            {
-                _title = value;
-                RaisePropertyChanged();
-            }
-        }
-        
         private string _bookWindowTitle;
         public string BookWindowTitle
         {
-            get => _bookWindowTitle; 
-            set 
+            get => _bookWindowTitle;
+            set
             {
                 _bookWindowTitle = value;
                 RaisePropertyChanged();
