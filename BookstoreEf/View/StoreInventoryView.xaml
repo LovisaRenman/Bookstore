@@ -160,10 +160,10 @@
                                     Binding="{Binding Quantity}"/>
                 <DataGridTextColumn Header="Price per unit"
                                     Width="*"
-                                    Binding="{Binding Price, StringFormat=sek}"/>
+                                    Binding="{Binding Price}"/>
                 <DataGridTextColumn Header="Total price"
                                     Width="*"
-                                    Binding="{Binding TotalPrice, StringFormat=sek}"/>      
+                                    Binding="{Binding TotalPrice}"/>      
             </DataGrid.Columns>
         </DataGrid>
         <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->

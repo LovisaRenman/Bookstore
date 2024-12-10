@@ -104,6 +104,7 @@ namespace BookstoreEf.ViewModel
             get => _books;
             set
             {
+
                 _books = value;
                 RaisePropertyChanged();
             }
@@ -123,8 +124,8 @@ namespace BookstoreEf.ViewModel
         }
 
 
-        public ObservableCollection<Author> _authors { get; set; }
-        public ObservableCollection<Author> Authors
+        public List<Author> _authors { get; set; }
+        public List<Author> Authors
         {
             get
             {
