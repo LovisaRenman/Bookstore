@@ -169,7 +169,7 @@ class StoreInventoryViewModel : ViewModelBase
     {       
         SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
         mainWindowViewModel.AuthorViewModel.SwitchToAuthorViewCommand.RaiseCanExecuteChanged();
-        //mainWindowViewModel.BookViewModel.SwitchToBookViewCommand.RaiseCanExecuteChanged();
+        mainWindowViewModel.BookViewModel.SwitchToBookViewCommand.RaiseCanExecuteChanged();
     }
 
 }

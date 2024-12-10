@@ -31,10 +31,11 @@
                       InputGestureText="Ctrl+A"
                       IsEnabled="{Binding AuthorViewModel.IsAuthorMenuOptionEnable, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <MenuItem Command="{Binding temp}"
+            <MenuItem Command="{Binding BookViewModel.SwitchToBookViewCommand}"
                       Header="_Books"
                       Icon="{fa:Icon Book}"
-                      InputGestureText="Ctrl+B"/>
+                      InputGestureText="Ctrl+B"
+                      IsEnabled="{Binding BookViewModel.IsBookViewMenuOptionEnable, UpdateSourceTrigger=PropertyChanged}"/>
 
             <MenuItem Command="{Binding StoreInventoryViewModel.SwitchToStoreInventoryViewCommand}"
                       Header="Store I_nventory"

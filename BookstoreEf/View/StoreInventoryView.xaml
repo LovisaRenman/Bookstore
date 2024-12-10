@@ -75,9 +75,7 @@
                VerticalAlignment="Bottom"
                Margin="10 0 0 0">
         </Label>
-        <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
 
-        
         <Button Background="Transparent"
                 BorderBrush="Transparent"
                 Command ="{Binding OpenInventoryCommand}"
@@ -89,14 +87,12 @@
                 VerticalAlignment="Bottom"
                 Margin="0 0 70 0"
                 ToolTip="Update Book Quantity in Selected Store">
-            
-            <Button.Content>
-                    <fa:IconBlock Icon="Shop"/>
-                </Button.Content>   
-        </Button>
-        <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
 
-        
+            <Button.Content>
+                <fa:IconBlock Icon="Shop"/>
+            </Button.Content>
+        </Button>
+
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
                 Command ="{Binding tempAuthorView}"
@@ -107,15 +103,13 @@
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"
                 Margin="0 0 40 0"
-                ToolTip="Edit Author Information">   
-            
-            <Button.Content>
-                    <fa:IconBlock Icon="UserPen"/>
-                </Button.Content>
-        </Button>
-        <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
+                ToolTip="Edit Author Information">
 
-        
+            <Button.Content>
+                <fa:IconBlock Icon="UserPen"/>
+            </Button.Content>
+        </Button>
+
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
                 Command ="{Binding tempBookView}"
@@ -132,9 +126,7 @@
                     <fa:IconBlock Icon="Book"/>
                 </Button.Content>
         </Button>
-        <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
 
-        
         <DataGrid x:Name="DG_BookDetails" 
                   Grid.Column="1" Grid.Row="1"
                   Margin="10 0 10 0"
@@ -150,7 +142,7 @@
                   RowHeaderWidth="20"
                   SelectedItem="{Binding SelectedBook}"
                   ItemsSource="{Binding BooksInSelectedStore}">
-            
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Book Title"
                                     Width="2*"
@@ -160,14 +152,12 @@
                                     Binding="{Binding Quantity}"/>
                 <DataGridTextColumn Header="Price per unit"
                                     Width="*"
-                                    Binding="{Binding Price, StringFormat=sek}"/>
+                                    Binding="{Binding Price}"/>
                 <DataGridTextColumn Header="Total price"
                                     Width="*"
-                                    Binding="{Binding TotalPrice, StringFormat=sek}"/>      
+                                    Binding="{Binding TotalPrice}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
-
 
         <!--TOTAL INVENTORY VALUE-->
         <Grid Grid.Column="1" Grid.Row="2"
@@ -185,7 +175,6 @@
                    HorizontalAlignment="Right"
                    VerticalAlignment="Center">
             </Label>
-            <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
 
             <Label Content="{Binding tempTotalInventoryValue}"
                    Grid.Column="1"
@@ -194,8 +183,7 @@
                    HorizontalAlignment="Left"
                    VerticalAlignment="Center">
             </Label>
-            <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
-
+     
         </Grid>
 
     </Grid>

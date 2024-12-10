@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:BookstoreEf.Dialogs"
         mc:Ignorable="d"
         Title="Manage Inventory" Height="350" Width="250" ResizeMode="NoResize"
-        FontSize="16" FontWeight="Bold">
+        FontSize="16" FontWeight="Bold"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <StackPanel VerticalAlignment="Center"
                     HorizontalAlignment="Center"

@@ -9,93 +9,15 @@ namespace BookstoreEf.ViewModel
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
 
-        public DelegateCommand AddBookCommand { get; }
-        public DelegateCommand EditBookCommand { get; }
-        public DelegateCommand RemoveBookCommand { get; }
-        public DelegateCommand CreateCommand { get; }
-        public DelegateCommand CancelCommand { get; }
-
-        public event EventHandler ShowDialogAddBooks;
-        public event EventHandler ShowDialogEditBook;
-        public event EventHandler ShowMessageBoxRemoveBook;
-        public event EventHandler CloseBookDialog;
-
-
-        public BookViewModel(MainWindowViewModel? mainWindowViewModel)
+        public ObservableCollection<Author> _authors { get; set; }
+        public ObservableCollection<Author> Authors
         {
-            this.mainWindowViewModel = mainWindowViewModel;
-
-            AddBookCommand = new DelegateCommand(AddBook);
-            EditBookCommand = new DelegateCommand(EditBook, EditBookActive);
-            RemoveBookCommand = new DelegateCommand(RemoveBook, RemoveBookActive);
-            CreateCommand = new DelegateCommand(Create);
-            CancelCommand = new DelegateCommand(Cancel);
-
-            LoadBooks();
-        }
-
-        private void Cancel(object obj)
-        {
-            CloseBookDialog.Invoke(this, EventArgs.Empty);
-        }
-
-        private void Create(object obj)
-        {
-            //SelectedBook.Authors = SelectedAuthor;
-            SelectedBook.Genre = SelectedGenre;
-            SelectedBook.Publisher = SelectedPublisher;
-
-            CloseBookDialog.Invoke(this, EventArgs.Empty);
-        }
-
-        private bool RemoveBookActive(object? arg)
-        {
-            if (SelectedBook != null) return true;
-            else return false;
-        }
-
-        private void RemoveBook(object obj)
-        {
-            ShowMessageBoxRemoveBook.Invoke(this, EventArgs.Empty);
-        }
-
-        private bool EditBookActive(object? arg)
-        {
-            if (SelectedBook != null) return true;
-            else return false;
-        }
-
-        private void EditBook(object obj)
-        {
-            BookWindowTitle = "Edit book";
-            ShowDialogEditBook.Invoke(this, EventArgs.Empty);
-
-            //SelectedAuthor = SelectedBook.Authors;
-            SelectedGenre = SelectedBook.Genre;
-            SelectedPublisher = SelectedBook.Publisher;
-        }
-
-        private void AddBook(object obj)
-        {
-            using var db = new BookstoreContext();
-
-            ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
-            var newBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
-            Books.Add(newBook);
-            SelectedBook = newBook;
-
-            //SelectedAuthor = Authors.FirstOrDefault();
-            SelectedGenre = Genres.FirstOrDefault();
-            SelectedPublisher = Publishers.FirstOrDefault();
-
-            BookWindowTitle = "Add book";
-        }
-        
-        public void LoadBooks()
-        {
-            using var db = new BookstoreContext();
-            var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Authors).ToList();
-            Books = new ObservableCollection<Book>(books);
+            get
+            {
+                using var db = new BookstoreContext();
+                //_authors = db.Authors.OrderBy(a => a.LastName).ToList();                
+                return _authors;
+            }
         }
 
         private ObservableCollection<Book> _books;
@@ -109,30 +31,7 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        private Book? _selectedBook;
-        public Book? SelectedBook
-        {
-            get => _selectedBook;
-            set 
-            {
-                _selectedBook = value;
-                RaisePropertyChanged();
-                EditBookCommand.RaiseCanExecuteChanged();
-                RemoveBookCommand.RaiseCanExecuteChanged();
-            }
-        }
 
-
-        public ObservableCollection<Author> _authors { get; set; }
-        public ObservableCollection<Author> Authors
-        {
-            get
-            {
-                using var db = new BookstoreContext();
-                _authors = db.Authors.OrderBy(a => a.LastName).ToList();                
-                return _authors;
-            }
-        }
         public Author _selectedAuthor { get; set; }
         public Author SelectedAuthor
         {
@@ -145,16 +44,19 @@ namespace BookstoreEf.ViewModel
         }
 
 
-        public List<Genre> _genres { get; set; }
-        public List<Genre> Genres
+        private Book? _selectedBook;
+        public Book? SelectedBook
         {
-            get
+            get => _selectedBook;
+            set
             {
-                using var db = new BookstoreContext();
-                _genres = db.Genres.ToList();
-                return _genres;
+                _selectedBook = value;
+                RaisePropertyChanged();
+                EditBookCommand.RaiseCanExecuteChanged();
+                RemoveBookCommand.RaiseCanExecuteChanged();
             }
         }
+
         public Genre _selectedGenre { get; set; }
         public Genre SelectedGenre
         {
@@ -166,7 +68,16 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-
+        public List<Genre> _genres { get; set; }
+        public List<Genre> Genres
+        {
+            get
+            {
+                using var db = new BookstoreContext();
+                _genres = db.Genres.ToList();
+                return _genres;
+            }
+        }
         public List<Publisher> _publishers { get; set; }
         public List<Publisher> Publishers
         {
@@ -177,6 +88,7 @@ namespace BookstoreEf.ViewModel
                 return _publishers;
             }
         }
+
         public Publisher _selectedPublishers { get; set; }
         public Publisher SelectedPublisher
         {
@@ -189,11 +101,34 @@ namespace BookstoreEf.ViewModel
         }
 
 
+        private bool _isBookViewMenuOptionEnable;
+        public bool IsBookViewMenuOptionEnable
+        {
+            get => _isBookViewMenuOptionEnable; 
+            set 
+            { 
+                _isBookViewMenuOptionEnable = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isBookViewVisible;
+        public bool IsBookViewVisible
+        {
+            get => _isBookViewVisible; 
+            set 
+            { 
+                _isBookViewVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private DateOnly _publishDate;
         public DateOnly PublishDate
         {
             get => _publishDate;
-            set 
+            set
             {
                 _publishDate = value;
                 RaisePropertyChanged();
@@ -211,5 +146,113 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+
+        public event EventHandler CloseBookDialog;
+        public event EventHandler ShowDialogAddBooks;
+        public event EventHandler ShowDialogEditBook;
+        public event EventHandler ShowMessageBoxRemoveBook;
+
+        public DelegateCommand AddBookCommand { get; }
+        public DelegateCommand CancelCommand { get; }
+        public DelegateCommand CreateCommand { get; }
+        public DelegateCommand EditBookCommand { get; }
+        public DelegateCommand RemoveBookCommand { get; }
+        public DelegateCommand SwitchToBookViewCommand { get; }
+
+
+        public BookViewModel(MainWindowViewModel? mainWindowViewModel)
+        {
+            this.mainWindowViewModel = mainWindowViewModel;
+
+            IsBookViewMenuOptionEnable = true;
+
+            LoadBooks();
+            
+            AddBookCommand = new DelegateCommand(AddBook);
+            EditBookCommand = new DelegateCommand(EditBook, EditBookActive);
+            RemoveBookCommand = new DelegateCommand(RemoveBook, RemoveBookActive);
+            CreateCommand = new DelegateCommand(Create);
+            CancelCommand = new DelegateCommand(Cancel);
+            SwitchToBookViewCommand = new DelegateCommand(StartBookView, IsBookViewEnable);
+
+        }
+
+        public void LoadBooks()
+        {
+            using var db = new BookstoreContext();
+            var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Authors).ToList();
+            Books = new ObservableCollection<Book>(books);
+        }
+
+        private void AddBook(object obj)
+        {
+            using var db = new BookstoreContext();
+
+            ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
+            var newBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
+            Books.Add(newBook);
+            SelectedBook = newBook;
+
+            //SelectedAuthor = Authors.FirstOrDefault();
+            SelectedGenre = Genres.FirstOrDefault();
+            SelectedPublisher = Publishers.FirstOrDefault();
+
+            BookWindowTitle = "Add book";
+        }
+
+
+        private void Cancel(object obj) => CloseBookDialog.Invoke(this, EventArgs.Empty);
+
+        private void Create(object obj)
+        {
+            //SelectedBook.Authors = SelectedAuthor;
+            SelectedBook.Genre = SelectedGenre;
+            SelectedBook.Publisher = SelectedPublisher;
+
+            CloseBookDialog.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool EditBookActive(object? arg)
+        {
+            if (SelectedBook != null) return true;
+            else return false;
+        }
+
+        private void EditBook(object obj)
+        {
+            BookWindowTitle = "Edit book";
+            ShowDialogEditBook.Invoke(this, EventArgs.Empty);
+
+            //SelectedAuthor = SelectedBook.Authors;
+            SelectedGenre = SelectedBook.Genre;
+            SelectedPublisher = SelectedBook.Publisher;
+        }
+        private bool RemoveBookActive(object? arg)
+        {
+            if (SelectedBook != null) return true;
+            else return false;
+        }
+
+        private void RemoveBook(object obj) => ShowMessageBoxRemoveBook.Invoke(this, EventArgs.Empty);
+
+        public void StartBookView(object? obj)
+        {
+            IsBookViewVisible = true;
+            mainWindowViewModel.AuthorViewModel.IsAuthorViewVisible = false;
+            mainWindowViewModel.StoreInventoryViewModel.IsStoreInventoryViewVisible = false;
+
+            UpdateCommandStates();
+        }
+
+        private bool IsBookViewEnable(object? obj) => IsBookViewMenuOptionEnable = !IsBookViewVisible;
+
+        private void UpdateCommandStates()
+        {
+            SwitchToBookViewCommand.RaiseCanExecuteChanged();
+            mainWindowViewModel.StoreInventoryViewModel.SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
+            mainWindowViewModel.AuthorViewModel.SwitchToAuthorViewCommand.RaiseCanExecuteChanged();
+        }
+
     }
 }
