@@ -7,21 +7,107 @@ using BookstoreEf.Model;
 
 namespace BookstoreEf;
 
-public partial class Book
+public partial class Book : INotifyPropertyChanged
 {
-    public string Isbn { get; set; } = null!;
+    public Book(Book original)
+    {
+        Isbn = original.Isbn;
+        BookTitle = original.BookTitle;
+        Language = original.Language;
+        Price = original.Price;
+        Pages = original.Pages;
+        PublishDate = original.PublishDate;
+        WeightInGrams = original.WeightInGrams;
+        GenreId = original.GenreId;
+        Inventories = original.Inventories;
+        Publisher = original.Publisher;
+        Authors = original.Authors;
+    }
 
-    public string BookTitle { get; set; } = null!;
+    public Book()
+    {
+        
+    }
 
-    public string? Language { get; set; }
+    private string bookTitle = null!;
+    private Genre? genre;
+    private Publisher? publisher;
+    private string isbn = null!;
+    private string? language;
+    private decimal price;
+    private DateOnly publishDate;
+    private int pages;
+    private int? weightInGrams;
 
-    public decimal Price { get; set; }
+    public string Isbn
+    {
+        get => isbn;
+        set
+        {
+            isbn = value;
+            RaisePropertyChanged();
+        }
+    }
 
-    public DateOnly PublishDate { get; set; }
+    public string BookTitle 
+    { 
+        get => bookTitle; 
+        set
+        {
+            bookTitle = value;
+            RaisePropertyChanged();
+        }
+    }
+    public string? Language 
+    { 
+        get => language; 
+        set
+        {
+            language = value;
+            RaisePropertyChanged();
 
-    public int Pages { get; set; }
+        }
+    }
 
-    public int? WeightInGrams { get; set; }
+    public decimal Price 
+    { 
+        get => price;
+        set
+        {
+            price = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public DateOnly PublishDate
+    {
+        get => publishDate;
+        set
+        {
+            publishDate = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    public int Pages 
+    {
+        get => pages;
+        set
+        {
+            pages = value;
+            RaisePropertyChanged();
+        } 
+    }
+
+    public int? WeightInGrams 
+    {
+        get => weightInGrams; 
+        set
+        {
+            weightInGrams = value;
+            RaisePropertyChanged();
+        } 
+    }
 
     public int? GenreId { get; set; }
 
@@ -29,11 +115,25 @@ public partial class Book
 
     public virtual ICollection<BookReview1> BookReview1s { get; set; } = new List<BookReview1>();
 
-    public virtual Genre? Genre { get; set; }
+    public virtual Genre? Genre { get => genre; 
+        set 
+        {
+            genre = value;
+            RaisePropertyChanged();
+        } 
+    }
 
     public virtual ICollection<Inventory> Inventories { get; set; } = new List<Inventory>();
 
-    public virtual Publisher? Publisher { get; set; }
+    public virtual Publisher? Publisher
+    {
+        get => publisher;
+        set
+        {
+            publisher = value;
+            RaisePropertyChanged();
+        }
+    }
 
     public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
 

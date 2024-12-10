@@ -18,7 +18,7 @@ public partial class MainWindow : Window
         mainWindowViewModel.AuthorViewModel.DeleteAuthorRequested += DeleteAuthor;
         mainWindowViewModel.BookViewModel.ShowDialogAddBooks += AddBooks;
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
-        mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += RemoveBook;
+        mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += DeleteBook;
         mainWindowViewModel.BookViewModel.CloseBookDialog += CloseDialog;
         mainWindowViewModel.StoreInventoryViewModel.ShowDialogManageInventory += ManageInventory;
     }
@@ -52,9 +52,10 @@ public partial class MainWindow : Window
         }
     }
 
-    public void RemoveBook(object? sender, EventArgs arg)
+    public void DeleteBook(object? sender, EventArgs arg)
     {
-        MessageBox.Show("Are you sure you want to remove this Book", "Remove Book", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        MessageBoxResult result = MessageBox.Show("Are you sure you want to remove this Book", "Remove Book", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (result == MessageBoxResult.Yes) mainWindowViewModel.BookViewModel.Books.Remove(mainWindowViewModel.BookViewModel.SelectedBook);
     }
     public void ShowDialog(object viewModel)
     {

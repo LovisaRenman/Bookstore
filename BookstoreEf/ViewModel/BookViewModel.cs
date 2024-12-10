@@ -9,13 +9,13 @@ namespace BookstoreEf.ViewModel
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
 
-        public ObservableCollection<Author> _authors { get; set; }
-        public ObservableCollection<Author> Authors
+        public List<Author> _authors { get; set; }
+        public List<Author> Authors
         {
             get
             {
                 using var db = new BookstoreContext();
-                //_authors = db.Authors.OrderBy(a => a.LastName).ToList();                
+                _authors = db.Authors.ToList();
                 return _authors;
             }
         }
@@ -54,6 +54,16 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
                 EditBookCommand.RaiseCanExecuteChanged();
                 RemoveBookCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private Book? _savedSelectedBook;
+        public Book? SaveSelectedBook
+        {
+            get => _savedSelectedBook;
+            set
+            {
+                _savedSelectedBook = value;
             }
         }
 
@@ -147,6 +157,20 @@ namespace BookstoreEf.ViewModel
             }
         }
 
+        private string _buttonContent;
+
+        public string ButtonContent
+        {
+            get => _buttonContent; 
+            set 
+            {
+                _buttonContent = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string TitleAddBook = "Add Book";
+        public string TitleEditBook = "Edit Book";
 
         public event EventHandler CloseBookDialog;
         public event EventHandler ShowDialogAddBooks;
@@ -159,7 +183,6 @@ namespace BookstoreEf.ViewModel
         public DelegateCommand EditBookCommand { get; }
         public DelegateCommand RemoveBookCommand { get; }
         public DelegateCommand SwitchToBookViewCommand { get; }
-
 
         public BookViewModel(MainWindowViewModel? mainWindowViewModel)
         {
@@ -175,7 +198,6 @@ namespace BookstoreEf.ViewModel
             CreateCommand = new DelegateCommand(Create);
             CancelCommand = new DelegateCommand(Cancel);
             SwitchToBookViewCommand = new DelegateCommand(StartBookView, IsBookViewEnable);
-
         }
 
         public void LoadBooks()
@@ -187,6 +209,9 @@ namespace BookstoreEf.ViewModel
 
         private void AddBook(object obj)
         {
+            BookWindowTitle = TitleAddBook;
+            ButtonContent = "Create";
+
             using var db = new BookstoreContext();
 
             ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
@@ -198,11 +223,21 @@ namespace BookstoreEf.ViewModel
             SelectedGenre = Genres.FirstOrDefault();
             SelectedPublisher = Publishers.FirstOrDefault();
 
-            BookWindowTitle = "Add book";
         }
 
 
-        private void Cancel(object obj) => CloseBookDialog.Invoke(this, EventArgs.Empty);
+        private void Cancel(object obj)
+        {
+            if (BookWindowTitle == TitleAddBook) Books.Remove(SelectedBook);
+            else if (BookWindowTitle == TitleEditBook)
+            {
+                //SelectedBook = SaveSelectedBook;
+                //var book = Books.FirstOrDefault(b => b.Isbn == SelectedBook.Isbn);
+                //SelectedBook.BookTitle = SaveSelectedBook.BookTitle;
+
+            }
+            CloseBookDialog.Invoke(this, EventArgs.Empty);
+        }            
 
         private void Create(object obj)
         {
@@ -221,8 +256,12 @@ namespace BookstoreEf.ViewModel
 
         private void EditBook(object obj)
         {
-            BookWindowTitle = "Edit book";
+            SaveSelectedBook = new Book(SelectedBook);
+
+            BookWindowTitle = TitleEditBook;
+            ButtonContent = "Change";
             ShowDialogEditBook.Invoke(this, EventArgs.Empty);
+
 
             //SelectedAuthor = SelectedBook.Authors;
             SelectedGenre = SelectedBook.Genre;
