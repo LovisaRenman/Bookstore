@@ -1,5 +1,6 @@
 ﻿using BookstoreEf.Command;
 using BookstoreEf.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 
 namespace BookstoreEf.ViewModel;
@@ -27,6 +28,17 @@ class StoreInventoryViewModel : ViewModelBase
         set
         {
             _booksInSelectedStore = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    private ObservableCollection<Book> _books;
+    public ObservableCollection<Book> Books
+    {
+        get => _books;
+        set
+        {
+            _books = value;
             RaisePropertyChanged();
         }
     }
@@ -113,11 +125,12 @@ class StoreInventoryViewModel : ViewModelBase
 
     public event EventHandler OpenManageInventoryDialog;
     public event EventHandler CloseManageInventoryDialog;
+    public event EventHandler OpenAddBookToInventoryDialog;
 
     public DelegateCommand CloseManageInventoryCommand { get; }
     public DelegateCommand OpenManageInventoryCommand { get; }
     public DelegateCommand SwitchToStoreInventoryViewCommand { get; }
-
+    public DelegateCommand OpenAddBookToInventoryCommand { get; }
 
     public StoreInventoryViewModel(MainWindowViewModel? mainWindowViewModel)
     {
@@ -131,9 +144,12 @@ class StoreInventoryViewModel : ViewModelBase
         CloseManageInventoryCommand = new DelegateCommand(CloseInventory);
         OpenManageInventoryCommand = new DelegateCommand(OpenInventory);
         SwitchToStoreInventoryViewCommand = new DelegateCommand(StartInventoryView, IsInventoryViewEnable);
+        OpenAddBookToInventoryCommand = new DelegateCommand(AddBookToInventory);
 
         SelectedStore = Stores?.FirstOrDefault();
-    } 
+    }
+
+    private void AddBookToInventory(object obj) => OpenAddBookToInventoryDialog.Invoke(this, EventArgs.Empty);
 
     private void LoadStores() 
     {
@@ -141,6 +157,13 @@ class StoreInventoryViewModel : ViewModelBase
         var stores = db.Stores.ToList();
 
         Stores = new ObservableCollection<Store>(stores);
+    }
+
+    public void LoadBooks()
+    {
+        using var db = new BookstoreContext();
+        var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Author).ToList();
+        Books = new ObservableCollection<Book>(books);
     }
 
     private void GetStoreAdress()

@@ -22,6 +22,13 @@ public partial class MainWindow : Window
         mainWindowViewModel.BookViewModel.CloseBookDialog += CloseDialog;
         mainWindowViewModel.StoreInventoryViewModel.CloseManageInventoryDialog += CloseDialog;
         mainWindowViewModel.StoreInventoryViewModel.OpenManageInventoryDialog += ManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToInventoryDialog += AddBookInventory;
+    }
+
+    private void AddBookInventory(object? sender, EventArgs e)
+    {
+        _dialog = new AddBooksToInventory();
+        ShowDialog(mainWindowViewModel.StoreInventoryViewModel);
     }
 
     private void ManageInventory(object? sender, EventArgs e)
