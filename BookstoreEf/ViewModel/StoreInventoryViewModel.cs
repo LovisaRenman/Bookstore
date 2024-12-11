@@ -187,13 +187,24 @@ class StoreInventoryViewModel : ViewModelBase
 
     private bool IsInventoryViewEnable(object? obj) => IsStoreInventoryMenuOptionEnable = !IsStoreInventoryViewVisible;
 
-    private void OpenInventory(object? obj) => OpenManageInventoryDialog.Invoke(this, EventArgs.Empty);
-
-    private void CloseInventory(object obj)
+    private void OpenInventory(object? obj)
     {
-        CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
+        using var db = new BookstoreContext();
+
+        OpenManageInventoryDialog.Invoke(this, EventArgs.Empty);
+
+        if (SelectedBookTitle.Quantity >= 0 && SelectedBookTitle.Quantity <= 20)
+        {
+            //db.SaveChanges();
+        }
+        else
+        {
+            
+        }
     }
 
+    private void CloseInventory(object obj) => CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
+    
     private void UpdateBooksForSelectedStore()
     {
         if (SelectedStore == null)
