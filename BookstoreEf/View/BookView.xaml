@@ -63,7 +63,6 @@
                 <fa:IconBlock Icon="Minus"/>
             </Button.Content>
         </Button>
-        <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
@@ -80,7 +79,6 @@
                 <fa:IconBlock Icon="Gears"/>
             </Button.Content>
         </Button>
-        <!--Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}"-->
 
         <DataGrid x:Name="DG_BookDetails" 
                   Grid.Row="1"
