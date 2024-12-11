@@ -129,8 +129,10 @@ class StoreInventoryViewModel : ViewModelBase
 
     public DelegateCommand CloseManageInventoryCommand { get; }
     public DelegateCommand OpenManageInventoryCommand { get; }
+
+    //public DelegateCommand OpenAddBookToInventoryCommand { get; }
+    public DelegateCommand SaveInventoryCommand { get; set; }
     public DelegateCommand SwitchToStoreInventoryViewCommand { get; }
-    public DelegateCommand OpenAddBookToInventoryCommand { get; }
 
     public StoreInventoryViewModel(MainWindowViewModel? mainWindowViewModel)
     {
@@ -143,8 +145,9 @@ class StoreInventoryViewModel : ViewModelBase
 
         CloseManageInventoryCommand = new DelegateCommand(CloseInventory);
         OpenManageInventoryCommand = new DelegateCommand(OpenInventory);
+        SaveInventoryCommand = new DelegateCommand(SaveInventory);
         SwitchToStoreInventoryViewCommand = new DelegateCommand(StartInventoryView, IsInventoryViewEnable);
-        OpenAddBookToInventoryCommand = new DelegateCommand(AddBookToInventory);
+        //OpenAddBookToInventoryCommand = new DelegateCommand(AddBookToInventory);
 
         SelectedStore = Stores?.FirstOrDefault();
     }
@@ -187,24 +190,16 @@ class StoreInventoryViewModel : ViewModelBase
 
     private bool IsInventoryViewEnable(object? obj) => IsStoreInventoryMenuOptionEnable = !IsStoreInventoryViewVisible;
 
-    private void OpenInventory(object? obj)
-    {
-        using var db = new BookstoreContext();
-
-        OpenManageInventoryDialog.Invoke(this, EventArgs.Empty);
-
-        if (SelectedBookTitle.Quantity >= 0 && SelectedBookTitle.Quantity <= 20)
-        {
-            //db.SaveChanges();
-        }
-        else
-        {
-            
-        }
-    }
+    private void OpenInventory(object? obj) => OpenManageInventoryDialog.Invoke(this, EventArgs.Empty);
 
     private void CloseInventory(object obj) => CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
-    
+
+    // BÖRJA HÄR !! kolla upp UpdateSourceTrigger=Explicit
+    private void SaveInventory(object obj)
+    {
+        throw new NotImplementedException();
+    }
+
     private void UpdateBooksForSelectedStore()
     {
         if (SelectedStore == null)

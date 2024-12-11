@@ -12,6 +12,7 @@
         WindowStartupLocation="CenterOwner"
         DataContext="{Binding StoreInventoryViewModel}">
     <Grid>
+        <!--ItemsSource="{Binding BooksInSelectedStore}"-->
         <StackPanel VerticalAlignment="Center"
                     HorizontalAlignment="Center">
             <Label Content="Title"
@@ -21,7 +22,7 @@
             <ComboBox ItemsSource="{Binding BooksInSelectedStore}"
                       DisplayMemberPath="BookTitle"                      
                       Margin="0 0 0 70"
-                      MaxDropDownHeight="70"
+                      MaxDropDownHeight="80"
                       SelectedIndex="0"
                       SelectedItem="{Binding SelectedBookTitle}"
                       ToolTip="Select a book"/>
@@ -39,7 +40,7 @@
                        HorizontalAlignment="Left"/>
             </WrapPanel>
             <Slider x:Name="slider"              
-                    Value="{Binding SelectedBookTitle.Quantity, UpdateSourceTrigger=PropertyChanged}"
+                    Value="{Binding SelectedBookTitle.Quantity, UpdateSourceTrigger=Explicit}"
                     Minimum="0"
                     Maximum="20"
                     TickFrequency="1"
@@ -48,6 +49,7 @@
             <WrapPanel HorizontalAlignment="Center"
                        Margin="20">
                 <Button Content="Save" 
+                        Command="{Binding temp}"
                         Margin="5 3"
                         Padding="3"/>
                 <Button Content="Cancel" 

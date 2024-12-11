@@ -112,7 +112,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding temp}"
+                Command ="{Binding OpenAddBookToInventoryCommand}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
