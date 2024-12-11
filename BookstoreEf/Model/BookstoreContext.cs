@@ -54,28 +54,30 @@ public partial class BookstoreContext : DbContext
                 .HasDefaultValue("Unknown");
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
-                .HasDefaultValue("Uknown");
+                .HasDefaultValue("Uknown");            
 
-            entity.HasMany(d => d.BookIsbns).WithMany(p => p.Authors)
-                .UsingEntity<Dictionary<string, object>>(
-                    "AuthorsBook",
-                    r => r.HasOne<Book>().WithMany()
-                        .HasForeignKey("BookIsbn")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__AuthorsBo__BookI__39E294A9"),
-                    l => l.HasOne<Author>().WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__AuthorsBo__Autho__38EE7070"),
-                    j =>
-                    {
-                        j.HasKey("AuthorId", "BookIsbn").HasName("PK__AuthorsB__D33751843AAFE47B");
-                        j.ToTable("AuthorsBooks");
-                        j.IndexerProperty<int>("AuthorId").HasColumnName("AuthorID");
-                        j.IndexerProperty<string>("BookIsbn")
-                            .HasMaxLength(13)
-                            .HasColumnName("BookISBN");
-                    });
+            //entity.HasMany(d => d.BookIsbns).WithMany(p => p.Authors)
+            //    .UsingEntity<Dictionary<string, object>>(
+            //        "AuthorsBook",
+            //        r => r.HasOne<Book>().WithMany()
+            //            .HasForeignKey("BookIsbn")
+            //            .OnDelete(DeleteBehavior.ClientSetNull)
+            //            .HasConstraintName("FK__AuthorsBo__BookI__39E294A9"),
+            //        l => l.HasOne<Author>().WithMany()
+            //            .HasForeignKey("AuthorId")
+            //            .OnDelete(DeleteBehavior.ClientSetNull)
+            //            .HasConstraintName("FK__AuthorsBo__Autho__38EE7070"),
+            //        j =>
+            //        {
+            //            j.HasKey("AuthorId", "BookIsbn").HasName("PK__AuthorsB__D33751843AAFE47B");
+            //            j.ToTable("AuthorsBooks");
+            //            j.IndexerProperty<int>("AuthorId").HasColumnName("AuthorID");
+            //            j.IndexerProperty<string>("BookIsbn")
+            //                .HasMaxLength(13)
+            //                .HasColumnName("BookISBN");
+            //        });
+
+
         });
 
         modelBuilder.Entity<Book>(entity =>

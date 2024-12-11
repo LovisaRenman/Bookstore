@@ -18,7 +18,7 @@ public partial class Book : INotifyPropertyChanged
         GenreId = original.GenreId;
         Inventories = original.Inventories;
         Publisher = original.Publisher;
-        Authors = original.Authors;
+        AuthorId = original.AuthorId;
     }
 
     public Book()
@@ -28,6 +28,7 @@ public partial class Book : INotifyPropertyChanged
 
     private string bookTitle = null!;
     private Genre? genre;
+    private Author? author;
     private Publisher? publisher;
     private string isbn = null!;
     private string? language;
@@ -132,7 +133,19 @@ public partial class Book : INotifyPropertyChanged
         }
     }
 
-    public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
+    public int? AuthorId { get; set; }
+
+    public virtual Author? Author
+    {
+        get => author;
+        set
+        {
+            author = value;
+            RaisePropertyChanged();
+        }
+    }
+
+    //public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
 
 
     public event PropertyChangedEventHandler? PropertyChanged;

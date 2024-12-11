@@ -203,7 +203,7 @@ namespace BookstoreEf.ViewModel
         public void LoadBooks()
         {
             using var db = new BookstoreContext();
-            var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Authors).ToList();
+            var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Author).ToList();
             Books = new ObservableCollection<Book>(books);
         }
 
@@ -219,7 +219,7 @@ namespace BookstoreEf.ViewModel
             Books.Add(newBook);
             SelectedBook = newBook;
 
-            //SelectedAuthor = Authors.FirstOrDefault();
+            SelectedAuthor = Authors.FirstOrDefault();
             SelectedGenre = Genres.FirstOrDefault();
             SelectedPublisher = Publishers.FirstOrDefault();
 
@@ -241,7 +241,7 @@ namespace BookstoreEf.ViewModel
 
         private void Create(object obj)
         {
-            //SelectedBook.Authors = SelectedAuthor;
+            SelectedBook.Author = SelectedAuthor;
             SelectedBook.Genre = SelectedGenre;
             SelectedBook.Publisher = SelectedPublisher;
 
