@@ -217,12 +217,14 @@ namespace BookstoreEf.ViewModel
             ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
             var newBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
             Books.Add(newBook);
+            db.Books.Add(newBook);
             SelectedBook = newBook;
+
+            //db.SaveChanges();
 
             SelectedAuthor = Authors.FirstOrDefault();
             SelectedGenre = Genres.FirstOrDefault();
             SelectedPublisher = Publishers.FirstOrDefault();
-
         }
 
 
@@ -231,10 +233,14 @@ namespace BookstoreEf.ViewModel
             if (BookWindowTitle == TitleAddBook) Books.Remove(SelectedBook);
             else if (BookWindowTitle == TitleEditBook)
             {
-                //SelectedBook = SaveSelectedBook;
-                //var book = Books.FirstOrDefault(b => b.Isbn == SelectedBook.Isbn);
-                //SelectedBook.BookTitle = SaveSelectedBook.BookTitle;
+                using var db = new BookstoreContext();
 
+                var dbBook = db.Books.FirstOrDefault(b => b.Isbn == SaveSelectedBook.Isbn);
+                var book = Books.FirstOrDefault(b => b.Isbn == SaveSelectedBook.Isbn);
+                SelectedBook = new Book(SaveSelectedBook);
+                book = SaveSelectedBook;
+                dbBook = SaveSelectedBook;
+                //db.SaveChanges();
             }
             CloseBookDialog.Invoke(this, EventArgs.Empty);
         }            
