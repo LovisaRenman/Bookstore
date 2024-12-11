@@ -20,7 +20,8 @@ public partial class MainWindow : Window
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += DeleteBook;
         mainWindowViewModel.BookViewModel.CloseBookDialog += CloseDialog;
-        mainWindowViewModel.StoreInventoryViewModel.ShowDialogManageInventory += ManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.CloseManageInventoryDialog += CloseDialog;
+        mainWindowViewModel.StoreInventoryViewModel.OpenManageInventoryDialog += ManageInventory;
     }
 
     private void ManageInventory(object? sender, EventArgs e)
@@ -57,6 +58,7 @@ public partial class MainWindow : Window
         MessageBoxResult result = MessageBox.Show("Are you sure you want to remove this Book", "Remove Book", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result == MessageBoxResult.Yes) mainWindowViewModel.BookViewModel.Books.Remove(mainWindowViewModel.BookViewModel.SelectedBook);
     }
+
     public void ShowDialog(object viewModel)
     {
         try
@@ -70,6 +72,7 @@ public partial class MainWindow : Window
             MessageBox.Show($"An error occurred while opening the dialog box {e.Message}");
         }
     }
+
     public void CloseDialog(object? sender, EventArgs args)
     {
         if (_dialog != null)
