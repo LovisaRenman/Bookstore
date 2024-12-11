@@ -108,7 +108,7 @@
                                     Binding="{Binding BookTitle}"/>
                 <DataGridTextColumn Header="Author"
                                     Width="3*"
-                                    Binding="{Binding Authorstemp}"/>
+                                    Binding="{Binding Author.Name}"/>
                 <DataGridTextColumn Header="Genre"
                                     Width="3*"
                                     Binding="{Binding Genre.GenreName}"/>
