@@ -5,32 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookstoreEf.Dialogs"
         mc:Ignorable="d"
-        Title="Manage Inventory" Height="350" Width="250" ResizeMode="NoResize"
-        FontSize="16" FontWeight="Bold"
-        Background="Lavender"
-        WindowStartupLocation="CenterOwner">
+        Title="Manage Inventory" 
+        Background="MintCream"
+        Height="300" Width="250" 
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        DataContext="{Binding StoreInventoryViewModel}">
     <Grid>
         <StackPanel VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Width="230">
+                    HorizontalAlignment="Center">
             <Label Content="Title"
-                   Margin="0 10 0 0"/>
-            <ComboBox ItemsSource="{Binding temp}"
+                   Margin="0 10 0 0"
+                   FontSize="16" 
+                   FontWeight="Bold"/>
+            <ComboBox ItemsSource="{Binding BooksInSelectedStore}"
+                      DisplayMemberPath="BookTitle"                      
                       Margin="0 0 0 70"
-                      ToolTip="Select a Book"
-                      SelectedItem="{Binding temp}"                    
-                      MaxDropDownHeight="60"/>
+                      MaxDropDownHeight="70"
+                      SelectedIndex="0"
+                      SelectedItem="{Binding SelectedBookTitle}"
+                      ToolTip="Select a book"/>
             <WrapPanel Margin="0 10 0 0">
-                <Label Content="Balance"/>
-                <Label Content="value"
-                       Margin="75 0 0 0"
-                       FontWeight="Normal"
-                       HorizontalAlignment="Left"/>
+                <Label Content="Balance"
+                       FontSize="16" 
+                       FontWeight="Bold"/>
                 <Label Content="{Binding ElementName=slider, Path=Value}"
-                       FontWeight="Normal"/>
+                       FontWeight="Normal"
+                       FontSize="14"
+                       Margin="65 0 0 0"/>
+                <Label Content="book(s)"
+                       FontWeight="Normal"
+                       FontSize="14"
+                       HorizontalAlignment="Left"/>
             </WrapPanel>
-            <Slider x:Name="slider"
-                    Value="{Binding temp}"
+            <Slider x:Name="slider"              
+                    Value="{Binding SelectedBookTitle.Quantity, UpdateSourceTrigger=PropertyChanged}"
                     Minimum="0"
                     Maximum="20"
                     TickPlacement="BottomRight"
@@ -38,10 +47,11 @@
             <WrapPanel HorizontalAlignment="Center"
                        Margin="20">
                 <Button Content="Ok" 
-                        Margin="0 0 5 0"
-                        Padding="5 0 5 0"/>
-                <Button Content="Cancel" Margin="5 0 0 0"
-                        Padding="5 0 5 0"/>
+                        Margin="5 3"
+                        Padding="3"/>
+                <Button Content="Cancel" 
+                        Margin="5 3"
+                        Padding="3"/>
             </WrapPanel>
 
         </StackPanel>

@@ -77,7 +77,7 @@
 
         <Button Background="Transparent"
                 BorderBrush="Transparent"
-                Command ="{Binding StoreInventoryViewModel.OpenInventoryCommand}"
+                Command ="{Binding StoreInventoryViewModel.OpenManageInventoryCommand}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
