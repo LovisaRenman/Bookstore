@@ -27,10 +27,19 @@ public partial class MainWindow : Window
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += DeleteBook;
         mainWindowViewModel.StoreInventoryViewModel.CloseManageInventoryDialog += OnCloseDialogRequested;
         mainWindowViewModel.StoreInventoryViewModel.OpeInventoryDialog += OnOpenInventoryRequested;
-        mainWindowViewModel.BookViewModel.UpdateSource += UpdateSourceBookDataGrid;
+        mainWindowViewModel.BookViewModel.UpdateSource += UpdateSourceAddBook;
+        mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += UpdateSourceManageInventory;
     }
 
-    private void UpdateSourceBookDataGrid(object? sender, EventArgs e)
+    private void UpdateSourceManageInventory(object? sender, EventArgs e)
+    {
+        if (_dialog is ManageInventory dialog)
+        {
+
+        }
+    }
+
+    private void UpdateSourceAddBook(object? sender, EventArgs e)
     {        
         if (_dialog is AddBook addBookDialog)
         {

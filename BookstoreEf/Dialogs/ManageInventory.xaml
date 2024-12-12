@@ -23,7 +23,7 @@
                       Margin="0 0 0 70"
                       MaxDropDownHeight="80"
                       SelectedIndex="0"
-                      SelectedItem="{Binding SelectedBookTitle}"
+                      SelectedItem="{Binding SelectedBookTitle, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
                       ToolTip="Select a book"/>
             <WrapPanel Margin="0 10 0 0">
                 <Label Content="Balance"
@@ -39,7 +39,7 @@
                        HorizontalAlignment="Left"/>
             </WrapPanel>
             <Slider x:Name="slider"              
-                    Value="{Binding SelectedBookTitle.Quantity, UpdateSourceTrigger=Explicit}"
+                    Value="{Binding SelectedBookTitle.Quantity, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
                     Minimum="0"
                     Maximum="20"
                     TickFrequency="1"
