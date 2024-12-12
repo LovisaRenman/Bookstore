@@ -13,6 +13,8 @@ public partial class Genre
 
     public virtual ICollection<Book> Books { get; set; } = new List<Book>();
 
+
+
     public event PropertyChangedEventHandler? PropertyChanged;
     public void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
     {

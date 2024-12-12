@@ -9,7 +9,7 @@
         Title="{Binding BookWindowTitle}" Height="450" Width="500" ResizeMode="NoResize"
         FontSize="16"
         FontWeight="Bold"
-        Background="Lavender"
+        Background="MintCream"
         WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>

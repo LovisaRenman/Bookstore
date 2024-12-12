@@ -12,7 +12,6 @@
         WindowStartupLocation="CenterOwner"
         DataContext="{Binding StoreInventoryViewModel}">
     <Grid>
-        <!--ItemsSource="{Binding BooksInSelectedStore}"-->
         <StackPanel VerticalAlignment="Center"
                     HorizontalAlignment="Center">
             <Label Content="Title"
@@ -49,7 +48,7 @@
             <WrapPanel HorizontalAlignment="Center"
                        Margin="20">
                 <Button Content="Save" 
-                        Command="{Binding temp}"
+                        Command="{Binding SaveInventoryCommand}"
                         Margin="5 3"
                         Padding="3"/>
                 <Button Content="Cancel" 

@@ -12,15 +12,16 @@
 
     <Menu Background="Lavender">
         <MenuItem Header="_File">
-            <MenuItem Command="{Binding temp}"                 
-                        Header="_Fullscreen"
-                        Icon="{fa:Icon Expand}"
-                        InputGestureText="Alt+Enter"/>
+            <MenuItem Command="{Binding ToggleFullscreenCommand}"
+                      Header="_Fullscreen"
+                      Icon="{fa:Icon Expand}"
+                      InputGestureText="Alt+Enter"
+                      IsCheckable="true"/>
 
-            <MenuItem Command="{Binding temp}"
-                        Header="E_xit"
-                        Icon="{fa:Icon DoorOpen}"
-                        InputGestureText="Alt+F4"/>
+            <MenuItem Command="{Binding ExitProgramCommand}"
+                      Header="E_xit"
+                      Icon="{fa:Icon DoorOpen}"
+                      InputGestureText="Alt+F4"/>
         </MenuItem>
 
 
@@ -45,7 +46,5 @@
         </MenuItem>
 
     </Menu>
-
-
 
 </UserControl>

@@ -102,7 +102,7 @@
                Margin="20 0 0 0"
                Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}">
         </Label>
-        
+
         <StackPanel Grid.Column="1" 
                     Grid.Row="1" 
                     Margin="10 0"
@@ -111,7 +111,7 @@
             <Label Content="First Name" 
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
-            
+
             <TextBox Text ="{Binding SelectedAuthor.FirstName, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
                      Margin="10 0 10 10"
@@ -120,7 +120,7 @@
             <Label Content="Last Name" 
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
-            
+
             <TextBox Text ="{Binding SelectedAuthor.LastName, UpdateSourceTrigger=PropertyChanged}"
                      Height="30"
                      Margin="10 0 10 10"
@@ -150,8 +150,6 @@
                      Margin="10 0 10 0"
                      Padding="2 5 2 5"/>
         </StackPanel>
-
-        
     </Grid>
 
 </UserControl>

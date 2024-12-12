@@ -123,21 +123,19 @@ class StoreInventoryViewModel : ViewModelBase
     }
 
 
-    public event EventHandler OpenManageInventoryDialog;
     public event EventHandler CloseManageInventoryDialog;
-    public event EventHandler OpenAddBookToInventoryDialog;
+    public event EventHandler OpeInventoryDialog;
+
 
     public DelegateCommand CloseManageInventoryCommand { get; }
     public DelegateCommand OpenManageInventoryCommand { get; }
-
-    //public DelegateCommand OpenAddBookToInventoryCommand { get; }
     public DelegateCommand SaveInventoryCommand { get; set; }
     public DelegateCommand SwitchToStoreInventoryViewCommand { get; }
 
     public StoreInventoryViewModel(MainWindowViewModel? mainWindowViewModel)
     {
         this.mainWindowViewModel = mainWindowViewModel;
-        
+
         IsStoreInventoryViewVisible = true;
 
         LoadStores();
@@ -147,12 +145,28 @@ class StoreInventoryViewModel : ViewModelBase
         OpenManageInventoryCommand = new DelegateCommand(OpenInventory);
         SaveInventoryCommand = new DelegateCommand(SaveInventory);
         SwitchToStoreInventoryViewCommand = new DelegateCommand(StartInventoryView, IsInventoryViewEnable);
-        //OpenAddBookToInventoryCommand = new DelegateCommand(AddBookToInventory);
 
         SelectedStore = Stores?.FirstOrDefault();
     }
 
-    private void AddBookToInventory(object obj) => OpenAddBookToInventoryDialog.Invoke(this, EventArgs.Empty);
+    private void CloseInventory(object obj) => CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
+
+    private void GetStoreAdress()
+    {
+        foreach (var store in Stores)
+        {
+            store.StoreAdress = string.Join(", " , string.Join(" ", store.Street, store.StreetNumber), store.Postcode, store.City, store.Country);
+        }
+    }
+
+    private bool IsInventoryViewEnable(object? obj) => IsStoreInventoryMenuOptionEnable = !IsStoreInventoryViewVisible;
+
+    public void LoadBooks()
+    {
+        using var db = new BookstoreContext();
+        var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Author).ToList();
+        Books = new ObservableCollection<Book>(books);
+    }
 
     private void LoadStores() 
     {
@@ -162,19 +176,11 @@ class StoreInventoryViewModel : ViewModelBase
         Stores = new ObservableCollection<Store>(stores);
     }
 
-    public void LoadBooks()
+    private void OpenInventory(object? obj) => OpeInventoryDialog.Invoke(this, EventArgs.Empty);
+    
+    private void SaveInventory(object obj) // BÖRJA HÄR !! kolla upp UpdateSourceTrigger=Explicit
     {
-        using var db = new BookstoreContext();
-        var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Author).ToList();
-        Books = new ObservableCollection<Book>(books);
-    }
-
-    private void GetStoreAdress()
-    {
-        foreach (var store in Stores)
-        {
-            store.StoreAdress = string.Join(", " , string.Join(" ", store.Street, store.StreetNumber), store.Postcode, store.City, store.Country);
-        }
+        throw new NotImplementedException();
     }
 
     private void StartInventoryView(object? obj)
@@ -186,20 +192,8 @@ class StoreInventoryViewModel : ViewModelBase
         mainWindowViewModel.BookViewModel.IsBookViewVisible = false;
        
         UpdateCommandStates();
-    }
-
-    private bool IsInventoryViewEnable(object? obj) => IsStoreInventoryMenuOptionEnable = !IsStoreInventoryViewVisible;
-
-    private void OpenInventory(object? obj) => OpenManageInventoryDialog.Invoke(this, EventArgs.Empty);
-
-    private void CloseInventory(object obj) => CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
-
-    // BÖRJA HÄR !! kolla upp UpdateSourceTrigger=Explicit
-    private void SaveInventory(object obj)
-    {
-        throw new NotImplementedException();
-    }
-
+    } 
+    
     private void UpdateBooksForSelectedStore()
     {
         if (SelectedStore == null)

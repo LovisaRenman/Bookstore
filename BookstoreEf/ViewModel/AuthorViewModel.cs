@@ -82,6 +82,7 @@ class AuthorViewModel : ViewModelBase
 
 
     public event EventHandler<Author> DeleteAuthorRequested;
+
     public DelegateCommand AddAuthorCommand { get; }
     public DelegateCommand DeleteAuthorCommand { get; }
     public DelegateCommand SwitchToAuthorViewCommand { get; }
@@ -114,7 +115,7 @@ class AuthorViewModel : ViewModelBase
         Authors = new ObservableCollection<Author>(authors);
     }
 
-    private void AddAuthor(object? obj)
+    private void AddAuthor(object? obj)  // !! KOLLA KOMMENTAR
     {
         using var db = new BookstoreContext();
 
@@ -125,7 +126,7 @@ class AuthorViewModel : ViewModelBase
         //db.SaveChanges()
     }
 
-    private void DeleteAuthor(object? obj)
+    private void DeleteAuthor(object? obj) // !! KOLLA KOMMENTAR
     {
         using var db = new BookstoreContext();
 

@@ -45,7 +45,6 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        
                         <TextBlock Text="{Binding StoreName}" 
                                    FontWeight="Bold"
                                    FontSize="12"
@@ -56,7 +55,6 @@
                                    FontSize="11"
                                    TextWrapping="Wrap"
                                    Margin="0 5 0 0"/>
-
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

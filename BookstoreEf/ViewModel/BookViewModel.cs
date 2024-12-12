@@ -9,29 +9,6 @@ namespace BookstoreEf.ViewModel
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
 
-        public List<Author> _authors { get; set; }
-        public List<Author> Authors
-        {
-            get
-            {
-                using var db = new BookstoreContext();
-                _authors = db.Authors.ToList();
-                return _authors;
-            }
-        }
-
-        private ObservableCollection<Book> _books;
-        public ObservableCollection<Book> Books
-        {
-            get => _books;
-            set
-            {
-                _books = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
         public Author _selectedAuthor { get; set; }
         public Author SelectedAuthor
         {
@@ -40,20 +17,6 @@ namespace BookstoreEf.ViewModel
             {
                 _selectedAuthor = value;
                 RaisePropertyChanged();
-            }
-        }
-
-
-        private Book? _selectedBook;
-        public Book? SelectedBook
-        {
-            get => _selectedBook;
-            set
-            {
-                _selectedBook = value;
-                RaisePropertyChanged();
-                EditBookCommand.RaiseCanExecuteChanged();
-                RemoveBookCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -67,49 +30,18 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        public Genre _selectedGenre { get; set; }
-        public Genre SelectedGenre
+        private Book? _selectedBook;
+        public Book? SelectedBook
         {
-            get => _selectedGenre;
+            get => _selectedBook;
             set
             {
-                _selectedGenre = value;
+                _selectedBook = value;
                 RaisePropertyChanged();
+                EditBookCommand.RaiseCanExecuteChanged();
+                RemoveBookCommand.RaiseCanExecuteChanged();
             }
         }
-
-        public List<Genre> _genres { get; set; }
-        public List<Genre> Genres
-        {
-            get
-            {
-                using var db = new BookstoreContext();
-                _genres = db.Genres.ToList();
-                return _genres;
-            }
-        }
-        public List<Publisher> _publishers { get; set; }
-        public List<Publisher> Publishers
-        {
-            get
-            {
-                using var db = new BookstoreContext();
-                _publishers = db.Publishers.ToList();
-                return _publishers;
-            }
-        }
-
-        public Publisher _selectedPublishers { get; set; }
-        public Publisher SelectedPublisher
-        {
-            get => _selectedPublishers;
-            set
-            {
-                _selectedPublishers = value;
-                RaisePropertyChanged();
-            }
-        }
-
 
         private bool _isBookViewMenuOptionEnable;
         public bool IsBookViewMenuOptionEnable
@@ -133,7 +65,6 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-
         private DateOnly _publishDate;
         public DateOnly PublishDate
         {
@@ -145,6 +76,69 @@ namespace BookstoreEf.ViewModel
             }
         }
 
+        public Genre _selectedGenre { get; set; }
+        public Genre SelectedGenre
+        {
+            get => _selectedGenre;
+            set
+            {
+                _selectedGenre = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public List<Author> _authors { get; set; }
+        public List<Author> Authors
+        {
+            get
+            {
+                using var db = new BookstoreContext();
+                _authors = db.Authors.ToList();
+                return _authors;
+            }
+        }
+        public List<Genre> _genres { get; set; }
+        public List<Genre> Genres
+        {
+            get
+            {
+                using var db = new BookstoreContext();
+                _genres = db.Genres.ToList();
+                return _genres;
+            }
+        }
+        public List<Publisher> _publishers { get; set; }
+        public List<Publisher> Publishers
+        {
+            get
+            {
+                using var db = new BookstoreContext();
+                _publishers = db.Publishers.ToList();
+                return _publishers;
+            }
+        }
+
+        private ObservableCollection<Book> _books;
+        public ObservableCollection<Book> Books
+        {
+            get => _books;
+            set
+            {
+                _books = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public Publisher _selectedPublishers { get; set; }
+        public Publisher SelectedPublisher
+        {
+            get => _selectedPublishers;
+            set
+            {
+                _selectedPublishers = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private string _bookWindowTitle;
         public string BookWindowTitle
@@ -158,7 +152,6 @@ namespace BookstoreEf.ViewModel
         }
 
         private string _buttonContent;
-
         public string ButtonContent
         {
             get => _buttonContent; 
@@ -171,6 +164,7 @@ namespace BookstoreEf.ViewModel
 
         public string TitleAddBook = "Add Book";
         public string TitleEditBook = "Edit Book";
+
 
         public event EventHandler CloseBookDialog;
         public event EventHandler ShowDialogAddBooks;
@@ -226,7 +220,6 @@ namespace BookstoreEf.ViewModel
             SelectedGenre = Genres.FirstOrDefault();
             SelectedPublisher = Publishers.FirstOrDefault();
         }
-
 
         private void Cancel(object obj)
         {

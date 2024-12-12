@@ -56,6 +56,7 @@ public partial class Book : INotifyPropertyChanged
             RaisePropertyChanged();
         }
     }
+
     public string? Language 
     { 
         get => language; 
