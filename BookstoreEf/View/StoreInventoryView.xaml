@@ -110,7 +110,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding OpenAddBookToInventoryCommand}"
+                Command ="{Binding temp}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
@@ -127,8 +127,8 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding temp}"
-                IsEnabled="{Binding temp}"
+                Command ="{Binding StoreInventoryViewModel.DeleteBookCommand}"
+                IsEnabled="{Binding StoreInventoryViewModel.IsDeleteBookOptionEnable, UpdateSourceTrigger=PropertyChanged}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
@@ -136,24 +136,25 @@
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"
                 Margin="0 0 40 0"
-                ToolTip="Remove book from store">
+                ToolTip="Remove selected book from store">
 
             <Button.Content>
                 <fa:IconBlock Icon="Minus"/>
             </Button.Content>
         </Button>
-
+        
         <Button Background="Transparent"
                 BorderBrush="Transparent"
-                Command ="{Binding StoreInventoryViewModel.OpenManageInventoryCommand}"
+                Command ="{Binding StoreInventoryViewModel.OpenManageInventoryCommand}"               
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
+                IsEnabled="{Binding StoreInventoryViewModel.IsUpdateBookQuantityEnable}"
                 Width="30"
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom"
                 Margin="0 0 10 0"
-                ToolTip="Update book quantity in store">
+                ToolTip="Update selected book quantity in store">
 
             <Button.Content>
                 <fa:IconBlock Icon="Shop"/>
@@ -173,8 +174,8 @@
                   AlternatingRowBackground="LightGray"
                   RowBackground="White"
                   RowHeaderWidth="20"
-                  SelectedItem="{Binding StoreInventoryViewModel.SelectedBook}"
-                  ItemsSource="{Binding StoreInventoryViewModel.BooksInSelectedStore}">
+                  SelectedItem="{Binding StoreInventoryViewModel.SelectedBookTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                  ItemsSource="{Binding StoreInventoryViewModel.BooksInSelectedStore, UpdateSourceTrigger=PropertyChanged}">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Book Title"

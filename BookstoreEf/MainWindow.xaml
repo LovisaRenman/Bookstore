@@ -40,7 +40,7 @@
         </Grid.RowDefinitions>
 
         <view:MenuView Grid.Row="0"/>
-        <view:StoreInventoryView Grid.Row="1" Visibility="{Binding IsStoreInventoryViewVisible, Converter={StaticResource VisibilityConverter}}"/>
+        <view:StoreInventoryView Grid.Row="1" Visibility="{Binding StoreInventoryViewModel.IsStoreInventoryViewVisible, Converter={StaticResource VisibilityConverter}}"/>
         <view:BookView Grid.Row="1" Visibility="{Binding IsBookViewVisible, Converter={StaticResource VisibilityConverter}}"/>
         <view:AuthorView Grid.Row="1" Visibility="{Binding IsAuthorViewVisible, Converter={StaticResource VisibilityConverter}}"/>
     </Grid>
