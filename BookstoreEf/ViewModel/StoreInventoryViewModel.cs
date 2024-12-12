@@ -125,6 +125,7 @@ class StoreInventoryViewModel : ViewModelBase
 
     public event EventHandler CloseManageInventoryDialog;
     public event EventHandler OpeInventoryDialog;
+    public event EventHandler InventoryUpdateSource;
 
 
     public DelegateCommand CloseManageInventoryCommand { get; }
@@ -178,10 +179,8 @@ class StoreInventoryViewModel : ViewModelBase
 
     private void OpenInventory(object? obj) => OpeInventoryDialog.Invoke(this, EventArgs.Empty);
     
-    private void SaveInventory(object obj) // BÖRJA HÄR !! kolla upp UpdateSourceTrigger=Explicit
-    {
-        throw new NotImplementedException();
-    }
+    private void SaveInventory(object obj) => InventoryUpdateSource.Invoke(this, EventArgs.Empty);
+    
 
     private void StartInventoryView(object? obj)
     {
