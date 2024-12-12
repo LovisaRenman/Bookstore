@@ -29,13 +29,15 @@ public partial class MainWindow : Window
         mainWindowViewModel.StoreInventoryViewModel.OpeInventoryDialog += OnOpenInventoryRequested;
         mainWindowViewModel.BookViewModel.UpdateSource += UpdateSourceAddBook;
         mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += UpdateSourceManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += OnCloseDialogRequested;
     }
 
     private void UpdateSourceManageInventory(object? sender, EventArgs e)
     {
         if (_dialog is ManageInventory dialog)
         {
-
+            BindingExpression beQuantity = dialog.slider.GetBindingExpression(Slider.ValueProperty);
+            beQuantity.UpdateSource();
         }
     }
 

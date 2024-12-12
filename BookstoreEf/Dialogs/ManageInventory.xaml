@@ -23,7 +23,7 @@
                       Margin="0 0 0 70"
                       MaxDropDownHeight="80"
                       SelectedIndex="0"
-                      SelectedItem="{Binding SelectedBookTitle, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedBookTitle, UpdateSourceTrigger=PropertyChanged}"
                       ToolTip="Select a book"/>
             <WrapPanel Margin="0 10 0 0">
                 <Label Content="Balance"
