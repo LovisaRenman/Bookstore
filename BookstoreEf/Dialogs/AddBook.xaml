@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BookstoreEf.Dialogs"
+        xmlns:UI="clr-namespace:BookstoreEf.Dialogs"
         mc:Ignorable="d"
         DataContext="{Binding BookViewModel}"
         Title="{Binding BookWindowTitle}" Height="450" Width="500" ResizeMode="NoResize"
@@ -27,7 +28,8 @@
 
         <StackPanel Margin="10 0 10 0">
             <Label Content="ISBN"/>
-            <TextBox Text="{Binding SelectedBook.Isbn, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text="{Binding SelectedBook.Isbn, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     x:Name="ISBNTb"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
         </StackPanel>
@@ -35,7 +37,8 @@
         <StackPanel Margin="10 0 10 0"
                     Grid.Row="1">
             <Label Content="Title"/>
-            <TextBox Text="{Binding SelectedBook.BookTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text="{Binding SelectedBook.BookTitle, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     x:Name="TitleTb"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
         </StackPanel>
@@ -45,7 +48,7 @@
             <Label Content="Author"/>
             <ComboBox Margin="0 0 0 10"
                       ItemsSource="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedItem="{Binding SelectedAuthor, Mode=TwoWay}"
+                      SelectedItem="{Binding SelectedAuthor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                       DisplayMemberPath="Name"
                       FontWeight="Regular"/>
         </StackPanel>
@@ -57,8 +60,9 @@
                     <Label Content="MM/DD/YYYY"
                             FontWeight="Normal"/>
                 </WrapPanel>
-            <TextBox Text="{Binding SelectedBook.PublishDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                            Margin="0 0 0 10"
+            <TextBox x:Name="PublishDateTb"
+                     Text="{Binding SelectedBook.PublishDate, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     Margin="0 0 0 10"
                      FontWeight="Regular"/>
             
         </StackPanel>
@@ -76,7 +80,8 @@
         <StackPanel Grid.Column="2"
                     Margin="10 0 10 0">
             <Label Content="Language"/>
-            <TextBox Text="{Binding SelectedBook.Language, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text="{Binding SelectedBook.Language, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     x:Name="LanguageTb"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
         </StackPanel>
@@ -89,7 +94,8 @@
                 <Label Content="(kr)"
                        FontWeight="Normal"/>
             </WrapPanel>
-            <TextBox Text="{Binding SelectedBook.Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text="{Binding SelectedBook.Price, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     x:Name="PriceTb"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
         </StackPanel>
@@ -97,8 +103,8 @@
         <StackPanel Grid.Column="2"
                     Grid.Row="2"
                     Margin="10 0 10 0">
-            <Label Content="Pages"/>
-            <TextBox Text="{Binding SelectedBook.Pages, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <Label Content="PagesTb"/>
+            <TextBox Text="{Binding SelectedBook.Pages, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
             
@@ -112,7 +118,8 @@
                 <Label Content="(g)"
                        FontWeight="Normal"/>
             </WrapPanel>
-            <TextBox Text="{Binding SelectedBook.WeightInGrams, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text="{Binding SelectedBook.WeightInGrams, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     x:Name="WeightTb"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
         </StackPanel>

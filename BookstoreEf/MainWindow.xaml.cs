@@ -2,6 +2,8 @@
 using BookstoreEf.ViewModel;
 using System.Diagnostics.Eventing.Reader;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace BookstoreEf;
 
@@ -25,12 +27,37 @@ public partial class MainWindow : Window
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += DeleteBook;
         mainWindowViewModel.StoreInventoryViewModel.CloseManageInventoryDialog += OnCloseDialogRequested;
         mainWindowViewModel.StoreInventoryViewModel.OpeInventoryDialog += OnOpenInventoryRequested;
+        mainWindowViewModel.BookViewModel.UpdateSource += UpdateSourceBookDataGrid;
+    }
+
+    private void UpdateSourceBookDataGrid(object? sender, EventArgs e)
+    {        
+        if (_dialog is AddBook addBookDialog)
+        {
+            BindingExpression beISBN = addBookDialog.ISBNTb.GetBindingExpression(TextBox.TextProperty);
+            beISBN.UpdateSource();
+
+            BindingExpression beTitle = addBookDialog.TitleTb.GetBindingExpression(TextBox.TextProperty);
+            beTitle.UpdateSource();
+
+            BindingExpression bePublishDate = addBookDialog.PublishDateTb.GetBindingExpression(TextBox.TextProperty);
+            bePublishDate.UpdateSource();
+
+            BindingExpression beLanguage = addBookDialog.LanguageTb.GetBindingExpression(TextBox.TextProperty);
+            beLanguage.UpdateSource();
+
+            BindingExpression bePrice = addBookDialog.PriceTb.GetBindingExpression(TextBox.TextProperty);
+            bePrice.UpdateSource();
+
+            BindingExpression beWeight = addBookDialog.WeightTb.GetBindingExpression(TextBox.TextProperty);
+            beWeight.UpdateSource();
+        }
     }
 
     public void AddBooks(object? sender, EventArgs arg)
     {
         _dialog = new AddBook();
-        ShowDialog(mainWindowViewModel.BookViewModel);
+        ShowDialog(mainWindowViewModel.BookViewModel);        
     }
 
     public void DeleteBook(object? sender, EventArgs arg)

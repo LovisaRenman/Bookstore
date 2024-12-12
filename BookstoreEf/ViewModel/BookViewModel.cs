@@ -2,6 +2,7 @@
 using BookstoreEf.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace BookstoreEf.ViewModel
 {
@@ -21,7 +22,7 @@ namespace BookstoreEf.ViewModel
         }
 
         private Book? _savedSelectedBook;
-        public Book? SaveSelectedBook
+        public Book? NewBook
         {
             get => _savedSelectedBook;
             set
@@ -170,6 +171,7 @@ namespace BookstoreEf.ViewModel
         public event EventHandler ShowDialogAddBooks;
         public event EventHandler ShowDialogEditBook;
         public event EventHandler ShowMessageBoxRemoveBook;
+        public event EventHandler UpdateSource;
 
         public DelegateCommand AddBookCommand { get; }
         public DelegateCommand CancelCommand { get; }
@@ -189,7 +191,7 @@ namespace BookstoreEf.ViewModel
             AddBookCommand = new DelegateCommand(AddBook);
             EditBookCommand = new DelegateCommand(EditBook, EditBookActive);
             RemoveBookCommand = new DelegateCommand(RemoveBook, RemoveBookActive);
-            CreateCommand = new DelegateCommand(Create);
+            CreateCommand = new DelegateCommand(CreateOrChange);
             CancelCommand = new DelegateCommand(Cancel);
             SwitchToBookViewCommand = new DelegateCommand(StartBookView, IsBookViewEnable);
         }
@@ -209,10 +211,10 @@ namespace BookstoreEf.ViewModel
             using var db = new BookstoreContext();
 
             ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
-            var newBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
-            Books.Add(newBook);
-            db.Books.Add(newBook);
-            SelectedBook = newBook;
+            NewBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
+            Books.Add(NewBook);
+            db.Books.Add(NewBook);
+            SelectedBook = NewBook;
 
             //db.SaveChanges();
 
@@ -223,26 +225,24 @@ namespace BookstoreEf.ViewModel
 
         private void Cancel(object obj)
         {
-            if (BookWindowTitle == TitleAddBook) Books.Remove(SelectedBook);
-            else if (BookWindowTitle == TitleEditBook)
+            if (BookWindowTitle == TitleAddBook)
             {
                 using var db = new BookstoreContext();
-
-                var dbBook = db.Books.FirstOrDefault(b => b.Isbn == SaveSelectedBook.Isbn);
-                var book = Books.FirstOrDefault(b => b.Isbn == SaveSelectedBook.Isbn);
-                SelectedBook = new Book(SaveSelectedBook);
-                book = SaveSelectedBook;
-                dbBook = SaveSelectedBook;
+                Books.Remove(NewBook);
+                db.Books.Remove(NewBook);
                 //db.SaveChanges();
             }
             CloseBookDialog.Invoke(this, EventArgs.Empty);
         }            
 
-        private void Create(object obj)
+        private void CreateOrChange(object obj)
         {
+            using var db = new BookstoreContext();
             SelectedBook.Author = SelectedAuthor;
             SelectedBook.Genre = SelectedGenre;
             SelectedBook.Publisher = SelectedPublisher;
+            
+            UpdateSource.Invoke(this, EventArgs.Empty);
 
             CloseBookDialog.Invoke(this, EventArgs.Empty);
         }
@@ -255,15 +255,13 @@ namespace BookstoreEf.ViewModel
 
         private void EditBook(object obj)
         {
-            SaveSelectedBook = new Book(SelectedBook);
-
             BookWindowTitle = TitleEditBook;
             ButtonContent = "Change";
             ShowDialogEditBook.Invoke(this, EventArgs.Empty);
 
 
-            //SelectedAuthor = SelectedBook.Authors;
-            SelectedGenre = SelectedBook.Genre;
+            SelectedAuthor = SelectedBook.Author;
+            SelectedGenre = SelectedBook.Genre ;
             SelectedPublisher = SelectedBook.Publisher;
         }
         private bool RemoveBookActive(object? arg)
