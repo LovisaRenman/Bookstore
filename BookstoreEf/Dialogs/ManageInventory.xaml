@@ -73,8 +73,7 @@
                 Grid.Row="2"
                 VerticalAlignment="Bottom"/>
         <WrapPanel HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Margin="20"
+                   VerticalAlignment="Center"
                    Grid.Column="1"
                     Grid.Row="3">
             <Button Content="Save" 
