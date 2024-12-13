@@ -1,5 +1,6 @@
 ﻿using BookstoreEf.Command;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace BookstoreEf.ViewModel;
 
@@ -33,7 +34,17 @@ class AuthorViewModel : ViewModelBase
         }
     }
 
+    private Author? _newAuthor;
 
+    public Author? NewAuthor
+    {
+        get => _newAuthor; 
+        set 
+        { 
+            _newAuthor = value;
+            RaisePropertyChanged();
+        }
+    }
 
     private bool _isAuthorViewVisible;
     public bool IsAuthorViewVisible
@@ -82,6 +93,7 @@ class AuthorViewModel : ViewModelBase
 
 
     public event EventHandler<Author> DeleteAuthorRequested;
+    public event EventHandler<Exception> FailedToAddAuthor;
 
     public DelegateCommand AddAuthorCommand { get; }
     public DelegateCommand DeleteAuthorCommand { get; }
@@ -115,26 +127,49 @@ class AuthorViewModel : ViewModelBase
         Authors = new ObservableCollection<Author>(authors);
     }
 
-    private void AddAuthor(object? obj)  // !! KOLLA KOMMENTAR
+    private void AddAuthor(object? obj)
     {
         using var db = new BookstoreContext();
 
-        Authors.Add(new Author() { FirstName = "<New Author>" }); 
-        
-        SelectedAuthor = (Authors.Count > 0) ? Authors.Last() : Authors.FirstOrDefault();
-       
-        //db.SaveChanges()
+        // Lägg till den nya författaren till databasen
+        NewAuthor = new Author() { FirstName = "New Author" };
+        db.Authors.Add(NewAuthor);
+
+        try
+        {
+            db.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            FailedToAddAuthor.Invoke(this, e);           
+        }
+
+        // Hämta information från databas
+        var authors = db.Authors.ToList();
+
+        // Uppdatera listan Authors som gui:t är bindad till
+        Authors = new ObservableCollection<Author>(authors);
+
+        SelectedAuthor = Authors.LastOrDefault();
     }
 
-    private void DeleteAuthor(object? obj) // !! KOLLA KOMMENTAR
+    private void DeleteAuthor(object? obj)
     {
-        using var db = new BookstoreContext();
+        if (SelectedAuthor != null)
+        {
+            using var db = new BookstoreContext();
 
-        if (SelectedAuthor != null) DeleteAuthorRequested.Invoke(this, SelectedAuthor);
+            // Ta bort en författare
+            DeleteAuthorRequested.Invoke(this, SelectedAuthor);
 
-        ChangeTextVisibility();
+            // Hämta uppdaterad information från databasen 
+            var authors = db.Authors.ToList();
 
-        //db.SaveChanges()
+            // Uppdatera listan Authors som Gui:t är bindad till
+            Authors = new ObservableCollection<Author>(authors);
+
+            ChangeTextVisibility();
+        }
     }
 
     private bool IsDeleteAuthorEnable(object? obj) => IsDeleteButtonEnable = SelectedAuthor != null && Authors.Count > 0;

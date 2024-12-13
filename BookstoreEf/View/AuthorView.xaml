@@ -112,7 +112,7 @@
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
 
-            <TextBox Text ="{Binding SelectedAuthor.FirstName, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text ="{Binding SelectedAuthor.FirstName, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -121,7 +121,7 @@
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
 
-            <TextBox Text ="{Binding SelectedAuthor.LastName, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text ="{Binding SelectedAuthor.LastName, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -133,7 +133,7 @@
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -145,7 +145,7 @@
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 0"
                      Padding="2 5 2 5"/>
