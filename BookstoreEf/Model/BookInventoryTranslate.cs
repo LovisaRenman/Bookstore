@@ -2,7 +2,7 @@
 
 namespace BookstoreEf.ViewModel
 {
-    internal class BookInventoryViewModel : ViewModelBase
+    internal class BookInventoryTranslate : ViewModelBase
     {
         private string _bookTitle;
         public string BookTitle

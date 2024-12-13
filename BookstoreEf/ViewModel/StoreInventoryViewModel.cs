@@ -10,8 +10,8 @@ class StoreInventoryViewModel : ViewModelBase
     private readonly MainWindowViewModel? mainWindowViewModel;
 
 
-    private BookInventoryViewModel _selectedBookTitle;
-    public BookInventoryViewModel SelectedBookTitle
+    private BookInventoryTranslate _selectedBookTitle;
+    public BookInventoryTranslate SelectedBookTitle
     {
         get => _selectedBookTitle; 
         set 
@@ -25,14 +25,15 @@ class StoreInventoryViewModel : ViewModelBase
     }
 
 
-    private ObservableCollection<BookInventoryViewModel> _booksInSelectedStore; 
-    public ObservableCollection<BookInventoryViewModel> BooksInSelectedStore
+    private ObservableCollection<BookInventoryTranslate> _booksInSelectedStore; 
+    public ObservableCollection<BookInventoryTranslate> BooksInSelectedStore
     {
         get => _booksInSelectedStore;
         set
         {
             _booksInSelectedStore = value;
             RaisePropertyChanged();
+            RaisePropertyChanged("Books");
             DeleteBookCommand.RaiseCanExecuteChanged();
             SaveInventoryCommand.RaiseCanExecuteChanged();
         }
@@ -136,24 +137,9 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
-    private string _storeNames;
-    public string StoreNames
-    {
-        get => _storeNames; 
-        set
-        {
-            if (_storeNames != value)
-            {
-                _storeNames = value;
-                RaisePropertyChanged();
-            }
-        }
-    }
-
-
     public event EventHandler CloseAddBookToSelectedStoreDialog;
     public event EventHandler CloseManageInventoryDialog;
-    public event EventHandler<BookInventoryViewModel> DeleteBookFromStoreRequested;
+    public event EventHandler<BookInventoryTranslate> DeleteBookFromStoreRequested;
     public event EventHandler OpenInventoryDialog;
     public event EventHandler OpenAddBookToStoreDialog;
     public event EventHandler InventoryUpdateSource;
@@ -180,7 +166,7 @@ class StoreInventoryViewModel : ViewModelBase
         SaveInventoryCommand = new DelegateCommand(SaveInventory);
         SwitchToStoreInventoryViewCommand = new DelegateCommand(StartInventoryView, IsInventoryViewEnable);
 
-        LoadBooks();
+        //LoadBooks();
         LoadStores();
         GetStoreAdress();
 
@@ -203,12 +189,7 @@ class StoreInventoryViewModel : ViewModelBase
 
     private bool IsInventoryViewEnable(object? obj) => IsStoreInventoryMenuOptionEnable = !IsStoreInventoryViewVisible;
 
-    public void LoadBooks()
-    {
-        using var db = new BookstoreContext();
-        var books = db.Books.Include(b => b.Genre).Include(b => b.Publisher).Include(b => b.Author).ToList();
-        Books = new ObservableCollection<Book>(books);
-    }
+    
 
     private void LoadStores() 
     {
@@ -243,7 +224,7 @@ class StoreInventoryViewModel : ViewModelBase
     {
         if (SelectedStore == null)
         {
-            BooksInSelectedStore = new ObservableCollection<BookInventoryViewModel>();
+            BooksInSelectedStore = new ObservableCollection<BookInventoryTranslate>();
             TotalInventoryValue = 0;            
             return;
         }
@@ -252,7 +233,7 @@ class StoreInventoryViewModel : ViewModelBase
         {
             var booksInStore = db.Inventories
                 .Where(i => i.StoreId == SelectedStore.Id)
-                .Select(i => new BookInventoryViewModel
+                .Select(i => new BookInventoryTranslate
                 {
                     BookTitle = i.BookIsbnNavigation.BookTitle,
                     Quantity = i.Quantity,
@@ -260,10 +241,17 @@ class StoreInventoryViewModel : ViewModelBase
                 })
                 .ToList();
 
-            BooksInSelectedStore = new ObservableCollection<BookInventoryViewModel>(booksInStore);
+            BooksInSelectedStore = new ObservableCollection<BookInventoryTranslate>(booksInStore);
+            LoadBooks(BooksInSelectedStore);
         }
 
         TotalInventoryValue = BooksInSelectedStore.Sum(book => book.TotalPrice);
+    }
+
+    public void LoadBooks(ObservableCollection<BookInventoryTranslate> booksInSelectedStore)
+    {
+        using var db = new BookstoreContext();
+        var books = db.Books.ToList();
     }
 
     private void UpdateCommandStates()

@@ -72,7 +72,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void OnDeleteBookFromStoreRequested(object? sender, BookInventoryViewModel selectedBook)
+    private void OnDeleteBookFromStoreRequested(object? sender, BookInventoryTranslate selectedBook)
     {
         MessageBoxResult result = MessageBox.Show("Do you want to delete selected booktitle from the store? ", "Delete selected booktitle?",
             MessageBoxButton.YesNo, MessageBoxImage.Question);
