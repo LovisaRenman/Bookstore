@@ -110,7 +110,7 @@
 
         <Button Background="Transparent" 
                 BorderBrush="Transparent"
-                Command ="{Binding temp}"
+                Command ="{Binding StoreInventoryViewModel.OpenAddBooktitleToStoreCommand}"
                 Grid.Column="1" 
                 Grid.Row="0"
                 Height="30" 
