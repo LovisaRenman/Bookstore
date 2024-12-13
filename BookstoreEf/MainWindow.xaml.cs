@@ -1,5 +1,6 @@
 ﻿using BookstoreEf.Dialogs;
 using BookstoreEf.ViewModel;
+using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,43 +27,10 @@ public partial class MainWindow : Window
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += DeleteBook;
         mainWindowViewModel.StoreInventoryViewModel.CloseManageInventoryDialog += OnCloseDialogRequested;
+        mainWindowViewModel.StoreInventoryViewModel.DeleteBookFromStoreRequested += OnDeleteBookFromStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.OpeInventoryDialog += OnOpenInventoryRequested;
         mainWindowViewModel.BookViewModel.UpdateSource += UpdateSourceAddBook;
         mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += UpdateSourceManageInventory;
-        mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += OnCloseDialogRequested;
-    }
-
-    private void UpdateSourceManageInventory(object? sender, EventArgs e)
-    {
-        if (_dialog is ManageInventory dialog)
-        {
-            BindingExpression beQuantity = dialog.slider.GetBindingExpression(Slider.ValueProperty);
-            beQuantity.UpdateSource();
-        }
-    }
-
-    private void UpdateSourceAddBook(object? sender, EventArgs e)
-    {        
-        if (_dialog is AddBook addBookDialog)
-        {
-            BindingExpression beISBN = addBookDialog.ISBNTb.GetBindingExpression(TextBox.TextProperty);
-            beISBN.UpdateSource();
-
-            BindingExpression beTitle = addBookDialog.TitleTb.GetBindingExpression(TextBox.TextProperty);
-            beTitle.UpdateSource();
-
-            BindingExpression bePublishDate = addBookDialog.PublishDateTb.GetBindingExpression(TextBox.TextProperty);
-            bePublishDate.UpdateSource();
-
-            BindingExpression beLanguage = addBookDialog.LanguageTb.GetBindingExpression(TextBox.TextProperty);
-            beLanguage.UpdateSource();
-
-            BindingExpression bePrice = addBookDialog.PriceTb.GetBindingExpression(TextBox.TextProperty);
-            bePrice.UpdateSource();
-
-            BindingExpression beWeight = addBookDialog.WeightTb.GetBindingExpression(TextBox.TextProperty);
-            beWeight.UpdateSource();
-        }
     }
 
     public void AddBooks(object? sender, EventArgs arg)
@@ -100,6 +68,17 @@ public partial class MainWindow : Window
         if (result == MessageBoxResult.Yes)
         {
             mainWindowViewModel.AuthorViewModel.Authors.Remove(author);
+        }
+    }
+
+    private void OnDeleteBookFromStoreRequested(object? sender, BookInventoryViewModel selectedBook)
+    {
+        MessageBoxResult result = MessageBox.Show("Do you want to delete this book from the store? ", "Delete selected book?",
+            MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            mainWindowViewModel.StoreInventoryViewModel.BooksInSelectedStore.Remove(selectedBook);
         }
     }
 
@@ -145,6 +124,43 @@ public partial class MainWindow : Window
         catch (Exception e)
         {
             MessageBox.Show($"An error occurred while opening the dialog box {e.Message}");
+        }
+    }
+
+    private void UpdateSourceManageInventory(object? sender, EventArgs e)
+    {
+        if (_dialog is ManageInventory dialog)
+        {
+            BindingExpression bookTitleBinding = dialog.cbBooktitle.GetBindingExpression(ComboBox.SelectedItemProperty);
+            bookTitleBinding?.UpdateSource();
+
+            BindingExpression sliderBinding = dialog.slider.GetBindingExpression(Slider.ValueProperty);
+            sliderBinding?.UpdateSource();
+            //mainWindowViewModel.StoreInventoryViewModel.SelectedBookTitle.Quantity = (int)dialog.slider.Value;
+        }
+    }
+
+    private void UpdateSourceAddBook(object? sender, EventArgs e)
+    {        
+        if (_dialog is AddBook addBookDialog)
+        {
+            BindingExpression beISBN = addBookDialog.ISBNTb.GetBindingExpression(TextBox.TextProperty);
+            beISBN.UpdateSource();
+
+            BindingExpression beTitle = addBookDialog.TitleTb.GetBindingExpression(TextBox.TextProperty);
+            beTitle.UpdateSource();
+
+            BindingExpression bePublishDate = addBookDialog.PublishDateTb.GetBindingExpression(TextBox.TextProperty);
+            bePublishDate.UpdateSource();
+
+            BindingExpression beLanguage = addBookDialog.LanguageTb.GetBindingExpression(TextBox.TextProperty);
+            beLanguage.UpdateSource();
+
+            BindingExpression bePrice = addBookDialog.PriceTb.GetBindingExpression(TextBox.TextProperty);
+            bePrice.UpdateSource();
+
+            BindingExpression beWeight = addBookDialog.WeightTb.GetBindingExpression(TextBox.TextProperty);
+            beWeight.UpdateSource();
         }
     }
   

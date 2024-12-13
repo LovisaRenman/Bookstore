@@ -14,12 +14,25 @@
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
     </Window.Resources>
 
-    <!--<Window.InputBindings>
-        <KeyBinding Key="Insert"
-            Command="{Binding ConfigurationViewModel.AddQuestionCommand}"/>
-    </Window.InputBindings>-->
+    <Window.InputBindings>
+        <KeyBinding Key="Return"
+                    Modifiers="Alt"
+                    Command="{Binding ToggleFullscreenCommand}"/>
+        <KeyBinding Key="F4"
+                    Modifiers="Alt"
+                    Command="{Binding ExitProgramCommand}"/>
+        <KeyBinding Key="A"
+                    Modifiers="Ctrl"
+                    Command="{Binding AuthorViewModel.SwitchToAuthorViewCommand}"/>
+        <KeyBinding Key="B"
+                    Modifiers="Ctrl"
+                    Command="{Binding BookViewModel.SwitchToBookViewCommand}"/>
+        <KeyBinding Key="I"
+                    Modifiers="Ctrl"
+                    Command="{Binding StoreInventoryViewModel.SwitchToStoreInventoryViewCommand}"/>
+    </Window.InputBindings>
 
-    
+
     <Grid Background="MintCream">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -27,16 +40,9 @@
         </Grid.RowDefinitions>
 
         <view:MenuView Grid.Row="0"/>
-        <view:StoreInventoryView Grid.Row="1" Visibility="{Binding IsStoreInventoryViewVisible, Converter={StaticResource VisibilityConverter}}"/>
-        <view:BookView Grid.Row="1" 
-                       x:Name="BookView"
-                       Visibility="{Binding IsBookViewVisible, Converter={StaticResource VisibilityConverter}}"/>
+        <view:StoreInventoryView Grid.Row="1" Visibility="{Binding StoreInventoryViewModel.IsStoreInventoryViewVisible, Converter={StaticResource VisibilityConverter}}"/>
+        <view:BookView Grid.Row="1" Visibility="{Binding IsBookViewVisible, Converter={StaticResource VisibilityConverter}}"/>
         <view:AuthorView Grid.Row="1" Visibility="{Binding IsAuthorViewVisible, Converter={StaticResource VisibilityConverter}}"/>
-
     </Grid>
 
-
 </Window>
-
-    
-<!--Visibility="{Binding IsPlayerModeVisible, Converter={StaticResource VisibilityConverter}}"-->

@@ -18,7 +18,8 @@
                    Margin="0 10 0 0"
                    FontSize="16" 
                    FontWeight="Bold"/>
-            <ComboBox ItemsSource="{Binding BooksInSelectedStore}"
+            <ComboBox x:Name="cbBooktitle"
+                      ItemsSource="{Binding BooksInSelectedStore}"
                       DisplayMemberPath="BookTitle"                      
                       Margin="0 0 0 70"
                       MaxDropDownHeight="80"
@@ -38,6 +39,7 @@
                        FontSize="14"
                        HorizontalAlignment="Left"/>
             </WrapPanel>
+            
             <Slider x:Name="slider"              
                     Value="{Binding SelectedBookTitle.Quantity, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
                     Minimum="0"
