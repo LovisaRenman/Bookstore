@@ -1,10 +1,9 @@
 ﻿using BookstoreEf.Dialogs;
 using BookstoreEf.ViewModel;
-using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace BookstoreEf;
 
@@ -26,11 +25,13 @@ public partial class MainWindow : Window
         mainWindowViewModel.BookViewModel.ShowDialogAddBooks += AddBooks;
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += DeleteBook;
+        mainWindowViewModel.BookViewModel.UpdateSource += UpdateSourceAddBook;
+        mainWindowViewModel.StoreInventoryViewModel.CloseAddBookToSelectedStoreDialog += OnCloseDialogRequested;
         mainWindowViewModel.StoreInventoryViewModel.CloseManageInventoryDialog += OnCloseDialogRequested;
         mainWindowViewModel.StoreInventoryViewModel.DeleteBookFromStoreRequested += OnDeleteBookFromStoreRequested;
-        mainWindowViewModel.StoreInventoryViewModel.OpeInventoryDialog += OnOpenInventoryRequested;
-        mainWindowViewModel.BookViewModel.UpdateSource += UpdateSourceAddBook;
+        mainWindowViewModel.StoreInventoryViewModel.OpenInventoryDialog += OnOpenInventoryRequested;
         mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += UpdateSourceManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToStoreDialog += OnOpenAddBooktitleToStoreRequested;
     }
 
     public void AddBooks(object? sender, EventArgs arg)
@@ -73,7 +74,7 @@ public partial class MainWindow : Window
 
     private void OnDeleteBookFromStoreRequested(object? sender, BookInventoryViewModel selectedBook)
     {
-        MessageBoxResult result = MessageBox.Show("Do you want to delete this book from the store? ", "Delete selected book?",
+        MessageBoxResult result = MessageBox.Show("Do you want to delete selected booktitle from the store? ", "Delete selected booktitle?",
             MessageBoxButton.YesNo, MessageBoxImage.Question);
 
         if (result == MessageBoxResult.Yes)
@@ -91,6 +92,12 @@ public partial class MainWindow : Window
         {
             Application.Current.Shutdown();
         }
+    }
+
+    private void OnOpenAddBooktitleToStoreRequested(object? sender, EventArgs e)
+    {
+        _dialog = new AddBookToSelectedStore();
+        ShowDialog(mainWindowViewModel.StoreInventoryViewModel);
     }
 
     private void OnOpenInventoryRequested(object? sender, EventArgs e)
@@ -130,13 +137,9 @@ public partial class MainWindow : Window
     private void UpdateSourceManageInventory(object? sender, EventArgs e)
     {
         if (_dialog is ManageInventory dialog)
-        {
-            BindingExpression bookTitleBinding = dialog.cbBooktitle.GetBindingExpression(ComboBox.SelectedItemProperty);
-            bookTitleBinding?.UpdateSource();
-
+        {         
             BindingExpression sliderBinding = dialog.slider.GetBindingExpression(Slider.ValueProperty);
-            sliderBinding?.UpdateSource();
-            //mainWindowViewModel.StoreInventoryViewModel.SelectedBookTitle.Quantity = (int)dialog.slider.Value;
+            sliderBinding?.UpdateSource();          
         }
     }
 
