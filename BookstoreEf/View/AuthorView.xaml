@@ -41,7 +41,7 @@
                  Grid.Row="1"
                  ItemsSource="{Binding Authors}" 
                  Margin="20 0 20 0"
-                 SelectedItem="{Binding SelectedAuthor, UpdateSourceTrigger=PropertyChanged}" >
+                 SelectedItem="{Binding SelectedAuthor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -112,7 +112,8 @@
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
 
-            <TextBox Text ="{Binding SelectedAuthor.FirstName, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+            <TextBox x:Name="tbFirstName"
+                     Text ="{Binding SelectedAuthor.FirstName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -121,7 +122,8 @@
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
 
-            <TextBox Text ="{Binding SelectedAuthor.LastName, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+            <TextBox x:Name="tbLastName"
+                     Text ="{Binding SelectedAuthor.LastName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -133,7 +135,8 @@
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+            <TextBox x:Name="tbDateofBirth"
+                     Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -145,10 +148,19 @@
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+            <TextBox x:Name="tbDateofDeath"
+                     Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 0"
                      Padding="2 5 2 5"/>
+
+            <Button Content="Save Changes"
+                    Command="{Binding SaveAuthorCommand}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0 30 10 0"
+                    Padding="3"
+                    Width="100"/>
         </StackPanel>
     </Grid>
 

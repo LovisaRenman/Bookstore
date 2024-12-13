@@ -1,5 +1,6 @@
 ﻿using BookstoreEf.Dialogs;
 using BookstoreEf.ViewModel;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -25,23 +26,21 @@ public partial class MainWindow : Window
         mainWindowViewModel.ExitProgramRequested += OnExitProgramRequested;
         mainWindowViewModel.ToggleFullscreenRequested += OnToggleFullscreenRequested;
         mainWindowViewModel.AuthorViewModel.DeleteAuthorRequested += OnDeleteAuthorRequested;
+        mainWindowViewModel.AuthorViewModel.FailedToAddAuthor += OnFailedToAddAuthor;
+        mainWindowViewModel.AuthorViewModel.FailedToSaveAuthor += OnFailedToSaveAuthor;
+        mainWindowViewModel.AuthorViewModel.SuccessfullySaveAuthor += OnSuccessfullySaveAuthor;
         mainWindowViewModel.BookViewModel.CloseBookDialog += OnCloseDialogRequested;
+        mainWindowViewModel.BookViewModel.FailedBookUpdate += FailedBookUpdate;
         mainWindowViewModel.BookViewModel.ShowDialogAddBooks += AddBooks;
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
         mainWindowViewModel.BookViewModel.ShowMessageBoxRemoveBook += DeleteBook;
         mainWindowViewModel.BookViewModel.UpdateSource += UpdateSourceAddBook;
         mainWindowViewModel.StoreInventoryViewModel.CloseAddBookToSelectedStoreDialog += OnCloseDialogRequested;
         mainWindowViewModel.StoreInventoryViewModel.CloseManageInventoryDialog += OnCloseDialogRequested;
+        mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToStoreDialog += OnOpenAddBooktitleToStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.DeleteBookFromStoreRequested += OnDeleteBookFromStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.OpenInventoryDialog += OnOpenInventoryRequested;
-        mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += UpdateSourceManageInventory;
-        mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToStoreDialog += OnOpenAddBooktitleToStoreRequested;
-        mainWindowViewModel.BookViewModel.FailedBookUpdate += FailedBookUpdate;
-    }
-
-    private void FailedBookUpdate(object? sender, Exception e)
-    {
-        System.Windows.MessageBox.Show($"You were unable to Update the Databse: {e.Message}", "Unsuccessful update", MessageBoxButton.OK, MessageBoxImage.Error);
+        mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += OnUpdateSourceManageInventory;
     }
 
     public void AddBooks(object? sender, EventArgs arg)
@@ -76,6 +75,11 @@ public partial class MainWindow : Window
         ShowDialog(mainWindowViewModel.BookViewModel);
     }
 
+    private void FailedBookUpdate(object? sender, Exception e)
+    {
+        System.Windows.MessageBox.Show($"You were unable to Update the Databse: {e.Message}", "Unsuccessful update", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
     public void OnCloseDialogRequested(object? sender, EventArgs args)
     {
         if (_dialog != null)
@@ -92,7 +96,17 @@ public partial class MainWindow : Window
 
         if (result == MessageBoxResult.Yes)
         {
-            mainWindowViewModel.AuthorViewModel.Authors.Remove(author);
+            using var db = new BookstoreContext();
+            db.Authors.Remove(author);
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show($"Failed to delete author: {e.Message}.");
+            }
         }
     }
 
@@ -118,6 +132,18 @@ public partial class MainWindow : Window
         }
     }
 
+    private void OnFailedToAddAuthor(object? sender, Exception message)
+    {
+        MessageBoxResult result = System.Windows.MessageBox.Show($"Failed to add author: {message}.",
+            "Warning", MessageBoxButton.OK);
+    }
+
+    private void OnFailedToSaveAuthor(object? sender, Exception message)
+    {
+        System.Windows.MessageBox.Show($"Failed to save the author's information. Error message: {message}", 
+            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
     private void OnOpenAddBooktitleToStoreRequested(object? sender, EventArgs e)
     {
         _dialog = new AddBookToSelectedStore();
@@ -128,6 +154,12 @@ public partial class MainWindow : Window
     {
         _dialog = new ManageInventory();
         ShowDialog(mainWindowViewModel.StoreInventoryViewModel);
+    }
+
+    private void OnSuccessfullySaveAuthor(object? sender, EventArgs e)
+    {
+        System.Windows.MessageBox.Show("All changes for the author have been saved.", 
+            "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void OnToggleFullscreenRequested(object? sender, bool isFullscreen)
@@ -144,6 +176,15 @@ public partial class MainWindow : Window
         }
     }
 
+    private void OnUpdateSourceManageInventory(object? sender, EventArgs e)
+    {
+        if (_dialog is ManageInventory dialog)
+        {         
+            BindingExpression sliderBinding = dialog.slider.GetBindingExpression(Slider.ValueProperty);
+            sliderBinding?.UpdateSource();          
+        }
+    }
+
     public void ShowDialog(object viewModel)
     {
         try
@@ -155,15 +196,6 @@ public partial class MainWindow : Window
         catch (Exception e)
         {
             System.Windows.MessageBox.Show($"An error occurred while opening the dialog box {e.Message}");
-        }
-    }
-
-    private void UpdateSourceManageInventory(object? sender, EventArgs e)
-    {
-        if (_dialog is ManageInventory dialog)
-        {         
-            BindingExpression sliderBinding = dialog.slider.GetBindingExpression(Slider.ValueProperty);
-            sliderBinding?.UpdateSource();          
         }
     }
 
@@ -193,5 +225,5 @@ public partial class MainWindow : Window
             beWeight.UpdateSource();
         }
     }
-  
+
 }
