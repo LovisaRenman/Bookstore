@@ -34,8 +34,7 @@ class StoreInventoryViewModel : ViewModelBase
             _booksInSelectedStore = value;
             RaisePropertyChanged();
             RaisePropertyChanged("Books");
-            DeleteBookCommand.RaiseCanExecuteChanged();
-            SaveInventoryCommand.RaiseCanExecuteChanged();
+            RaisePropertyChanged("TotalInventoryValue");
         }
     }
 
@@ -74,7 +73,7 @@ class StoreInventoryViewModel : ViewModelBase
             {
                 _selectedStore = value;
                 RaisePropertyChanged();
-                UpdateBooksForSelectedStore();
+                UpdateBooksForSelectedStore();                
             }
         }
     }
@@ -114,7 +113,7 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
-    private bool _isUpdateBookQuantityEnable ;
+    private bool _isUpdateBookQuantityEnable;
     public bool IsUpdateBookQuantityEnable
     {
         get => _isUpdateBookQuantityEnable; 
@@ -136,6 +135,7 @@ class StoreInventoryViewModel : ViewModelBase
             RaisePropertyChanged();
         }
     }
+
 
     public event EventHandler CloseAddBookToSelectedStoreDialog;
     public event EventHandler CloseManageInventoryDialog;
@@ -166,7 +166,6 @@ class StoreInventoryViewModel : ViewModelBase
         SaveInventoryCommand = new DelegateCommand(SaveInventory);
         SwitchToStoreInventoryViewCommand = new DelegateCommand(StartInventoryView, IsInventoryViewEnable);
 
-        //LoadBooks();
         LoadStores();
         GetStoreAdress();
 
@@ -177,7 +176,11 @@ class StoreInventoryViewModel : ViewModelBase
 
     private void CloseInventory(object obj) => CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
 
-    private void DeleteBook(object? obj) => DeleteBookFromStoreRequested.Invoke(this, SelectedBookTitle);
+    private void DeleteBook(object? obj)
+    {
+        DeleteBookFromStoreRequested.Invoke(this, SelectedBookTitle);
+        UpdateTotalInventoryValue();
+    } 
 
     private void GetStoreAdress()
     {
@@ -187,9 +190,7 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
-    private bool IsInventoryViewEnable(object? obj) => IsStoreInventoryMenuOptionEnable = !IsStoreInventoryViewVisible;
-
-    
+    private bool IsInventoryViewEnable(object? obj) => IsStoreInventoryMenuOptionEnable = !IsStoreInventoryViewVisible;    
 
     private void LoadStores() 
     {
@@ -207,6 +208,7 @@ class StoreInventoryViewModel : ViewModelBase
     {
         InventoryUpdateSource.Invoke(this, EventArgs.Empty);
         CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
+        UpdateTotalInventoryValue();
     }
     
     private void StartInventoryView(object? obj)
@@ -246,7 +248,13 @@ class StoreInventoryViewModel : ViewModelBase
             LoadBooks(BooksInSelectedStore);
         }
 
-        TotalInventoryValue = BooksInSelectedStore.Sum(book => book.TotalPrice);
+        UpdateTotalInventoryValue();
+    }
+
+    public void UpdateTotalInventoryValue() 
+    {
+        decimal totalValue = BooksInSelectedStore.Sum(book => book.TotalPrice);
+        TotalInventoryValue = totalValue;
     }
 
     public void LoadBooks(ObservableCollection<BookInventoryTranslate> booksInSelectedStore)
