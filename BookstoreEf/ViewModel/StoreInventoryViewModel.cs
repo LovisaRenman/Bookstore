@@ -242,6 +242,7 @@ class StoreInventoryViewModel : ViewModelBase
                 .ToList();
 
             BooksInSelectedStore = new ObservableCollection<BookInventoryTranslate>(booksInStore);
+            
             LoadBooks(BooksInSelectedStore);
         }
 
@@ -252,6 +253,28 @@ class StoreInventoryViewModel : ViewModelBase
     {
         using var db = new BookstoreContext();
         var books = db.Books.ToList();
+
+        var booksToBeRemoved = new List<Book>();
+
+        foreach (var book in books)
+        {
+            foreach (var inventory in booksInSelectedStore)
+            {
+                if (book.BookTitle == inventory.BookTitle)
+                {
+                    booksToBeRemoved.Add(book);
+                    break;
+                }
+            }
+        }
+
+        foreach (var book in booksToBeRemoved)
+        {
+            books.Remove(book);
+        }
+
+        Books = new ObservableCollection<Book>(books);        
+
     }
 
     private void UpdateCommandStates()
