@@ -3,6 +3,11 @@ using BookstoreEf.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using TextBox = System.Windows.Controls.TextBox;
+
+
 
 namespace BookstoreEf;
 
@@ -20,7 +25,6 @@ public partial class MainWindow : Window
         mainWindowViewModel.ExitProgramRequested += OnExitProgramRequested;
         mainWindowViewModel.ToggleFullscreenRequested += OnToggleFullscreenRequested;
         mainWindowViewModel.AuthorViewModel.DeleteAuthorRequested += OnDeleteAuthorRequested;
-        mainWindowViewModel.AuthorViewModel.FailedToAddAuthor += OnFailedToAddAuthor;
         mainWindowViewModel.BookViewModel.CloseBookDialog += OnCloseDialogRequested;
         mainWindowViewModel.BookViewModel.ShowDialogAddBooks += AddBooks;
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
@@ -32,7 +36,12 @@ public partial class MainWindow : Window
         mainWindowViewModel.StoreInventoryViewModel.OpenInventoryDialog += OnOpenInventoryRequested;
         mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += UpdateSourceManageInventory;
         mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToStoreDialog += OnOpenAddBooktitleToStoreRequested;
+        mainWindowViewModel.BookViewModel.FailedBookUpdate += FailedBookUpdate;
+    }
 
+    private void FailedBookUpdate(object? sender, Exception e)
+    {
+        System.Windows.MessageBox.Show($"You were unable to Update the Databse: {e.Message}", "Unsuccessful update", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     public void AddBooks(object? sender, EventArgs arg)
@@ -41,10 +50,24 @@ public partial class MainWindow : Window
         ShowDialog(mainWindowViewModel.BookViewModel);        
     }
 
-    public void DeleteBook(object? sender, EventArgs arg)
+    public void DeleteBook(object? sender, Book book)
     {
-        MessageBoxResult result = MessageBox.Show("Are you sure you want to remove this Book", "Remove Book", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (result == MessageBoxResult.Yes) mainWindowViewModel.BookViewModel.Books.Remove(mainWindowViewModel.BookViewModel.SelectedBook);
+        MessageBoxResult result = System.Windows.MessageBox.Show("Are you sure you want to remove this Book", "Remove Book", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (result == MessageBoxResult.Yes)
+        {
+            mainWindowViewModel.BookViewModel.Books.Remove(book);
+            using var db = new BookstoreContext();
+            db.Books.Remove(book);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                System.Windows.MessageBox.Show($"You were unable to Update the Databse: {e.Message}", "Unsuccessful update", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            mainWindowViewModel.BookViewModel.LoadBooks();
+        }
     }
 
     private void EditBooks(object? sender, EventArgs e)
@@ -64,28 +87,18 @@ public partial class MainWindow : Window
 
     public void OnDeleteAuthorRequested(object? sender, Author author)
     {
-        MessageBoxResult result = MessageBox.Show("All books associated with this author will be permanently removed from the system. Do you want to continue?",
+        MessageBoxResult result = System.Windows.MessageBox.Show("All books associated with this author will be permanently removed from the system. Do you want to continue?",
             "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
         if (result == MessageBoxResult.Yes)
         {
-            using var db = new BookstoreContext();            
-            db.Authors.Remove(author);
-
-            try
-            {
-                db.SaveChanges();       
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show($"Failed to delete author: {e.Message}.");
-            }
+            mainWindowViewModel.AuthorViewModel.Authors.Remove(author);
         }
     }
 
     private void OnDeleteBookFromStoreRequested(object? sender, BookInventoryTranslate selectedBook)
     {
-        MessageBoxResult result = MessageBox.Show("Do you want to delete selected booktitle from the store? ", "Delete selected booktitle?",
+        MessageBoxResult result = System.Windows.MessageBox.Show("Do you want to delete selected booktitle from the store? ", "Delete selected booktitle?",
             MessageBoxButton.YesNo, MessageBoxImage.Question);
 
         if (result == MessageBoxResult.Yes)
@@ -96,19 +109,13 @@ public partial class MainWindow : Window
 
     private void OnExitProgramRequested(object? sender, EventArgs e)
     {
-        MessageBoxResult result = MessageBox.Show("Are you sure you want to exit \"Once Upon a Bookstore\"?", "Exit bookstore",
+        MessageBoxResult result = System.Windows.MessageBox.Show("Are you sure you want to exit \"Once Upon a Bookstore\"?", "Exit bookstore",
             MessageBoxButton.YesNo, MessageBoxImage.Question);
 
         if (result == MessageBoxResult.Yes)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
-    }
-
-    private void OnFailedToAddAuthor(object? sender, Exception message)
-    {
-        MessageBoxResult result = MessageBox.Show($"Failed to add author: {message}.",
-            "Warning", MessageBoxButton.OK);
     }
 
     private void OnOpenAddBooktitleToStoreRequested(object? sender, EventArgs e)
@@ -142,12 +149,12 @@ public partial class MainWindow : Window
         try
         {
             _dialog.DataContext = viewModel;
-            _dialog.Owner = Application.Current.MainWindow;
+            _dialog.Owner = System.Windows.Application.Current.MainWindow;
             _dialog.Show();
         }
         catch (Exception e)
         {
-            MessageBox.Show($"An error occurred while opening the dialog box {e.Message}");
+            System.Windows.MessageBox.Show($"An error occurred while opening the dialog box {e.Message}");
         }
     }
 
@@ -177,6 +184,9 @@ public partial class MainWindow : Window
             beLanguage.UpdateSource();
 
             BindingExpression bePrice = addBookDialog.PriceTb.GetBindingExpression(TextBox.TextProperty);
+            bePrice.UpdateSource();
+
+            BindingExpression bePages = addBookDialog.PagesTb.GetBindingExpression(TextBox.TextProperty);
             bePrice.UpdateSource();
 
             BindingExpression beWeight = addBookDialog.WeightTb.GetBindingExpression(TextBox.TextProperty);

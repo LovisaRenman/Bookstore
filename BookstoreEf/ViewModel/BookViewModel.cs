@@ -3,6 +3,7 @@ using BookstoreEf.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookstoreEf.ViewModel
 {
@@ -170,8 +171,9 @@ namespace BookstoreEf.ViewModel
         public event EventHandler CloseBookDialog;
         public event EventHandler ShowDialogAddBooks;
         public event EventHandler ShowDialogEditBook;
-        public event EventHandler ShowMessageBoxRemoveBook;
+        public event EventHandler<Book> ShowMessageBoxRemoveBook;
         public event EventHandler UpdateSource;
+        public event EventHandler<Exception> FailedBookUpdate;
 
         public DelegateCommand AddBookCommand { get; }
         public DelegateCommand CancelCommand { get; }
@@ -208,15 +210,10 @@ namespace BookstoreEf.ViewModel
             BookWindowTitle = TitleAddBook;
             ButtonContent = "Create";
 
-            using var db = new BookstoreContext();
-
             ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
             NewBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
             Books.Add(NewBook);
-            db.Books.Add(NewBook);
             SelectedBook = NewBook;
-
-            //db.SaveChanges();
 
             SelectedAuthor = Authors.FirstOrDefault();
             SelectedGenre = Genres.FirstOrDefault();
@@ -230,7 +227,7 @@ namespace BookstoreEf.ViewModel
                 using var db = new BookstoreContext();
                 Books.Remove(NewBook);
                 db.Books.Remove(NewBook);
-                //db.SaveChanges();
+                db.SaveChanges();
             }
             CloseBookDialog.Invoke(this, EventArgs.Empty);
         }            
@@ -238,11 +235,50 @@ namespace BookstoreEf.ViewModel
         private void CreateOrChange(object obj)
         {
             using var db = new BookstoreContext();
-            SelectedBook.Author = SelectedAuthor;
-            SelectedBook.Genre = SelectedGenre;
-            SelectedBook.Publisher = SelectedPublisher;
-            
-            UpdateSource.Invoke(this, EventArgs.Empty);
+
+            if (BookWindowTitle == TitleAddBook)
+            {
+                SelectedBook.AuthorId = SelectedAuthor.Id;
+                SelectedBook.GenreId = SelectedGenre.Id;
+                SelectedBook.PublisherId = SelectedPublisher.Id;
+                UpdateSource.Invoke(this, EventArgs.Empty);
+
+                db.Books.Add(SelectedBook);
+
+                try 
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    FailedBookUpdate.Invoke(this, e);
+                    Books.Remove(NewBook);
+                }
+            }
+            else if (BookWindowTitle == TitleEditBook)
+            {
+                var bookToBeChanged = new Book(SelectedBook);
+
+                SelectedBook.AuthorId = SelectedAuthor.Id;
+                SelectedBook.GenreId = SelectedGenre.Id;
+                SelectedBook.PublisherId = SelectedPublisher.Id;
+
+                UpdateSource.Invoke(this, EventArgs.Empty);
+
+                var bookEntry = db.Entry(db.Books.Find(bookToBeChanged.Isbn));
+                bookEntry.CurrentValues.SetValues(SelectedBook);
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch(Exception e)
+                {
+                    FailedBookUpdate.Invoke(this, e);
+                }
+            }            
+
+            LoadBooks();
 
             CloseBookDialog.Invoke(this, EventArgs.Empty);
         }
@@ -270,7 +306,7 @@ namespace BookstoreEf.ViewModel
             else return false;
         }
 
-        private void RemoveBook(object obj) => ShowMessageBoxRemoveBook.Invoke(this, EventArgs.Empty);
+        private void RemoveBook(object obj) => ShowMessageBoxRemoveBook.Invoke(this, SelectedBook);
 
         public void StartBookView(object? obj)
         {
