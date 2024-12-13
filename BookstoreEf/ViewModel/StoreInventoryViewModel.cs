@@ -69,16 +69,6 @@ class StoreInventoryViewModel : ViewModelBase
         set { _selectedBook = value; }
     }
 
-    private int _quantity;
-
-    public int SelectedBookQuantity
-    {
-        get { return _quantity; }
-        set { _quantity = value; }
-    }
-
-
-
     private ObservableCollection<Store> _stores;
     public ObservableCollection<Store> Stores
     {
@@ -162,6 +152,18 @@ class StoreInventoryViewModel : ViewModelBase
         set
         {
             _totalInventoryValue = value;
+            RaisePropertyChanged();
+        }
+    }
+
+
+    private int _selectedBookQuantity;
+    public int SelectedBookQuantity
+    {
+        get =>_selectedBookQuantity; 
+        set 
+        { 
+            _selectedBookQuantity = value;
             RaisePropertyChanged();
         }
     }
@@ -259,27 +261,7 @@ class StoreInventoryViewModel : ViewModelBase
 
         Stores = new ObservableCollection<Store>(stores);
     }
-
-    private void SaveNewBookToSelectedStore(object? obj)
-    {
-        using var db = new BookstoreContext();
-
-        NewBook = new BookInventoryTranslate()
-        {
-            BookTitle = SelectedBook.BookTitle,
-            Quantity = SelectedBookQuantity, 
-            Price = SelectedBook.Price,
-        };
-        
-        BooksInSelectedStore.Add(NewBook);
-
-        SelectedBookTitle = NewBook;
-
-        CloseAddBookToSelectedStoreDialog.Invoke(this, EventArgs.Empty);
-
-        UpdateTotalInventoryValue();
-    }
-
+   
     private void OpenAddBookToSelectedStore(object obj)
     {
         OpenAddBookToStoreDialog.Invoke(this, EventArgs.Empty);
@@ -293,7 +275,27 @@ class StoreInventoryViewModel : ViewModelBase
         CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
         UpdateTotalInventoryValue();
     }
-    
+
+    private void SaveNewBookToSelectedStore(object? obj)
+    {
+        using var db = new BookstoreContext();
+
+        NewBook = new BookInventoryTranslate()
+        {
+            BookTitle = SelectedBook.BookTitle,
+            Quantity = SelectedBookQuantity,
+            Price = SelectedBook.Price,
+        };
+
+        BooksInSelectedStore.Add(NewBook);
+
+        SelectedBookTitle = NewBook;
+
+        CloseAddBookToSelectedStoreDialog.Invoke(this, EventArgs.Empty);
+
+        UpdateTotalInventoryValue();
+    }
+
     private void StartInventoryView(object? obj)
     {
         IsStoreInventoryMenuOptionEnable = false;

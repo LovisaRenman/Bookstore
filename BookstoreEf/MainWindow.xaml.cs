@@ -3,7 +3,6 @@ using BookstoreEf.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace BookstoreEf;
 
@@ -21,6 +20,7 @@ public partial class MainWindow : Window
         mainWindowViewModel.ExitProgramRequested += OnExitProgramRequested;
         mainWindowViewModel.ToggleFullscreenRequested += OnToggleFullscreenRequested;
         mainWindowViewModel.AuthorViewModel.DeleteAuthorRequested += OnDeleteAuthorRequested;
+        mainWindowViewModel.AuthorViewModel.FailedToAddAuthor += OnFailedToAddAuthor;
         mainWindowViewModel.BookViewModel.CloseBookDialog += OnCloseDialogRequested;
         mainWindowViewModel.BookViewModel.ShowDialogAddBooks += AddBooks;
         mainWindowViewModel.BookViewModel.ShowDialogEditBook += EditBooks;
@@ -32,6 +32,7 @@ public partial class MainWindow : Window
         mainWindowViewModel.StoreInventoryViewModel.OpenInventoryDialog += OnOpenInventoryRequested;
         mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += UpdateSourceManageInventory;
         mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToStoreDialog += OnOpenAddBooktitleToStoreRequested;
+
     }
 
     public void AddBooks(object? sender, EventArgs arg)
@@ -68,7 +69,17 @@ public partial class MainWindow : Window
 
         if (result == MessageBoxResult.Yes)
         {
-            mainWindowViewModel.AuthorViewModel.Authors.Remove(author);
+            using var db = new BookstoreContext();            
+            db.Authors.Remove(author);
+
+            try
+            {
+                db.SaveChanges();       
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Failed to delete author: {e.Message}.");
+            }
         }
     }
 
@@ -92,6 +103,12 @@ public partial class MainWindow : Window
         {
             Application.Current.Shutdown();
         }
+    }
+
+    private void OnFailedToAddAuthor(object? sender, Exception message)
+    {
+        MessageBoxResult result = MessageBox.Show($"Failed to add author: {message}.",
+            "Warning", MessageBoxButton.OK);
     }
 
     private void OnOpenAddBooktitleToStoreRequested(object? sender, EventArgs e)
