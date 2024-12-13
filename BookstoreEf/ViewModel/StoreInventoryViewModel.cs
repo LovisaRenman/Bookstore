@@ -173,6 +173,7 @@ class StoreInventoryViewModel : ViewModelBase
     public event EventHandler OpenInventoryDialog;
     public event EventHandler OpenAddBookToStoreDialog;
     public event EventHandler InventoryUpdateSource;
+    public event EventHandler<Exception> FailedDbUpdate;
 
     public DelegateCommand CloseAddBookToStoreCommand { get; }
     public DelegateCommand CloseManageInventoryCommand { get; }
@@ -270,7 +271,18 @@ class StoreInventoryViewModel : ViewModelBase
             Quantity = SelectedBookQuantity, 
             Price = SelectedBook.Price,
         };
-        
+
+        db.Inventories.Add(new Inventory() {StoreId = SelectedStore.Id, BookIsbn = SelectedBook.Isbn, Quantity = NewBook.Quantity });
+
+        try
+        {
+            db.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            FailedDbUpdate.Invoke(this, e);
+        }
+
         BooksInSelectedStore.Add(NewBook);
 
         SelectedBookTitle = NewBook;
