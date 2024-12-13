@@ -33,6 +33,7 @@
                 Grid.Column="1"
                 />
         <ComboBox ItemsSource="{Binding Books}"
+                  SelectedItem="{Binding SelectedBook}"
                     DisplayMemberPath="BookTitle"
                     MaxDropDownHeight="80"
                     SelectedIndex="0"  
@@ -63,7 +64,7 @@
 
 
         <Slider x:Name="slider" 
-                    Value="{Binding NewBook.Quantity, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                    Value="{Binding SelectedBookQuantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                     Minimum="1"
                     Maximum="20"
                     TickFrequency="1"

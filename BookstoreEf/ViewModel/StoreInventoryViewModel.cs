@@ -61,6 +61,24 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
+    private Book _selectedBook;
+
+    public Book SelectedBook
+    {
+        get { return _selectedBook; }
+        set { _selectedBook = value; }
+    }
+
+    private int _quantity;
+
+    public int SelectedBookQuantity
+    {
+        get { return _quantity; }
+        set { _quantity = value; }
+    }
+
+
+
     private ObservableCollection<Store> _stores;
     public ObservableCollection<Store> Stores
     {
@@ -163,7 +181,7 @@ class StoreInventoryViewModel : ViewModelBase
     public DelegateCommand OpenAddBooktitleToStoreCommand { get; }
     public DelegateCommand SaveInventoryCommand { get; set; }
     public DelegateCommand SwitchToStoreInventoryViewCommand { get; }
-    new DelegateCommand SaveNewBookToSelectedStoreCommand { get; }
+    public DelegateCommand SaveNewBookToSelectedStoreCommand { get; }
 
     public StoreInventoryViewModel(MainWindowViewModel? mainWindowViewModel)
     {
@@ -245,11 +263,12 @@ class StoreInventoryViewModel : ViewModelBase
     private void SaveNewBookToSelectedStore(object? obj)
     {
         using var db = new BookstoreContext();
-       
+
         NewBook = new BookInventoryTranslate()
         {
-            BookTitle = string.Empty,
-            Quantity = 1
+            BookTitle = SelectedBook.BookTitle,
+            Quantity = SelectedBookQuantity, 
+            Price = SelectedBook.Price,
         };
         
         BooksInSelectedStore.Add(NewBook);
@@ -257,6 +276,8 @@ class StoreInventoryViewModel : ViewModelBase
         SelectedBookTitle = NewBook;
 
         CloseAddBookToSelectedStoreDialog.Invoke(this, EventArgs.Empty);
+
+        UpdateTotalInventoryValue();
     }
 
     private void OpenAddBookToSelectedStore(object obj)
