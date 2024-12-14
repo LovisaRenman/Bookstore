@@ -172,7 +172,7 @@ class StoreInventoryViewModel : ViewModelBase
     public event EventHandler<BookInventoryTranslate> DeleteBookFromStoreRequested;
     public event EventHandler OpenInventoryDialog;
     public event EventHandler OpenAddBookToStoreDialog;
-    public event EventHandler InventoryUpdateSource;
+    public event EventHandler AddInventoryUpdateDatabase;
     public event EventHandler<Exception> FailedDbUpdate;
 
     public DelegateCommand CloseAddBookToStoreCommand { get; }
@@ -236,7 +236,7 @@ class StoreInventoryViewModel : ViewModelBase
         {
             foreach (var inventory in booksInSelectedStore)
             {
-                if (book.BookTitle == inventory.BookTitle)
+                if (book.BookTitle == inventory.BookIsbn)
                 {
                     booksToBeRemoved.Add(book);
                     break;
@@ -267,7 +267,7 @@ class StoreInventoryViewModel : ViewModelBase
 
         NewBook = new BookInventoryTranslate()
         {
-            BookTitle = SelectedBook.BookTitle,
+            BookIsbn = SelectedBook.BookTitle,
             Quantity = SelectedBookQuantity, 
             Price = SelectedBook.Price,
         };
@@ -301,7 +301,7 @@ class StoreInventoryViewModel : ViewModelBase
     
     private void SaveInventory(object obj)
     {
-        InventoryUpdateSource.Invoke(this, EventArgs.Empty);
+        AddInventoryUpdateDatabase.Invoke(this, EventArgs.Empty);
         CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
         UpdateTotalInventoryValue();
     }
@@ -332,6 +332,7 @@ class StoreInventoryViewModel : ViewModelBase
             .Where(i => i.StoreId == SelectedStore.Id)
             .Select(i => new BookInventoryTranslate
             {
+                BookIsbn = i.BookIsbnNavigation.Isbn,
                 BookTitle = i.BookIsbnNavigation.BookTitle,
                 Quantity = i.Quantity,
                 Price = i.BookIsbnNavigation.Price
