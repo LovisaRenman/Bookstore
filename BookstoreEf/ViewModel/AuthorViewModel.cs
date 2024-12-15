@@ -194,7 +194,7 @@ class AuthorViewModel : ViewModelBase
         {
             FailedToSaveAuthor.Invoke(this, e);
         }
-    }
+    } // Binding: converter dateOnly to string?
 
     private bool IsDeleteAuthorEnable(object? obj) => IsDeleteButtonEnable = SelectedAuthor != null && Authors.Count > 0;
 

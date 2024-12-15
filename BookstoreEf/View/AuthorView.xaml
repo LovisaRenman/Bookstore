@@ -108,22 +108,20 @@
                     Margin="10 0"
                     Visibility="{Binding TextVisibility, Converter={StaticResource VisibilityConverter}}">
 
-            <Label Content="First Name" 
+            <Label Content="First Name*" 
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
 
-            <TextBox x:Name="tbFirstName"
-                     Text ="{Binding SelectedAuthor.FirstName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text ="{Binding SelectedAuthor.FirstName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
 
-            <Label Content="Last Name" 
+            <Label Content="Last Name*" 
                    FontWeight="Bold" 
                    Margin="10 0 0 0"/>
 
-            <TextBox x:Name="tbLastName"
-                     Text ="{Binding SelectedAuthor.LastName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text ="{Binding SelectedAuthor.LastName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -131,12 +129,11 @@
             <WrapPanel Margin="10 0 0 0">
                 <Label Content="Date Of Birth"
                        FontWeight="Bold"/>
-                <Label Content="MM/DD/YYYY*"
+                <Label Content="mm/dd/yyyy"
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox x:Name="tbDateofBirth"
-                     Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -144,12 +141,11 @@
             <WrapPanel Margin="10 0 0 0">
                 <Label Content="Date Of Death"
                        FontWeight="Bold"/>
-                <Label Content="MM/DD/YYYY*"
+                <Label Content="mm/dd/yyyy"
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox x:Name="tbDateofDeath"
-                     Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <TextBox Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 0"
                      Padding="2 5 2 5"/>
