@@ -4,7 +4,19 @@ namespace BookstoreEf.ViewModel
 {
     internal class BookInventoryTranslate : ViewModelBase
     {
+        private string _bookisbn;
+        public string BookIsbn
+        {
+            get => _bookisbn;
+            set
+            {
+                _bookisbn = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private string _bookTitle;
+
         public string BookTitle
         {
             get => _bookTitle;
@@ -14,6 +26,7 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
             }
         }
+
 
         private int _quantity;
         public int Quantity

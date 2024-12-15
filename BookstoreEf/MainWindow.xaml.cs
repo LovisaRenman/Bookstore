@@ -40,7 +40,7 @@ public partial class MainWindow : Window
         mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToStoreDialog += OnOpenAddBooktitleToStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.DeleteBookFromStoreRequested += OnDeleteBookFromStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.OpenInventoryDialog += OnOpenInventoryRequested;
-        mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += OnUpdateSourceManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.AddInventoryUpdateDatabase += OnUpdateSourceManageInventory;
     }
 
     public void AddBooks(object? sender, EventArgs arg)
@@ -118,6 +118,10 @@ public partial class MainWindow : Window
         if (result == MessageBoxResult.Yes)
         {
             mainWindowViewModel.StoreInventoryViewModel.BooksInSelectedStore.Remove(selectedBook);
+            using var db = new BookstoreContext();
+            var inventory = db.Inventories.FirstOrDefault(i => i.StoreId == mainWindowViewModel.StoreInventoryViewModel.SelectedStore.Id && i.BookIsbn == selectedBook.BookIsbn);
+            db.Inventories.Remove(inventory);
+            db.SaveChanges();
         }
     }
 
@@ -181,7 +185,7 @@ public partial class MainWindow : Window
         if (_dialog is ManageInventory dialog)
         {         
             BindingExpression sliderBinding = dialog.slider.GetBindingExpression(Slider.ValueProperty);
-            sliderBinding?.UpdateSource();          
+            sliderBinding?.UpdateSource();
         }
     }
 
@@ -225,5 +229,4 @@ public partial class MainWindow : Window
             beWeight.UpdateSource();
         }
     }
-
 }

@@ -69,6 +69,16 @@ class StoreInventoryViewModel : ViewModelBase
         set { _selectedBook = value; }
     }
 
+    private int _quantity;
+
+    public int SelectedBookQuantity
+    {
+        get { return _quantity; }
+        set { _quantity = value; }
+    }
+
+
+
     private ObservableCollection<Store> _stores;
     public ObservableCollection<Store> Stores
     {
@@ -157,24 +167,13 @@ class StoreInventoryViewModel : ViewModelBase
     }
 
 
-    private int _selectedBookQuantity;
-    public int SelectedBookQuantity
-    {
-        get =>_selectedBookQuantity; 
-        set 
-        { 
-            _selectedBookQuantity = value;
-            RaisePropertyChanged();
-        }
-    }
-
-
     public event EventHandler CloseAddBookToSelectedStoreDialog;
     public event EventHandler CloseManageInventoryDialog;
     public event EventHandler<BookInventoryTranslate> DeleteBookFromStoreRequested;
     public event EventHandler OpenInventoryDialog;
     public event EventHandler OpenAddBookToStoreDialog;
-    public event EventHandler InventoryUpdateSource;
+    public event EventHandler AddInventoryUpdateDatabase;
+    public event EventHandler<Exception> FailedDbUpdate;
 
     public DelegateCommand CloseAddBookToStoreCommand { get; }
     public DelegateCommand CloseManageInventoryCommand { get; }
@@ -237,7 +236,7 @@ class StoreInventoryViewModel : ViewModelBase
         {
             foreach (var inventory in booksInSelectedStore)
             {
-                if (book.BookTitle == inventory.BookTitle)
+                if (book.BookTitle == inventory.BookIsbn)
                 {
                     booksToBeRemoved.Add(book);
                     break;
@@ -261,20 +260,6 @@ class StoreInventoryViewModel : ViewModelBase
 
         Stores = new ObservableCollection<Store>(stores);
     }
-   
-    private void OpenAddBookToSelectedStore(object obj)
-    {
-        OpenAddBookToStoreDialog.Invoke(this, EventArgs.Empty);
-    }
-
-    private void OpenInventory(object? obj) => OpenInventoryDialog.Invoke(this, EventArgs.Empty);
-    
-    private void SaveInventory(object obj)
-    {
-        InventoryUpdateSource.Invoke(this, EventArgs.Empty);
-        CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
-        UpdateTotalInventoryValue();
-    }
 
     private void SaveNewBookToSelectedStore(object? obj)
     {
@@ -282,10 +267,21 @@ class StoreInventoryViewModel : ViewModelBase
 
         NewBook = new BookInventoryTranslate()
         {
-            BookTitle = SelectedBook.BookTitle,
-            Quantity = SelectedBookQuantity,
+            BookIsbn = SelectedBook.BookTitle,
+            Quantity = SelectedBookQuantity, 
             Price = SelectedBook.Price,
         };
+
+        db.Inventories.Add(new Inventory() {StoreId = SelectedStore.Id, BookIsbn = SelectedBook.Isbn, Quantity = NewBook.Quantity });
+
+        try
+        {
+            db.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            FailedDbUpdate.Invoke(this, e);
+        }
 
         BooksInSelectedStore.Add(NewBook);
 
@@ -296,6 +292,20 @@ class StoreInventoryViewModel : ViewModelBase
         UpdateTotalInventoryValue();
     }
 
+    private void OpenAddBookToSelectedStore(object obj)
+    {
+        OpenAddBookToStoreDialog.Invoke(this, EventArgs.Empty);
+    }
+
+    private void OpenInventory(object? obj) => OpenInventoryDialog.Invoke(this, EventArgs.Empty);
+    
+    private void SaveInventory(object obj)
+    {
+        AddInventoryUpdateDatabase.Invoke(this, EventArgs.Empty);
+        CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
+        UpdateTotalInventoryValue();
+    }
+    
     private void StartInventoryView(object? obj)
     {
         IsStoreInventoryMenuOptionEnable = false;
@@ -322,6 +332,7 @@ class StoreInventoryViewModel : ViewModelBase
             .Where(i => i.StoreId == SelectedStore.Id)
             .Select(i => new BookInventoryTranslate
             {
+                BookIsbn = i.BookIsbnNavigation.Isbn,
                 BookTitle = i.BookIsbnNavigation.BookTitle,
                 Quantity = i.Quantity,
                 Price = i.BookIsbnNavigation.Price
