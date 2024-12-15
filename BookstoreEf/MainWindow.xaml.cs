@@ -1,14 +1,9 @@
 ﻿using BookstoreEf.Dialogs;
 using BookstoreEf.ViewModel;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using TextBox = System.Windows.Controls.TextBox;
-
-
 
 namespace BookstoreEf;
 
@@ -40,7 +35,8 @@ public partial class MainWindow : Window
         mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToStoreDialog += OnOpenAddBooktitleToStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.DeleteBookFromStoreRequested += OnDeleteBookFromStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.OpenInventoryDialog += OnOpenInventoryRequested;
-        mainWindowViewModel.StoreInventoryViewModel.AddInventoryUpdateDatabase += OnUpdateSourceManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.UpdateSliderQuantity += OnUpdateSourceManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.FailedToUpdateQuantity += OnFailedToUpdateQuantity;
     }
 
     public void AddBooks(object? sender, EventArgs arg)
@@ -146,6 +142,11 @@ public partial class MainWindow : Window
     {
         System.Windows.MessageBox.Show($"Failed to save the author's information. Error message: {message}", 
             "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
+    private void OnFailedToUpdateQuantity(object? sender, EventArgs e)
+    {
+        System.Windows.MessageBox.Show("Error: book quantity could not be updated");
     }
 
     private void OnOpenAddBooktitleToStoreRequested(object? sender, EventArgs e)
