@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BookstoreEf.View"
-             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" xmlns:converters="clr-namespace:BookstoreEf.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="MintCream"
@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+        <converters:StringToDateOnly x:Key="StringToDateOnlyConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -133,7 +134,10 @@
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <!--Converter={StaticResource StringToDateOnlyConverter},-->
+            <TextBox Text ="{Binding SelectedAuthor.DateofBirth, 
+                            Converter={StaticResource StringToDateOnlyConverter},
+                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
@@ -145,7 +149,9 @@
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <TextBox Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <!--Converter={StaticResource StringToDateOnlyConverter},-->
+            <TextBox Text ="{Binding SelectedAuthor.DateofDeath, 
+                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 0"
                      Padding="2 5 2 5"/>

@@ -259,18 +259,21 @@ class StoreInventoryViewModel : ViewModelBase
         Stores = new ObservableCollection<Store>(stores);
     }
 
-    private void SaveNewBookToSelectedStore(object? obj)
+    private void SaveNewBookToSelectedStore(object? obj) // KLADD
     {
         using var db = new BookstoreContext();
 
         NewBook = new BookInventoryTranslate()
         {
             BookIsbn = SelectedBook.BookTitle,
-            Quantity = SelectedBookQuantity, 
+            Quantity = SelectedBookQuantity,
             Price = SelectedBook.Price,
         };
 
-        db.Inventories.Add(new Inventory() {StoreId = SelectedStore.Id, BookIsbn = SelectedBook.Isbn, Quantity = NewBook.Quantity });
+        db.Inventories.Add(new Inventory() { StoreId = SelectedStore.Id, BookIsbn = SelectedBook.Isbn, Quantity = NewBook.Quantity });
+
+        BooksInSelectedStore.Add(NewBook);
+        SelectedBookTitle = NewBook;
 
         try
         {
@@ -281,12 +284,10 @@ class StoreInventoryViewModel : ViewModelBase
             FailedDbUpdate.Invoke(this, e);
         }
 
-        BooksInSelectedStore.Add(NewBook);
-
-        SelectedBookTitle = NewBook;
 
         CloseAddBookToSelectedStoreDialog.Invoke(this, EventArgs.Empty);
 
+        UpdateBooksForSelectedStore();
         UpdateTotalInventoryValue();
     }
 
@@ -309,9 +310,10 @@ class StoreInventoryViewModel : ViewModelBase
                                    where b.Isbn == SelectedBookTitle.BookIsbn && i.StoreId == SelectedStore.Id
                                    select i).FirstOrDefault();
 
+        bookInSelectedStore.Quantity = SelectedBookTitle.Quantity;
+        
         try
         {
-            bookInSelectedStore.Quantity = SelectedBookTitle.Quantity;
             db.SaveChanges();
         }
         catch (Exception)
