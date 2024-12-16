@@ -2,8 +2,6 @@
 using BookstoreEf.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.Windows.Data;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookstoreEf.ViewModel
 {

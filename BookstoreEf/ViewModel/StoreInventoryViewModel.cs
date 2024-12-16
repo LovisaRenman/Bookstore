@@ -172,7 +172,7 @@ class StoreInventoryViewModel : ViewModelBase
     public event EventHandler<BookInventoryTranslate> DeleteBookFromStoreRequested;
     public event EventHandler OpenInventoryDialog;
     public event EventHandler OpenAddBookToStoreDialog;
-    public event EventHandler AddInventoryUpdateDatabase;
+    public event EventHandler InventoryUpdateSource;
     public event EventHandler<Exception> FailedDbUpdate;
 
     public DelegateCommand CloseAddBookToStoreCommand { get; }
@@ -301,9 +301,31 @@ class StoreInventoryViewModel : ViewModelBase
     
     private void SaveInventory(object obj)
     {
-        AddInventoryUpdateDatabase.Invoke(this, EventArgs.Empty);
+        InventoryUpdateSource.Invoke(this, EventArgs.Empty);
         CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
         UpdateTotalInventoryValue();
+
+        using var db = new BookstoreContext();
+        Inventory inventory = new Inventory()
+        {
+            BookIsbn = SelectedBookTitle.BookIsbn,
+            Quantity = SelectedBookTitle.Quantity,
+            StoreId = SelectedStore.Id
+            
+        };
+
+
+        var inventoryEntry = db.Entry(db.Inventories.FirstOrDefault(i => i.BookIsbn == inventory.BookIsbn && i.StoreId == inventory.StoreId));
+        inventoryEntry.CurrentValues.SetValues(inventory);
+
+        try
+        {
+            db.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            FailedDbUpdate.Invoke(this, e);
+        }
     }
     
     private void StartInventoryView(object? obj)
