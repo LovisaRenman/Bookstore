@@ -75,6 +75,7 @@
                       ItemsSource="{Binding Publishers, UpdateSourceTrigger=PropertyChanged}"
                       DisplayMemberPath="Name" 
                       SelectedItem="{Binding SelectedPublisher, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      SelectedIndex="{Binding IndexOfSelectedPublisher, UpdateSourceTrigger=PropertyChanged}"
                       FontWeight="Regular"/>
         </StackPanel>
 
@@ -133,6 +134,7 @@
             <ComboBox Margin="0 0 0 10"
                       ItemsSource="{Binding Genres, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding SelectedGenre, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      SelectedIndex="{Binding IndexOfSelectedGenre}"
                       DisplayMemberPath="GenreName"
                       FontWeight="Regular"/>
         </StackPanel>

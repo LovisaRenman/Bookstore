@@ -100,13 +100,26 @@ namespace BookstoreEf.ViewModel
             }
         }
 
+        private int _indexOfSelectedGenre;
+
+        public int IndexOfSelectedGenre
+        {
+            get => _indexOfSelectedGenre; 
+            set 
+            {
+                _indexOfSelectedGenre = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public List<Author> _authors { get; set; }
         public List<Author> Authors
         {
             get
             {
                 using var db = new BookstoreContext();
-                _authors = db.Authors.ToList();
+                _authors = db.Authors.OrderBy(a => a.Id).ToList();
                 return _authors;
             }
         }
@@ -116,7 +129,7 @@ namespace BookstoreEf.ViewModel
             get
             {
                 using var db = new BookstoreContext();
-                _genres = db.Genres.ToList();
+                _genres = db.Genres.OrderBy(g => g.Id).ToList();
                 return _genres;
             }
         }
@@ -126,7 +139,7 @@ namespace BookstoreEf.ViewModel
             get
             {
                 using var db = new BookstoreContext();
-                _publishers = db.Publishers.ToList();
+                _publishers = db.Publishers.OrderBy(p => p.Id).ToList();
                 return _publishers;
             }
         }
@@ -152,6 +165,19 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        private int _indexOfSelectedPublisher;
+
+        public int IndexOfSelectedPublisher
+        {
+            get => _indexOfSelectedPublisher; 
+            set 
+            {
+                _indexOfSelectedPublisher = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         private string _bookWindowTitle;
         public string BookWindowTitle
@@ -227,8 +253,8 @@ namespace BookstoreEf.ViewModel
             SelectedBook = NewBook;
 
             IndexOfSelectedAuthor = 0;
-            SelectedGenre = Genres.FirstOrDefault();
-            SelectedPublisher = Publishers.FirstOrDefault();
+            IndexOfSelectedPublisher = 0;
+            IndexOfSelectedGenre = 0;
         }
 
         private void Cancel(object obj)
@@ -306,7 +332,9 @@ namespace BookstoreEf.ViewModel
             SelectedAuthor = Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId); 
             IndexOfSelectedAuthor = SelectedAuthor.Id - 1;
             SelectedGenre = Genres.FirstOrDefault(g => g.Id == SelectedBook.GenreId);
+            IndexOfSelectedGenre = SelectedGenre.Id;
             SelectedPublisher = Publishers.FirstOrDefault(p => p.Id == SelectedBook.PublisherId);
+            IndexOfSelectedPublisher = SelectedPublisher.Id - 1;
         }
         private bool RemoveBookActive(object? arg)
         {
