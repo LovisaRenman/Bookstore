@@ -1,4 +1,5 @@
 ﻿using BookstoreEf.Command;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -118,7 +119,7 @@ class AuthorViewModel : ViewModelBase
         LoadAuthors();
 
         SelectedAuthor = Authors.FirstOrDefault();
-        TextVisibility = Authors.Count > 0;
+        TextVisibility = Authors.Count > 0;        
     }
 
 
@@ -129,6 +130,8 @@ class AuthorViewModel : ViewModelBase
         var authors = db.Authors.OrderBy(a => a.FirstName).ThenBy(a => a.LastName).ToList();
 
         Authors = new ObservableCollection<Author>(authors);
+
+        IsAuthorDeceased(); 
     }
 
     private void AddAuthor(object? obj)
@@ -152,6 +155,8 @@ class AuthorViewModel : ViewModelBase
         Authors = new ObservableCollection<Author>(authors);
 
         SelectedAuthor = Authors.LastOrDefault();
+
+        IsAuthorDeceased(); 
     }
 
     private void DeleteAuthor(object? obj)
@@ -167,6 +172,14 @@ class AuthorViewModel : ViewModelBase
             Authors = new ObservableCollection<Author>(authors);
 
             ChangeTextVisibility();
+        }
+    }
+
+    private void IsAuthorDeceased()     
+    {
+        foreach (var author in Authors)
+        {
+            author.IsDeceased = (author.DateofDeath is null) ? false : true;
         }
     }
 
@@ -194,7 +207,9 @@ class AuthorViewModel : ViewModelBase
         {
             FailedToSaveAuthor.Invoke(this, e);
         }
-    } // Binding: converter dateOnly to string?
+
+        IsAuthorDeceased(); 
+    } 
 
     private bool IsDeleteAuthorEnable(object? obj) => IsDeleteButtonEnable = SelectedAuthor != null && Authors.Count > 0;
 
@@ -218,7 +233,7 @@ class AuthorViewModel : ViewModelBase
         SwitchToAuthorViewCommand.RaiseCanExecuteChanged();
         mainWindowViewModel.StoreInventoryViewModel.SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
         mainWindowViewModel.BookViewModel.SwitchToBookViewCommand.RaiseCanExecuteChanged();
-    }
+    }  
 
 }
 
