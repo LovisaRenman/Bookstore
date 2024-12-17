@@ -57,7 +57,7 @@
                     Margin="10 0 10 0">
             <WrapPanel>
                     <Label Content="Publish Date:"/>
-                    <Label Content="MM/DD/YYYY"
+                    <Label Content="yyyy-mm-dd"
                             FontWeight="Normal"/>
                 </WrapPanel>
             <DatePicker x:Name="PublishDateTb"
