@@ -224,7 +224,7 @@ public partial class MainWindow : Window
             bePrice.UpdateSource();
 
             BindingExpression bePages = addBookDialog.PagesTb.GetBindingExpression(TextBox.TextProperty);
-            bePrice.UpdateSource();
+            bePages.UpdateSource();
 
             BindingExpression beWeight = addBookDialog.WeightTb.GetBindingExpression(TextBox.TextProperty);
             beWeight.UpdateSource();
