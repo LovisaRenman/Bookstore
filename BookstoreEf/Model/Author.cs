@@ -42,6 +42,9 @@ public partial class Author : INotifyPropertyChanged
     [NotMapped]
     public string? Name => $"{FirstName} {LastName}";
 
+    [NotMapped]
+    public bool IsDeceased { get; set; }
+
 
     public event PropertyChangedEventHandler? PropertyChanged;
     public void RaisePropertyChanged([CallerMemberName] string? propertyName = null)

@@ -12,7 +12,6 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
-        <converters:StringToDateOnly x:Key="StringToDateOnlyConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -130,31 +129,35 @@
             <WrapPanel Margin="10 0 0 0">
                 <Label Content="Date Of Birth"
                        FontWeight="Bold"/>
-                <Label Content="mm/dd/yyyy"
+                <Label Content="yyyy-mm-dd"
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <!--Converter={StaticResource StringToDateOnlyConverter},-->
-            <TextBox Text ="{Binding SelectedAuthor.DateofBirth, 
-                            Converter={StaticResource StringToDateOnlyConverter},
-                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <DatePicker Text ="{Binding SelectedAuthor.DateofBirth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 10"
                      Padding="2 5 2 5"/>
 
-            <WrapPanel Margin="10 0 0 0">
+            <!--- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+            <CheckBox x:Name="cbDeceased"
+                      Content="Deceased "
+                      FontStyle="Italic"
+                      Margin="10"
+                      IsChecked="{Binding SelectedAuthor.IsDeceased, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <WrapPanel Margin="10 0 0 0"
+                       Visibility="{Binding IsChecked, ElementName=cbDeceased, Converter={StaticResource VisibilityConverter}}">
                 <Label Content="Date Of Death"
                        FontWeight="Bold"/>
-                <Label Content="mm/dd/yyyy"
+                <Label Content="yyyy-mm-dd"
                        FontWeight="Regular"/>
             </WrapPanel>
 
-            <!--Converter={StaticResource StringToDateOnlyConverter},-->
-            <TextBox Text ="{Binding SelectedAuthor.DateofDeath, 
-                            UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            <DatePicker Text ="{Binding SelectedAuthor.DateofDeath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      Height="30"
                      Margin="10 0 10 0"
-                     Padding="2 5 2 5"/>
+                     Padding="2 5 2 5"
+                     Visibility="{Binding IsChecked, ElementName=cbDeceased, Converter={StaticResource VisibilityConverter}}"/>
 
             <Button Content="Save Changes"
                     Command="{Binding SaveAuthorCommand}"

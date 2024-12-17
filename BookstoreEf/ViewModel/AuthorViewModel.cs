@@ -1,4 +1,5 @@
 ﻿using BookstoreEf.Command;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -68,6 +69,18 @@ class AuthorViewModel : ViewModelBase
         }
     }
 
+    //private bool _isDeceased;
+    //public bool IsDeceased // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //{
+    //    get => _isDeceased;
+    //    set 
+    //    { 
+    //        _isDeceased = value;
+    //        RaisePropertyChanged();
+    //    }
+    //}
+
+
 
     private bool _isDeleteButtonEnable;
     public bool IsDeleteButtonEnable
@@ -116,9 +129,10 @@ class AuthorViewModel : ViewModelBase
         SwitchToAuthorViewCommand = new DelegateCommand(StartAuthorView, IsAuthorViewEnable);
 
         LoadAuthors();
+        IsAuthorDeceased(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         SelectedAuthor = Authors.FirstOrDefault();
-        TextVisibility = Authors.Count > 0;
+        TextVisibility = Authors.Count > 0;        
     }
 
 
@@ -152,6 +166,8 @@ class AuthorViewModel : ViewModelBase
         Authors = new ObservableCollection<Author>(authors);
 
         SelectedAuthor = Authors.LastOrDefault();
+
+        IsAuthorDeceased(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     private void DeleteAuthor(object? obj)
@@ -167,6 +183,14 @@ class AuthorViewModel : ViewModelBase
             Authors = new ObservableCollection<Author>(authors);
 
             ChangeTextVisibility();
+        }
+    }
+
+    private void IsAuthorDeceased()     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    {
+        foreach (var author in Authors)
+        {
+            author.IsDeceased = (author.DateofDeath is null) ? false : true;
         }
     }
 
@@ -194,7 +218,9 @@ class AuthorViewModel : ViewModelBase
         {
             FailedToSaveAuthor.Invoke(this, e);
         }
-    } // Binding: converter dateOnly to string?
+
+        IsAuthorDeceased(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    } 
 
     private bool IsDeleteAuthorEnable(object? obj) => IsDeleteButtonEnable = SelectedAuthor != null && Authors.Count > 0;
 
@@ -218,7 +244,7 @@ class AuthorViewModel : ViewModelBase
         SwitchToAuthorViewCommand.RaiseCanExecuteChanged();
         mainWindowViewModel.StoreInventoryViewModel.SwitchToStoreInventoryViewCommand.RaiseCanExecuteChanged();
         mainWindowViewModel.BookViewModel.SwitchToBookViewCommand.RaiseCanExecuteChanged();
-    }
+    }  
 
 }
 

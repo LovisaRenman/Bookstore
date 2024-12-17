@@ -2,8 +2,6 @@
 using BookstoreEf.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.Threading.Channels;
-using System.Windows.Automation;
 
 namespace BookstoreEf.ViewModel;
 
@@ -61,6 +59,17 @@ class StoreInventoryViewModel : ViewModelBase
         }
     }
 
+    private ObservableCollection<Book> _possibleBooksToAdd; 
+    public ObservableCollection<Book> PossibleBooksToAdd
+    {
+        get => _possibleBooksToAdd;
+        set
+        {
+            _possibleBooksToAdd = value;
+            RaisePropertyChanged();
+        }
+    }
+
     private Book _selectedBook;
     public Book SelectedBook
     {
@@ -68,11 +77,15 @@ class StoreInventoryViewModel : ViewModelBase
         set { _selectedBook = value; }
     }
 
-    private int _quantity;
+    private int _selectedBookQuantity;
     public int SelectedBookQuantity
     {
-        get { return _quantity; }
-        set { _quantity = value; }
+        get => _selectedBookQuantity;
+        set 
+        { 
+            _selectedBookQuantity = value;
+            RaisePropertyChanged();
+        }
     }
 
 
@@ -200,7 +213,7 @@ class StoreInventoryViewModel : ViewModelBase
         LoadStores();
         GetStoreAdress();
 
-        SelectedStore = Stores?.FirstOrDefault();
+        SelectedStore = Stores?.FirstOrDefault();        
     }
 
     private void CloseAddBookDialog(object obj) => CloseAddBookToSelectedStoreDialog.Invoke(this, EventArgs.Empty);
@@ -211,7 +224,21 @@ class StoreInventoryViewModel : ViewModelBase
     {
         DeleteBookFromStoreRequested.Invoke(this, SelectedBookTitle);
         UpdateTotalInventoryValue();
-    } 
+    }
+
+    private void GetBooksToAddToSelectedStore()
+    {
+        using var db = new BookstoreContext();
+
+        var booksNotInStore = db.Books
+            .Where(b => !db.Inventories
+                .Where(i => i.StoreId == SelectedStore.Id)
+                .Select(i => i.BookIsbn)
+                .Contains(b.Isbn))
+            .ToList();
+
+        PossibleBooksToAdd = new ObservableCollection<Book>(booksNotInStore);
+    }
 
     private void GetStoreAdress()
     {
@@ -247,10 +274,11 @@ class StoreInventoryViewModel : ViewModelBase
             books.Remove(book);
         }
 
-        Books = new ObservableCollection<Book>(books);        
+        Books = new ObservableCollection<Book>(books);
 
-    }
+    }   
 
+    
     private void LoadStores() 
     {
         using var db = new BookstoreContext();
@@ -259,7 +287,7 @@ class StoreInventoryViewModel : ViewModelBase
         Stores = new ObservableCollection<Store>(stores);
     }
 
-    private void SaveNewBookToSelectedStore(object? obj) // KLADD
+    private void SaveNewBookToSelectedStore(object? obj)
     {
         using var db = new BookstoreContext();
 
@@ -284,17 +312,13 @@ class StoreInventoryViewModel : ViewModelBase
             FailedDbUpdate.Invoke(this, e);
         }
 
-
         CloseAddBookToSelectedStoreDialog.Invoke(this, EventArgs.Empty);
 
         UpdateBooksForSelectedStore();
         UpdateTotalInventoryValue();
     }
 
-    private void OpenAddBookToSelectedStore(object obj)
-    {
-        OpenAddBookToStoreDialog.Invoke(this, EventArgs.Empty);
-    }
+    private void OpenAddBookToSelectedStore(object obj) => OpenAddBookToStoreDialog.Invoke(this, EventArgs.Empty);
 
     private void OpenInventory(object? obj) => OpenInventoryDialog.Invoke(this, EventArgs.Empty);
 
@@ -361,10 +385,11 @@ class StoreInventoryViewModel : ViewModelBase
             .ToList();
 
         BooksInSelectedStore = new ObservableCollection<BookInventoryTranslate>(booksInStore);
-            
+
+        GetBooksToAddToSelectedStore(); 
         LoadBooks(BooksInSelectedStore);
-        
         UpdateTotalInventoryValue();
+
     }
 
     public void UpdateTotalInventoryValue() => TotalInventoryValue = BooksInSelectedStore.Sum(book => book.TotalPrice);
