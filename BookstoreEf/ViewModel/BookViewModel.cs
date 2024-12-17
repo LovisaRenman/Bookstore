@@ -20,6 +20,19 @@ namespace BookstoreEf.ViewModel
             }
         }
 
+        private int _indexOfSelectedAuthor;
+
+        public int IndexOfSelectedAuthor
+        {
+            get => _indexOfSelectedAuthor; 
+            set 
+            {
+                _indexOfSelectedAuthor = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private Book? _savedSelectedBook;
         public Book? NewBook
         {
@@ -213,7 +226,7 @@ namespace BookstoreEf.ViewModel
             Books.Add(NewBook);
             SelectedBook = NewBook;
 
-            SelectedAuthor = Authors.FirstOrDefault();
+            IndexOfSelectedAuthor = 0;
             SelectedGenre = Genres.FirstOrDefault();
             SelectedPublisher = Publishers.FirstOrDefault();
         }
@@ -290,8 +303,8 @@ namespace BookstoreEf.ViewModel
             ButtonContent = "Change";
             ShowDialogEditBook.Invoke(this, EventArgs.Empty);
 
-
-            SelectedAuthor = Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId);
+            SelectedAuthor = Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId); 
+            IndexOfSelectedAuthor = SelectedAuthor.Id - 1;
             SelectedGenre = Genres.FirstOrDefault(g => g.Id == SelectedBook.GenreId);
             SelectedPublisher = Publishers.FirstOrDefault(p => p.Id == SelectedBook.PublisherId);
         }

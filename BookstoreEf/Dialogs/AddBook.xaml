@@ -50,6 +50,7 @@
                       ItemsSource="{Binding Authors, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding SelectedAuthor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                       DisplayMemberPath="Name"
+                      SelectedIndex="{Binding IndexOfSelectedAuthor, UpdateSourceTrigger=PropertyChanged}"
                       FontWeight="Regular"/>
         </StackPanel>
 
