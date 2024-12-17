@@ -69,18 +69,6 @@ class AuthorViewModel : ViewModelBase
         }
     }
 
-    //private bool _isDeceased;
-    //public bool IsDeceased // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //{
-    //    get => _isDeceased;
-    //    set 
-    //    { 
-    //        _isDeceased = value;
-    //        RaisePropertyChanged();
-    //    }
-    //}
-
-
 
     private bool _isDeleteButtonEnable;
     public bool IsDeleteButtonEnable
@@ -129,7 +117,6 @@ class AuthorViewModel : ViewModelBase
         SwitchToAuthorViewCommand = new DelegateCommand(StartAuthorView, IsAuthorViewEnable);
 
         LoadAuthors();
-        IsAuthorDeceased(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         SelectedAuthor = Authors.FirstOrDefault();
         TextVisibility = Authors.Count > 0;        
@@ -143,6 +130,8 @@ class AuthorViewModel : ViewModelBase
         var authors = db.Authors.OrderBy(a => a.FirstName).ThenBy(a => a.LastName).ToList();
 
         Authors = new ObservableCollection<Author>(authors);
+
+        IsAuthorDeceased(); 
     }
 
     private void AddAuthor(object? obj)
@@ -167,7 +156,7 @@ class AuthorViewModel : ViewModelBase
 
         SelectedAuthor = Authors.LastOrDefault();
 
-        IsAuthorDeceased(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        IsAuthorDeceased(); 
     }
 
     private void DeleteAuthor(object? obj)
@@ -186,7 +175,7 @@ class AuthorViewModel : ViewModelBase
         }
     }
 
-    private void IsAuthorDeceased()     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private void IsAuthorDeceased()     
     {
         foreach (var author in Authors)
         {
@@ -219,7 +208,7 @@ class AuthorViewModel : ViewModelBase
             FailedToSaveAuthor.Invoke(this, e);
         }
 
-        IsAuthorDeceased(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        IsAuthorDeceased(); 
     } 
 
     private bool IsDeleteAuthorEnable(object? obj) => IsDeleteButtonEnable = SelectedAuthor != null && Authors.Count > 0;
