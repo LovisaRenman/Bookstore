@@ -2,6 +2,7 @@
 using BookstoreEf.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Threading.Channels;
 using System.Windows.Automation;
 
 namespace BookstoreEf.ViewModel;
@@ -26,7 +27,6 @@ class StoreInventoryViewModel : ViewModelBase
     }
 
     private BookInventoryTranslate _newBook;
-
     public BookInventoryTranslate NewBook
     {
         get => _newBook; 
@@ -62,7 +62,6 @@ class StoreInventoryViewModel : ViewModelBase
     }
 
     private Book _selectedBook;
-
     public Book SelectedBook
     {
         get { return _selectedBook; }
@@ -70,13 +69,11 @@ class StoreInventoryViewModel : ViewModelBase
     }
 
     private int _quantity;
-
     public int SelectedBookQuantity
     {
         get { return _quantity; }
         set { _quantity = value; }
     }
-
 
 
     private ObservableCollection<Store> _stores;
@@ -172,8 +169,9 @@ class StoreInventoryViewModel : ViewModelBase
     public event EventHandler<BookInventoryTranslate> DeleteBookFromStoreRequested;
     public event EventHandler OpenInventoryDialog;
     public event EventHandler OpenAddBookToStoreDialog;
-    public event EventHandler InventoryUpdateSource;
+    public event EventHandler UpdateSliderQuantity;
     public event EventHandler<Exception> FailedDbUpdate;
+    public event EventHandler FailedToUpdateQuantity;
 
     public DelegateCommand CloseAddBookToStoreCommand { get; }
     public DelegateCommand CloseManageInventoryCommand { get; }
@@ -298,36 +296,35 @@ class StoreInventoryViewModel : ViewModelBase
     }
 
     private void OpenInventory(object? obj) => OpenInventoryDialog.Invoke(this, EventArgs.Empty);
-    
-    private void SaveInventory(object obj)
+
+    private void SaveInventory(object? obj) 
     {
-        InventoryUpdateSource.Invoke(this, EventArgs.Empty);
-        CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
-        UpdateTotalInventoryValue();
+        UpdateSliderQuantity.Invoke(this, EventArgs.Empty);
 
         using var db = new BookstoreContext();
-        Inventory inventory = new Inventory()
-        {
-            BookIsbn = SelectedBookTitle.BookIsbn,
-            Quantity = SelectedBookTitle.Quantity,
-            StoreId = SelectedStore.Id
-            
-        };
 
-
-        var inventoryEntry = db.Entry(db.Inventories.FirstOrDefault(i => i.BookIsbn == inventory.BookIsbn && i.StoreId == inventory.StoreId));
-        inventoryEntry.CurrentValues.SetValues(inventory);
+        var bookInSelectedStore = (from b in db.Books
+                                   join i in db.Inventories on b.Isbn equals i.BookIsbn
+                                   join s in db.Stores on i.StoreId equals s.Id
+                                   where b.Isbn == SelectedBookTitle.BookIsbn && i.StoreId == SelectedStore.Id
+                                   select i).FirstOrDefault();
 
         try
         {
+            bookInSelectedStore.Quantity = SelectedBookTitle.Quantity;
             db.SaveChanges();
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            FailedDbUpdate.Invoke(this, e);
+            FailedToUpdateQuantity.Invoke(this, EventArgs.Empty);
         }
+
+        CloseManageInventoryDialog.Invoke(this, EventArgs.Empty);
+
+        UpdateBooksForSelectedStore();        
+        UpdateTotalInventoryValue();
     }
-    
+
     private void StartInventoryView(object? obj)
     {
         IsStoreInventoryMenuOptionEnable = false;

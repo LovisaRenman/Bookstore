@@ -1,14 +1,9 @@
 ﻿using BookstoreEf.Dialogs;
 using BookstoreEf.ViewModel;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using TextBox = System.Windows.Controls.TextBox;
-
-
 
 namespace BookstoreEf;
 
@@ -40,7 +35,8 @@ public partial class MainWindow : Window
         mainWindowViewModel.StoreInventoryViewModel.OpenAddBookToStoreDialog += OnOpenAddBooktitleToStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.DeleteBookFromStoreRequested += OnDeleteBookFromStoreRequested;
         mainWindowViewModel.StoreInventoryViewModel.OpenInventoryDialog += OnOpenInventoryRequested;
-        mainWindowViewModel.StoreInventoryViewModel.InventoryUpdateSource += OnUpdateSourceManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.UpdateSliderQuantity += OnUpdateSourceManageInventory;
+        mainWindowViewModel.StoreInventoryViewModel.FailedToUpdateQuantity += OnFailedToUpdateQuantity;
     }
 
     public void AddBooks(object? sender, EventArgs arg)
@@ -148,6 +144,11 @@ public partial class MainWindow : Window
             "Error", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
+    private void OnFailedToUpdateQuantity(object? sender, EventArgs e)
+    {
+        System.Windows.MessageBox.Show("Error: book quantity could not be updated");
+    }
+
     private void OnOpenAddBooktitleToStoreRequested(object? sender, EventArgs e)
     {
         _dialog = new AddBookToSelectedStore();
@@ -183,7 +184,7 @@ public partial class MainWindow : Window
     private void OnUpdateSourceManageInventory(object? sender, EventArgs e)
     {
         if (_dialog is ManageInventory dialog)
-        {
+        {         
             BindingExpression sliderBinding = dialog.slider.GetBindingExpression(Slider.ValueProperty);
             sliderBinding?.UpdateSource();
         }
@@ -201,7 +202,7 @@ public partial class MainWindow : Window
         {
             System.Windows.MessageBox.Show($"An error occurred while opening the dialog box {e.Message}");
         }
-    }    
+    }
 
     private void UpdateSourceAddBook(object? sender, EventArgs e)
     {        
