@@ -332,7 +332,7 @@ namespace BookstoreEf.ViewModel
             SelectedAuthor = Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId); 
             IndexOfSelectedAuthor = SelectedAuthor.Id - 1;
             SelectedGenre = Genres.FirstOrDefault(g => g.Id == SelectedBook.GenreId);
-            IndexOfSelectedGenre = SelectedGenre.Id;
+            IndexOfSelectedGenre = SelectedGenre.Id - 1;
             SelectedPublisher = Publishers.FirstOrDefault(p => p.Id == SelectedBook.PublisherId);
             IndexOfSelectedPublisher = SelectedPublisher.Id - 1;
         }
