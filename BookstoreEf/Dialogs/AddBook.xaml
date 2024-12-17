@@ -147,7 +147,7 @@
                     Margin="0 0 10 0"/>
             <Button Content="Cancel"
                     Padding="5"
-                    FontWeight="Normal"
+                    FontWeight="
                     Command="{Binding CancelCommand}"/>
         </WrapPanel>
     </Grid>

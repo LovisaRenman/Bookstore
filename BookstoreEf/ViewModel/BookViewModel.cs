@@ -291,9 +291,9 @@ namespace BookstoreEf.ViewModel
             ShowDialogEditBook.Invoke(this, EventArgs.Empty);
 
 
-            SelectedAuthor = SelectedBook.Author;
-            SelectedGenre = SelectedBook.Genre ;
-            SelectedPublisher = SelectedBook.Publisher;
+            SelectedAuthor = Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId);
+            SelectedGenre = Genres.FirstOrDefault(g => g.Id == SelectedBook.GenreId);
+            SelectedPublisher = Publishers.FirstOrDefault(p => p.Id == SelectedBook.PublisherId);
         }
         private bool RemoveBookActive(object? arg)
         {
