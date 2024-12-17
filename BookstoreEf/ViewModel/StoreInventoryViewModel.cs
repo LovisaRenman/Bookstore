@@ -185,6 +185,8 @@ class StoreInventoryViewModel : ViewModelBase
     public event EventHandler UpdateSliderQuantity;
     public event EventHandler<Exception> FailedDbUpdate;
     public event EventHandler FailedToUpdateQuantity;
+    public event EventHandler NoBooksToAddMessage;
+    public event EventHandler ChooseABookMessage;
 
     public DelegateCommand CloseAddBookToStoreCommand { get; }
     public DelegateCommand CloseManageInventoryCommand { get; }
@@ -223,6 +225,7 @@ class StoreInventoryViewModel : ViewModelBase
     private void DeleteBook(object? obj)
     {
         DeleteBookFromStoreRequested.Invoke(this, SelectedBookTitle);
+        GetBooksToAddToSelectedStore();
         UpdateTotalInventoryValue();
     }
 
@@ -291,17 +294,30 @@ class StoreInventoryViewModel : ViewModelBase
     {
         using var db = new BookstoreContext();
 
-        NewBook = new BookInventoryTranslate()
+        NewBook = new BookInventoryTranslate();
+
+        if (SelectedBook is not null)
         {
-            BookIsbn = SelectedBook.BookTitle,
-            Quantity = SelectedBookQuantity,
-            Price = SelectedBook.Price,
-        };
+            NewBook.BookIsbn = SelectedBook.BookTitle;
+            NewBook.Quantity = SelectedBookQuantity;
+            NewBook.Price = SelectedBook.Price;
 
-        db.Inventories.Add(new Inventory() { StoreId = SelectedStore.Id, BookIsbn = SelectedBook.Isbn, Quantity = NewBook.Quantity });
+            db.Inventories.Add(new Inventory() { StoreId = SelectedStore.Id, BookIsbn = SelectedBook.Isbn, Quantity = NewBook.Quantity });
 
-        BooksInSelectedStore.Add(NewBook);
-        SelectedBookTitle = NewBook;
+            BooksInSelectedStore.Add(NewBook);
+            SelectedBookTitle = NewBook;
+        }
+        else
+        {
+            if (PossibleBooksToAdd.Count <= 0)
+            {
+                NoBooksToAddMessage.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                ChooseABookMessage.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         try
         {

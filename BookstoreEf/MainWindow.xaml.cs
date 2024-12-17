@@ -37,6 +37,20 @@ public partial class MainWindow : Window
         mainWindowViewModel.StoreInventoryViewModel.OpenInventoryDialog += OnOpenInventoryRequested;
         mainWindowViewModel.StoreInventoryViewModel.UpdateSliderQuantity += OnUpdateSourceManageInventory;
         mainWindowViewModel.StoreInventoryViewModel.FailedToUpdateQuantity += OnFailedToUpdateQuantity;
+        mainWindowViewModel.StoreInventoryViewModel.NoBooksToAddMessage += OnNoBooksToAddMessage;
+        mainWindowViewModel.StoreInventoryViewModel.ChooseABookMessage += OnChooseABookMessage;
+    }
+
+    private void OnChooseABookMessage(object? sender, EventArgs e)
+    {
+        System.Windows.MessageBox.Show("Select a book title from the options provided.",
+            "Select a booktitle", MessageBoxButton.OK, MessageBoxImage.Warning);
+    }
+
+    private void OnNoBooksToAddMessage(object? sender, EventArgs e)
+    {
+        System.Windows.MessageBox.Show("There are no books available for adding to the store at this time. Please try again soon.",
+            "No booktitle avaiable", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     public void AddBooks(object? sender, EventArgs arg)
