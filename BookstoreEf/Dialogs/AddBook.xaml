@@ -60,10 +60,10 @@
                     <Label Content="MM/DD/YYYY"
                             FontWeight="Normal"/>
                 </WrapPanel>
-            <TextBox x:Name="PublishDateTb"
-                     Text="{Binding SelectedBook.PublishDate, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
-                     Margin="0 0 0 10"
-                     FontWeight="Regular"/>
+            <DatePicker x:Name="PublishDateTb"
+                        Text="{Binding SelectedBook.PublishDate, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                        Margin="0 0 0 10"
+                        FontWeight="Regular"/>
             
         </StackPanel>
 
@@ -141,12 +141,14 @@
                    Grid.ColumnSpan="2"
                    Grid.Row="5">
             <Button Content="{Binding ButtonContent}"
-                        Padding="5"
-                        Command="{Binding CreateCommand}"
-                        Margin="0 0 10 0"/>
+                    Padding="5"
+                    FontWeight="Normal"
+                    Command="{Binding CreateCommand}"
+                    Margin="0 0 10 0"/>
             <Button Content="Cancel"
-                        Padding="5"
-                        Command="{Binding CancelCommand}"/>
+                    Padding="5"
+                    FontWeight="Normal"
+                    Command="{Binding CancelCommand}"/>
         </WrapPanel>
     </Grid>
 </Window>

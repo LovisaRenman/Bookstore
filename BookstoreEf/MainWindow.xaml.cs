@@ -214,7 +214,7 @@ public partial class MainWindow : Window
             BindingExpression beTitle = addBookDialog.TitleTb.GetBindingExpression(TextBox.TextProperty);
             beTitle.UpdateSource();
 
-            BindingExpression bePublishDate = addBookDialog.PublishDateTb.GetBindingExpression(TextBox.TextProperty);
+            BindingExpression bePublishDate = addBookDialog.PublishDateTb.GetBindingExpression(DatePicker.TextProperty);
             bePublishDate.UpdateSource();
 
             BindingExpression beLanguage = addBookDialog.LanguageTb.GetBindingExpression(TextBox.TextProperty);

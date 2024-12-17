@@ -222,10 +222,7 @@ namespace BookstoreEf.ViewModel
         {
             if (BookWindowTitle == TitleAddBook)
             {
-                using var db = new BookstoreContext();
                 Books.Remove(NewBook);
-                db.Books.Remove(NewBook);
-                db.SaveChanges();
             }
             CloseBookDialog.Invoke(this, EventArgs.Empty);
         }            
