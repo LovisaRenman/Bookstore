@@ -20,19 +20,6 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        private int _indexOfSelectedAuthor;
-
-        public int IndexOfSelectedAuthor
-        {
-            get => _indexOfSelectedAuthor; 
-            set 
-            {
-                _indexOfSelectedAuthor = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
         private Book? _savedSelectedBook;
         public Book? NewBook
         {
@@ -88,7 +75,6 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
             }
         }
-
         public Genre _selectedGenre { get; set; }
         public Genre SelectedGenre
         {
@@ -100,47 +86,34 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        private int _indexOfSelectedGenre;
-
-        public int IndexOfSelectedGenre
-        {
-            get => _indexOfSelectedGenre; 
-            set 
-            {
-                _indexOfSelectedGenre = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
         public List<Author> _authors { get; set; }
         public List<Author> Authors
         {
-            get
+            get =>_authors;
+            set 
             {
-                using var db = new BookstoreContext();
-                _authors = db.Authors.OrderBy(a => a.Id).ToList();
-                return _authors;
+                _authors = value;
+                RaisePropertyChanged();
             }
         }
         public List<Genre> _genres { get; set; }
         public List<Genre> Genres
         {
-            get
+            get => _genres;
+            set 
             {
-                using var db = new BookstoreContext();
-                _genres = db.Genres.OrderBy(g => g.Id).ToList();
-                return _genres;
+                _genres = value;
+                RaisePropertyChanged();
             }
         }
         public List<Publisher> _publishers { get; set; }
         public List<Publisher> Publishers
         {
-            get
+            get => _publishers;
+            set 
             {
-                using var db = new BookstoreContext();
-                _publishers = db.Publishers.OrderBy(p => p.Id).ToList();
-                return _publishers;
+                _publishers = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -165,19 +138,6 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
             }
         }
-
-        private int _indexOfSelectedPublisher;
-
-        public int IndexOfSelectedPublisher
-        {
-            get => _indexOfSelectedPublisher; 
-            set 
-            {
-                _indexOfSelectedPublisher = value;
-                RaisePropertyChanged();
-            }
-        }
-
 
         private string _bookWindowTitle;
         public string BookWindowTitle
@@ -251,10 +211,6 @@ namespace BookstoreEf.ViewModel
             NewBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
             Books.Add(NewBook);
             SelectedBook = NewBook;
-
-            IndexOfSelectedAuthor = 0;
-            IndexOfSelectedPublisher = 0;
-            IndexOfSelectedGenre = 0;
         }
 
         private void Cancel(object obj)
@@ -329,12 +285,17 @@ namespace BookstoreEf.ViewModel
             ButtonContent = "Change";
             ShowDialogEditBook.Invoke(this, EventArgs.Empty);
 
-            SelectedAuthor = Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId); 
-            IndexOfSelectedAuthor = SelectedAuthor.Id - 1;
-            SelectedGenre = Genres.FirstOrDefault(g => g.Id == SelectedBook.GenreId);
-            IndexOfSelectedGenre = SelectedGenre.Id - 1;
-            SelectedPublisher = Publishers.FirstOrDefault(p => p.Id == SelectedBook.PublisherId);
-            IndexOfSelectedPublisher = SelectedPublisher.Id - 1;
+            using var db = new BookstoreContext();
+
+            SelectedAuthor = db.Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId);
+            Authors = db.Authors.ToList();                    
+            
+            SelectedGenre = db.Genres.FirstOrDefault(g => g.Id == SelectedBook.GenreId);
+            Genres = db.Genres.ToList();
+
+            SelectedPublisher = db.Publishers.FirstOrDefault(p => p.Id == SelectedBook.PublisherId);
+            Publishers = db.Publishers.ToList();
+
         }
         private bool RemoveBookActive(object? arg)
         {
