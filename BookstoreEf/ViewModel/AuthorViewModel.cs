@@ -167,11 +167,13 @@ class AuthorViewModel : ViewModelBase
 
             DeleteAuthorRequested.Invoke(this, SelectedAuthor);
 
-            var authors = db.Authors.ToList();
+            var authors = db.Authors.OrderBy(a => a.FirstName).ThenBy(a => a.LastName).ToList();
 
             Authors = new ObservableCollection<Author>(authors);
 
             ChangeTextVisibility();
+
+            IsAuthorDeceased();
         }
     }
 
