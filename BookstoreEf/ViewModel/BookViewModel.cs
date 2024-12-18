@@ -9,7 +9,7 @@ namespace BookstoreEf.ViewModel
     {
         private readonly MainWindowViewModel? mainWindowViewModel;
 
-        public Author _selectedAuthor { get; set; }
+        private Author _selectedAuthor;
         public Author SelectedAuthor
         {
             get => _selectedAuthor;
@@ -75,7 +75,8 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
             }
         }
-        public Genre _selectedGenre { get; set; }
+
+        private Genre _selectedGenre;
         public Genre SelectedGenre
         {
             get => _selectedGenre;
@@ -86,7 +87,7 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        public List<Author> _authors { get; set; }
+        private List<Author> _authors; 
         public List<Author> Authors
         {
             get =>_authors;
@@ -96,7 +97,8 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
             }
         }
-        public List<Genre> _genres { get; set; }
+
+        private List<Genre> _genres;
         public List<Genre> Genres
         {
             get => _genres;
@@ -106,7 +108,8 @@ namespace BookstoreEf.ViewModel
                 RaisePropertyChanged();
             }
         }
-        public List<Publisher> _publishers { get; set; }
+
+        private List<Publisher> _publishers;
         public List<Publisher> Publishers
         {
             get => _publishers;
@@ -128,7 +131,7 @@ namespace BookstoreEf.ViewModel
             }
         }
 
-        public Publisher _selectedPublishers { get; set; }
+        private Publisher _selectedPublishers;
         public Publisher SelectedPublisher
         {
             get => _selectedPublishers;
@@ -297,6 +300,7 @@ namespace BookstoreEf.ViewModel
             Publishers = db.Publishers.ToList();
 
         }
+
         private bool RemoveBookActive(object? arg)
         {
             if (SelectedBook != null) return true;
