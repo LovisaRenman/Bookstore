@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Text.RegularExpressions;
 
 namespace BookstoreEf.Dialogs
 {
@@ -10,6 +11,11 @@ namespace BookstoreEf.Dialogs
         public AddBook()
         {
             InitializeComponent();
+        }
+
+        private void TbForNumber_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
         }
     }
 }

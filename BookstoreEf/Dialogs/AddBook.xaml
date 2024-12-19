@@ -95,6 +95,7 @@
                        FontWeight="Normal"/>
             </WrapPanel>
             <TextBox Text="{Binding SelectedBook.Price, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     PreviewTextInput="TbForNumber_PreviewTextInput"
                      x:Name="PriceTb"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
@@ -105,6 +106,7 @@
                     Margin="10 0 10 0">
             <Label Content="Pages"/>
             <TextBox Text="{Binding SelectedBook.Pages, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     PreviewTextInput="TbForNumber_PreviewTextInput"
                      x:Name="PagesTb"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
@@ -120,6 +122,7 @@
                        FontWeight="Normal"/>
             </WrapPanel>
             <TextBox Text="{Binding SelectedBook.WeightInGrams, UpdateSourceTrigger=Explicit, Mode=TwoWay}"
+                     PreviewTextInput="TbForNumber_PreviewTextInput"
                      x:Name="WeightTb"
                      Margin="0 0 0 10"
                      FontWeight="Regular"/>
