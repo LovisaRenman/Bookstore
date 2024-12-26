@@ -212,8 +212,9 @@ namespace BookstoreEf.ViewModel
 
             ShowDialogAddBooks.Invoke(this, EventArgs.Empty);
             NewBook = new Book() { Isbn = string.Empty, BookTitle = string.Empty, Price = 0, PublishDate = DateOnly.MinValue, Pages = 0 };
-            Books.Add(NewBook);
+            //Books.Add(NewBook);
             SelectedBook = NewBook;
+            LoadCombobox();
         }
 
         private void Cancel(object obj)
@@ -288,17 +289,49 @@ namespace BookstoreEf.ViewModel
             ButtonContent = "Change";
             ShowDialogEditBook.Invoke(this, EventArgs.Empty);
 
-            using var db = new BookstoreContext();
+            LoadCombobox();
+        }
 
-            SelectedAuthor = db.Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId);
-            Authors = db.Authors.ToList();                    
+        public void LoadCombobox()
+        {
+            using var db = new BookstoreContext();
+            int i = 0;
+
+            if (db.Authors != null)
+            {
+                foreach (var author in db.Authors)
+                {
+                    i = author.Id;
+                    break;
+                }
+            } 
             
-            SelectedGenre = db.Genres.FirstOrDefault(g => g.Id == SelectedBook.GenreId);
+            SelectedAuthor = db.Authors.FirstOrDefault(a => a.Id == SelectedBook.AuthorId || a.Id == i);
+            Authors = db.Authors.ToList();
+
+            if (db.Genres != null)
+            {
+                foreach (var genre in db.Genres)
+                {
+                    i = genre.Id;
+                    break;
+                }
+            }
+
+            SelectedGenre = db.Genres.FirstOrDefault(g => g.Id == SelectedBook.GenreId || g.Id == 1);
             Genres = db.Genres.ToList();
 
-            SelectedPublisher = db.Publishers.FirstOrDefault(p => p.Id == SelectedBook.PublisherId);
-            Publishers = db.Publishers.ToList();
+            if (db.Publishers != null)
+            {
+                foreach (var publisher in db.Publishers)
+                {
+                    i = publisher.Id;
+                    break;
+                }
+            }
 
+            SelectedPublisher = db.Publishers.FirstOrDefault(p => p.Id == SelectedBook.PublisherId || p.Id == 1);
+            Publishers = db.Publishers.ToList();
         }
 
         private bool RemoveBookActive(object? arg)
